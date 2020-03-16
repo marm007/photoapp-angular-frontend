@@ -1,0 +1,30 @@
+<div class="gap-top" fxLayout="column" fxFlex="30%"   fxFlexOffset="35%">
+  <mat-card class="costam">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{photos[0].user.username}}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="{{'http://127.0.0.1:8000'+photos[0].image}}" alt="Photo of a Shiba Inu">
+    <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions>
+    <mat-card-content>
+      <p>{{photos[0].description}}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="costam">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{photos[0].user.username}}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="{{'http://127.0.0.1:8000'+photos[0].image}}" alt="Photo of a Shiba Inu">
+    <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions>
+    <mat-card-content>
+      <p>{{photos[0].description}}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
