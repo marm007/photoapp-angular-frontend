@@ -1,0 +1,70 @@
+.relations{
+  border: 1px solid rgba(var(--b6a,219,219,219),1);
+  position: fixed;
+  margin-top: 4px;
+}
+
+.relation-item-image {
+  background-size: cover;
+}
+
+.relation-viewport {
+  height: 223px;
+  width: 293px;
+  margin-top: 8px;
+  margin-left: 16px;
+}
+
+.relation-item {
+  margin: 2px;
+  height: 52px;
+}
+
+.relation-item-data {
+  flex: 0 1 100%;
+  margin-left: 14px;
+}
+
+.relation-item-data-username{
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(var(--i1d,38,38,38),1);
+}
+
+.relation-item-data-time{
+  font-size: 10px;
+  line-height: 12px;
+  color: rgba(var(--f52,153,153,153),1);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.relation-item-wrapper{
+  height: 44px;
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  align-items: center;
+  border: 0;
+  padding-left: 5px;
+  text-align: left;
+}
+
+#relations-header-box {
+  padding: 4px 16px;
+  margin-top: 12px;
+}
+
+#relations-header-text {
+  color: rgba(var(--f52,153,153,153),1);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  margin: -3px 0 -4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}

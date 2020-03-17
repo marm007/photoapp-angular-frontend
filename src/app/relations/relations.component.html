@@ -1,0 +1,21 @@
+<div class="relations">
+  <div id="relations-header-box">
+    <div id="relations-header-text">Relacje</div>
+  </div>
+  <cdk-virtual-scroll-viewport itemSize="52" class="relation-viewport">
+    <div *cdkVirtualFor="let relation of relations" class="relation-item">
+      <button class="relation-item-wrapper">
+        <div fxLayout="row">
+        <div mat-card-avatar class="relation-item-image"
+             [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
+        <div fxLayout="column" class="relation-item-data">
+          <div class="relation-item-data-username"><span>{{relation.username}}</span></div>
+          <div class="relation-item-data-time">{{relation.time}}</div>
+        </div>
+        </div>
+      </button>
+    </div>
+
+  </cdk-virtual-scroll-viewport>
+
+</div>

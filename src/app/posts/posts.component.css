@@ -1,0 +1,116 @@
+.post-section {
+  width: 614px;
+  float:left;
+  margin-right: 28px;
+
+}
+
+.post-item{
+  padding: 0;
+  border: 1px solid rgba(var(--b6a,219,219,219),1);
+  border-radius: 3px;
+  margin-bottom: 60px;
+}
+
+.post-item-photo-block{
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+
+.post-item-photo{
+  object-fit: cover;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.post-item-header-image{
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  margin-top: 10px;
+  background-size: cover;
+}
+
+.post-item-header{
+  height: 60px;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+
+}
+
+
+.post-item-header-username{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-item-scroll-section{
+  max-height: 300px;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+
+.post-item-footer{
+  padding-right: 16px;
+  padding-left: 16px;
+
+}
+
+
+.post-item-description {
+  font-size: 12px;
+  line-height: 16px;
+  height: 32px;
+  overflow: hidden;
+}
+
+
+.post-item-description p{
+  font-weight: 400;
+  color: rgba(var(--i1d,38,38,38),1);
+}
+
+.post-item-likes{
+  color: rgba(var(--f07,38,38,38),1);
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.show {
+  overflow: hidden;
+  height: auto;
+}
+
+.post-item-description-show-more{
+  background: 0 0;
+  border: 0;
+  color: #999;
+  line-height: inherit;
+  margin: 0;
+  cursor: pointer;
+  padding: 4px 0 0;
+}
+
+.post-item-comment{
+  margin-bottom: 4px;
+}
+
+.post-item-comment a{
+  color: #262626;
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.post-item-comment span{
+  color: rgba(var(--i1d,38,38,38),1);
+  margin-left: 10px;
+  font-size: 12px;
+  line-height: 16px;
+}
