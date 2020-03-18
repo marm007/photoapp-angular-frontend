@@ -11,6 +11,7 @@ import { PostsComponent } from './posts/posts.component';
 import { RelationsComponent } from './relations/relations.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { TruncateModule } from '@yellowspot/ng-truncate';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
       printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
     }),
     ScrollingModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

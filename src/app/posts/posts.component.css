@@ -20,9 +20,9 @@
 
 .post-item-photo{
   object-fit: cover;
-  height: 100%;
   left: 0;
   top: 0;
+  height: 600px;
 }
 
 .post-item-header-image{
@@ -67,6 +67,7 @@
   line-height: 16px;
   height: 32px;
   overflow: hidden;
+  margin-bottom: 6px;
 }
 
 
@@ -94,8 +95,24 @@
   line-height: inherit;
   margin: 0;
   cursor: pointer;
-  padding: 4px 0 0;
+  padding: 4px 0 4px 4px ;
 }
+
+.post-item-description-load-more-comments{
+  background: 0 0;
+  border: 0;
+  color: #999;
+  line-height: inherit;
+  margin: 0;
+  cursor: pointer;
+}
+
+.post-item-load-more-comments-wra{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .post-item-comment{
   margin-bottom: 4px;
@@ -113,4 +130,73 @@
   margin-left: 10px;
   font-size: 12px;
   line-height: 16px;
+}
+
+.post-item-add-comment{
+  border-top: 1px solid rgba(var(--ce3,239,239,239),1);
+  color: rgba(var(--f52,153,153,153),1);
+  line-height: 18px;
+  min-height: 56px;
+  justify-content: center;
+  margin-top: 4px;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 14px;
+  align-items: stretch;
+
+}
+
+.post-item-add-comment-wrapper{
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+
+}
+
+.post-item-add-comment-form{
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  position: relative;
+}
+
+.post-item-add-comment-text-area{
+  background: 0 0;
+  border: 0;
+  color: #262626;
+  color: rgba(var(--i1d,38,38,38),1);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  font-size: inherit;
+  max-height: 80px;
+  outline: 0;
+  padding: 0;
+  resize: none;
 }

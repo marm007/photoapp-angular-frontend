@@ -15,8 +15,17 @@ export class PostsComponent implements OnInit {
   postsMock = data.default;
   constructor(private postService: PostsService) {
     this.postsMock.forEach((item) => {
-      item.show = false;
+      item.showDescription = false;
+      item.showMoreComments = false;
     });
+  }
+
+  auto_grow(element) {
+    console.log('DAdkdak');
+    console.log(element.target);
+    console.log(element.target.height);
+    console.log(element.target.style.height);
+    element.target.style.height = '32';
   }
 
   ngOnInit(): void {
