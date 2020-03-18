@@ -1,16 +1,16 @@
-<div class="d-none d-lg-block relations">
-  <div id="relations-header-box">
-    <div id="relations-header-text">Relacje</div>
+<div class="d-none d-lg-block relation-section-wrapper">
+  <div id="relation-header-box">
+    <div id="relation-header-text">Relacje</div>
   </div>
-  <cdk-virtual-scroll-viewport itemSize="52" class="relation-viewport">
-    <div *cdkVirtualFor="let relation of relations" class="relation-item">
-      <button class="relation-item-wrapper">
+  <cdk-virtual-scroll-viewport itemSize="52" class="relation-section-scroll">
+    <div *cdkVirtualFor="let relation of relations" class="post">
+      <button class="relation-wrapper">
         <div fxLayout="row">
-        <div mat-card-avatar class="relation-item-image"
+        <div mat-card-avatar class="relation-photo"
              [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
-        <div fxLayout="column" class="relation-item-data">
-          <div class="relation-item-data-username"><span>{{relation.username}}</span></div>
-          <div class="relation-item-data-time">{{relation.time}}</div>
+        <div fxLayout="column" class="relation-data-wrapper">
+          <div class="relation-username"><span>{{relation.username}}</span></div>
+          <div class="relation-time">{{relation.time}}</div>
         </div>
         </div>
       </button>
@@ -20,34 +20,14 @@
 
 </div>
 
-<div class="d-block d-lg-none relations-mobile">
-  <div class="relations-mobile-wrapper">
-    <div class="relations-mobile-wrapper-two">
-      <div class="glupia-nazwa">
-      <div class="dupa" *ngFor="let relation of relations" >
-        {{relation.username}}
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--<div class="d-block d-lg-none relations-mobile">
-  <div class="cdk-virtual-scroll-data-source-example">
-  <cdk-virtual-scroll-viewport orientation="horizontal" itemSize="52" class="example-viewport">
-    <div *cdkVirtualFor="let relation of relations" class="example-item">
-      <button class="relation-item-wrapper">
-        <div fxLayout="row">
-          <div mat-card-avatar class="relation-item-image"
+<div class="d-block d-lg-none relation-section-mobile">
+  <div class="relation-section-wrapper-mobile">
+        <div class="relation-mobile" *ngFor="let relation of relations" >
+          <div mat-card-avatar class="relation-photo"
                [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
-          <div fxLayout="column" class="relation-item-data">
-            <div class="relation-item-data-username"><span>{{relation.username}}</span></div>
-            <div class="relation-item-data-time">{{relation.time}}</div>
+          <div class="relation-username-mobile">
+            {{relation.username}}
           </div>
         </div>
-      </button>
-    </div>
-
-  </cdk-virtual-scroll-viewport>
   </div>
-</div>-->
+</div>

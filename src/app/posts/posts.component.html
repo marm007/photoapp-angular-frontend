@@ -1,44 +1,44 @@
 <div class="d-none d-lg-block post-section">
-  <mat-card class="post-item" *ngFor="let post of postsMock">
-    <mat-card-header class="post-item-header">
-      <div mat-card-avatar class="post-item-header-image"
+  <mat-card class="post" *ngFor="let post of postsMock">
+    <mat-card-header class="post-header">
+      <div mat-card-avatar class="post-header-image"
            [ngStyle]="{'background-image': 'url(' + post.profile_image +')'}"></div>
-      <div class="post-item-header-username">
+      <div class="post-header-username">
         <p>{{post.username}}</p>
       </div>
     </mat-card-header>
-    <div class="post-item-photo-block">
-      <img class="post-item-photo" mat-card-image src="{{post.profile_image}}" alt="Photo of a Shiba Inu">
+    <div class="post-photo-block">
+      <img class="post-photo" mat-card-image src="{{post.profile_image}}" alt="Photo of a Shiba Inu">
     </div>
-    <div class="post-item-footer">
+    <div class="post-footer">
       <mat-card-actions>
-        <button mat-button>
+        <button mat-button style="outline: 0">
           <i class="material-icons">
             favorite_border
           </i></button>
       </mat-card-actions>
-      <div class="post-item-likes">
+      <div class="post-likes">
         Liczba polubień:
         <span>{{post.likes}}</span>
       </div>
-      <mat-card-content class="post-item-scroll-section">
-        <div class="post-item-description" [ngClass]="{show: post.showDescription}">
+      <mat-card-content class="post-scroll-section">
+        <div class="post-description" [ngClass]="{show: post.showDescription}">
           <span *ngIf="!post.showDescription">{{post.description  | words: 10}}</span>
           <span *ngIf="post.showDescription">{{post.description}}</span>
-          <button class="post-item-description-show-more"
+          <button class="post-description-show-more"
                   (click)="post.showDescription = !post.showDescription">{{post.showDescription == false ? "więcej" : "mniej"}}</button>
         </div>
         <div>
-          <div fxLayout="row" class="post-item-comment">
+          <div fxLayout="row" class="post-comment">
             <a>{{post.comment_nick}}</a>
             <span>{{post.comment_content}}</span>
           </div>
-          <div fxLayout="row" class="post-item-comment">
+          <div fxLayout="row" class="post-comment">
             <a>{{post.comment_nick}}</a>
             <span>{{post.comment_content}}</span>
           </div>
-          <div *ngIf="!post.showMoreComments" class="post-item-load-more-comments-wra">
-            <button class="post-item-description-load-more-comments"
+          <div *ngIf="!post.showMoreComments" class="post-load-more-comments-wrapper">
+            <button class="post-load-more-comments" style="outline: 0"
                     (click)="post.showMoreComments = !post.showMoreComments">
               <i class="material-icons">
                 add_circle_outline
@@ -46,23 +46,23 @@
             </button>
           </div>
           <div *ngIf="post.showMoreComments">
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
@@ -70,9 +70,9 @@
         </div>
 
       </mat-card-content>
-      <section class="post-item-add-comment">
-        <div class="post-item-add-comment-wrapper">
-          <form class="post-item-add-comment-form">
+      <section class="post-add-comment-section">
+        <div class="post-add-comment">
+          <form class="post-add-comment-form">
             <textarea [(ngModel)]="post.userCommentContent"
                       name="userCommentContent"
                       matInput
@@ -81,8 +81,8 @@
                       cdkAutosizeMaxRows="5"
                       aria-label="Dodaj komentarz..."
                       placeholder="Dodaj komentarz..."
-                      class="post-item-add-comment-text-area"></textarea>
-            <button (click)="sendValues(post)" [disabled]="!post.userCommentContent" type="button"  mat-button>adadd</button>
+                      class="post-add-comment-text-area"></textarea>
+            <button style="outline: 0" (click)="sendValues(post)" [disabled]="!post.userCommentContent" type="button"  mat-button>Opublikuj</button>
           </form>
         </div>
       </section>
@@ -91,46 +91,46 @@
 </div>
 
 <div class="d-block d-lg-none post-section-mobile">
-  <mat-card class="post-item" *ngFor="let post of postsMock">
-    <mat-card-header class="post-item-header">
-      <div mat-card-avatar class="post-item-header-image"
+  <mat-card class="post" *ngFor="let post of postsMock">
+    <mat-card-header class="post-header">
+      <div mat-card-avatar class="post-header-image"
            [ngStyle]="{'background-image': 'url(' + post.profile_image +')'}"></div>
-      <div class="post-item-header-username">
+      <div class="post-header-username">
         <p>{{post.username}}</p>
       </div>
     </mat-card-header>
-    <div class="post-item-photo-block">
-      <img class="post-item-photo" mat-card-image src="{{post.profile_image}}" alt="Photo of a Shiba Inu">
+    <div class="post-photo-block">
+      <img class="post-photo" mat-card-image src="{{post.profile_image}}" alt="Photo of a Shiba Inu">
     </div>
-    <div class="post-item-footer">
+    <div class="post-footer">
       <mat-card-actions>
-        <button mat-button>
+        <button mat-button style="outline: 0">
           <i class="material-icons">
             favorite_border
           </i></button>
       </mat-card-actions>
-      <div class="post-item-likes">
+      <div class="post-likes">
         Liczba polubień:
         <span>{{post.likes}}</span>
       </div>
-      <mat-card-content class="post-item-scroll-section">
-        <div class="post-item-description" [ngClass]="{show: post.showDescription}">
+      <mat-card-content class="post-scroll-section">
+        <div class="post-description" [ngClass]="{show: post.showDescription}">
           <span *ngIf="!post.showDescription">{{post.description  | words: 10}}</span>
           <span *ngIf="post.showDescription">{{post.description}}</span>
-          <button class="post-item-description-show-more"
+          <button class="post-description-show-more"
                   (click)="post.showDescription = !post.showDescription">{{post.showDescription == false ? "więcej" : "mniej"}}</button>
         </div>
         <div>
-          <div fxLayout="row" class="post-item-comment">
+          <div fxLayout="row" class="post-comment">
             <a>{{post.comment_nick}}</a>
             <span>{{post.comment_content}}</span>
           </div>
-          <div fxLayout="row" class="post-item-comment">
+          <div fxLayout="row" class="post-comment">
             <a>{{post.comment_nick}}</a>
             <span>{{post.comment_content}}</span>
           </div>
-          <div *ngIf="!post.showMoreComments" class="post-item-load-more-comments-wra">
-            <button class="post-item-description-load-more-comments"
+          <div *ngIf="!post.showMoreComments" class="post-load-more-comments-wrapper">
+            <button class="post-load-more-comments" style="outline: 0"
                     (click)="post.showMoreComments = !post.showMoreComments">
               <i class="material-icons">
                 add_circle_outline
@@ -138,23 +138,23 @@
             </button>
           </div>
           <div *ngIf="post.showMoreComments">
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
-            <div fxLayout="row" class="post-item-comment">
+            <div fxLayout="row" class="post-comment">
               <a>{{post.comment_nick}}</a>
               <span>{{post.comment_content}}</span>
             </div>
@@ -162,9 +162,9 @@
         </div>
 
       </mat-card-content>
-      <section class="post-item-add-comment">
-        <div class="post-item-add-comment-wrapper">
-          <form class="post-item-add-comment-form">
+      <section class="post-add-comment-section">
+        <div class="post-add-comment">
+          <form class="post-add-comment-form">
             <textarea [(ngModel)]="post.userCommentContent"
                       name="userCommentContent"
                       matInput
@@ -173,8 +173,8 @@
                       cdkAutosizeMaxRows="5"
                       aria-label="Dodaj komentarz..."
                       placeholder="Dodaj komentarz..."
-                      class="post-item-add-comment-text-area"></textarea>
-            <button (click)="sendValues(post)" [disabled]="!post.userCommentContent" type="button"  mat-button>adadd</button>
+                      class="post-add-comment-text-area"></textarea>
+            <button style="outline: 0" (click)="sendValues(post)" [disabled]="!post.userCommentContent" type="button"  mat-button>adadd</button>
           </form>
         </div>
       </section>
