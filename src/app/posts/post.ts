@@ -6,4 +6,5 @@ export interface Post {
   likes: number;
   description: string;
   user: User;
+  userCommentContent: string;
 }

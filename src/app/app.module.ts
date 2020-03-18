@@ -12,12 +12,15 @@ import { RelationsComponent } from './relations/relations.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import {MatInputModule} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PostsComponent,
-    RelationsComponent
+    RelationsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import {MatInputModule} from '@angular/material/input';
     }),
     ScrollingModule,
     MatInputModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

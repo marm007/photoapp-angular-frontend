@@ -4,6 +4,17 @@
   margin-right: 28px;
 
 }
+.post-section-mobile {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  margin: 0 auto;
+  max-width: 600px;
+  position: relative;
+  width: 100%;
+
+}
 
 .post-item{
   padding: 0;
@@ -27,7 +38,6 @@
 
 .post-item-header-image{
   background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  margin-top: 10px;
   background-size: cover;
 }
 

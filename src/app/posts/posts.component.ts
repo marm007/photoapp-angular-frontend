@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Post} from './post';
 import {PostsService} from './posts.service';
 import * as data from '../posts_data.json';
+
+
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
@@ -13,20 +15,19 @@ export class PostsComponent implements OnInit {
 
   // @ts-ignore
   postsMock = data.default;
+
   constructor(private postService: PostsService) {
     this.postsMock.forEach((item) => {
       item.showDescription = false;
       item.showMoreComments = false;
+      item.userCommentContent = '';
     });
   }
 
-  auto_grow(element) {
-    console.log('DAdkdak');
-    console.log(element.target);
-    console.log(element.target.height);
-    console.log(element.target.style.height);
-    element.target.style.height = '32';
+  sendValues(post: Post): void {
+    console.log(post.userCommentContent);
   }
+
 
   ngOnInit(): void {
     console.log(this.postsMock);
