@@ -16,6 +16,27 @@ import {FormsModule} from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import {MatMenuModule} from '@angular/material/menu';
+import { LoginComponent } from './login/login.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { RegisterComponent } from './register/register.component';
+import {RouterModule, Routes} from '@angular/router';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProfileComponent } from './profile/profile.component';
+import { HomepageComponent } from './homepage/homepage.component';
+
+
+const appRoutes: Routes = [
+  {
+    path: 'profile',
+    component: ProfileComponent,
+  },
+  { path: '',
+    pathMatch: 'full',
+    component: HomepageComponent,
+  },
+  { path: '**', component: PageNotFoundComponent }
+];
 
 @NgModule({
   declarations: [
@@ -23,9 +44,18 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     PostsComponent,
     RelationsComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoginComponent,
+    RegisterComponent,
+    PageNotFoundComponent,
+    ProfileComponent,
+    HomepageComponent,
   ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    ),
     BrowserModule,
     TruncateModule,
     HttpClientModule,
@@ -40,6 +70,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     MatInputModule,
     FormsModule,
     DeviceDetectorModule.forRoot(),
+    MatMenuModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

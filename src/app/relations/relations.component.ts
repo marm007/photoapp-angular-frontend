@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@an
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import * as data from '../relations_data.json';
+
 @Component({
   selector: 'app-relations',
   templateUrl: './relations.component.html',

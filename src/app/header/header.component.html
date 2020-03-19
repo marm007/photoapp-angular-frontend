@@ -14,15 +14,30 @@
       <input placeholder="Szukaj" class="header-search-input">
     </div>
     <div class="header-icons">
-      <div *ngIf="isLogin">
-        <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
-          insert_photo
-        </i>
-        <a style="width: 22px; height: 22px">
+      <div *ngIf="isLogin" class="header-icons">
+        <button class="header-icons-button" mat-button style="margin-right: 15px;">
+          <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
+            insert_photo
+          </i>
+        </button>
+    <!--    <a style="width: 22px; height: 22px">
           <img class="header-user"
                style="width: 22px; height: 22px"
                src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1"/>
-        </a>
+        </a>-->
+        <button class="header-icons-button" mat-button [matMenuTriggerFor]="menu">
+          <img class="header-user"
+               style="width: 22px; height: 22px"
+               src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1"/>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button  routerLink="/profile" mat-menu-item style="outline: 0;">Profil</button>
+          <button mat-menu-item style="outline: 0;">Wyloguj</button>
+        </mat-menu>
+      </div>
+      <div *ngIf="!isLogin">
+        <button mat-button style="outline: 0;"  (click)="openDialog()">Login</button>
       </div>
     </div>
   </div>

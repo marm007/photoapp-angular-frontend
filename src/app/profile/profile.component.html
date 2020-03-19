@@ -1,0 +1,38 @@
+<main>
+  <div class="profile-section">
+    <header class="profile-header">
+      <div class="profile-image-wrapper">
+        <img class="profile-image" src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1" />
+      </div>
+      <section class="profile-data">
+        <div class="profile-data-wrapper">
+          <div  class="profile-username">
+            {{profile.nick}}
+          </div>
+          <button mat-button class="profile-follow">Obserwuj</button>
+        </div>
+        <div class="profile-data-wrapper">
+          <div class="profile-data-statistics">
+            Posty: <b>{{profile.post_number}}</b>
+          </div>
+          <div class="profile-data-statistics">
+            Obeswujacych: <b>{{profile.followers}}</b>
+          </div>
+          <div style="margin-right: 0" class="profile-data-statistics">
+            Obserwoawni: <b>{{profile.following}}</b>
+          </div>
+        </div>
+        <div>
+         {{profile.first_name}} {{profile.last_name}}
+        </div>
+      </section>
+
+    </header>
+    <div class="profile-posts">
+      <div *ngFor="let post of profile.posts">
+
+      </div>
+    </div>
+
+  </div>
+</main>

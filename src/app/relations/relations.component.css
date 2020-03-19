@@ -84,6 +84,7 @@
   display: block;
   margin-top: 52px;
   padding: 10px 0;
+  scrollbar-color: transparent transparent;
 }
 
 .relation-section-wrapper-mobile {
@@ -103,11 +104,20 @@
 .relation-mobile {
   display: flex;
   height: auto;
-  padding: 0 4px;
+  margin: 0 10px;
   width: 120px;
   justify-content: center;
   flex-wrap: wrap;
+  cursor: pointer;
+  min-width: 50px;
+}
 
+.relation-mobile:hover div{
+ /* margin-left: 4px;*/
+}
+
+.relation-photo-mobile{
+  background-size: cover;
 }
 
 .relation-username-mobile{
@@ -118,7 +128,7 @@
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 50px;
+  width: 40px;
 }
 
 

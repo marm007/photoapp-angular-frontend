@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import {MatDialog} from '@angular/material/dialog';
+import {LoginComponent} from '../login/login.component';
 
 @Component({
   selector: 'app-header',
@@ -12,11 +14,26 @@ export class HeaderComponent implements OnInit {
   isDesktop: boolean;
   isLogin: boolean;
 
-  constructor(private deviceService: DeviceDetectorService) {
+  name: string;
+  animal: string;
+
+  constructor(private deviceService: DeviceDetectorService, public dialog: MatDialog) {
     this.isMobile = deviceService.isMobile();
     this.isTablet = deviceService.isTablet();
     this.isDesktop = deviceService.isDesktop();
-    this.isLogin = false;
+    this.isLogin = true;
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(LoginComponent, {
+      width: '600px',
+      height: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
   }
 
   ngOnInit(): void {

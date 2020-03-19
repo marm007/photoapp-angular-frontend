@@ -22,8 +22,8 @@
 
 <div class="d-block d-lg-none relation-section-mobile">
   <div class="relation-section-wrapper-mobile">
-        <div class="relation-mobile" *ngFor="let relation of relations" >
-          <div mat-card-avatar class="relation-photo"
+        <div  class="relation-mobile" *ngFor="let relation of relations" >
+          <div mat-card-avatar class="relation-photo-mobile"
                [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
           <div class="relation-username-mobile">
             {{relation.username}}
