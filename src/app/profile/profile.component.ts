@@ -11,8 +11,13 @@ export class ProfileComponent implements OnInit {
   // @ts-ignore
   profile = data.default[0];
 
+  loopIteration: number;
+
+  profileUrls: Array<Array<number>>;
+
   constructor() {
-    console.log(this.profile)
+    console.log(this.profile.posts.length);
+    this.loopIteration = this.profile.posts.length / 3;
   }
 
   ngOnInit(): void {

@@ -1,6 +1,6 @@
 <main>
   <div class="profile-section">
-    <header class="profile-header">
+    <header class="d-none d-md-flex profile-header">
       <div class="profile-image-wrapper">
         <img class="profile-image" src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1" />
       </div>
@@ -28,9 +28,106 @@
       </section>
 
     </header>
+    <header class="d-flex d-md-none profile-header-mobile">
+       <div class="profile-image-wrapper-mobile">
+         <img class="profile-image-mobile" src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1" />
+       </div>
+      <section class="profile-data">
+        <div class="profile-data-wrapper" style="margin-bottom: 5px">
+        <div class="profile-nick">
+          {{profile.nick}}
+        </div>
+        <button mat-button class="profile-follow">Obserwuj</button>
+        </div>
+        <div>
+          {{profile.first_name}} {{profile.last_name}}
+        </div>
+      </section>
+    </header>
+    <ul style="margin: 0" class="d-flex d-md-none profile-data-statistics-mobile-wrapper" >
+      <li class="profile-data-statistics-mobile">
+        <span class="profile-data-statistics-name-mobile">
+          Posty:
+        </span>
+        <span class="profile-data-statistics-value-mobile">
+          {{profile.post_number}}
+        </span>
+      </li>
+      <li class="profile-data-statistics-mobile">
+        <span class="profile-data-statistics-name-mobile">
+          Obeswujacych:
+        </span>
+        <span class="profile-data-statistics-value-mobile">
+          {{profile.followers}}
+        </span>
+      </li>
+      <li class="profile-data-statistics-mobile">
+        <span class="profile-data-statistics-name-mobile">
+          Obserwoawni:
+        </span>
+        <span class="profile-data-statistics-value-mobile">
+          {{profile.following}}
+        </span>
+      </li>
+    </ul>
     <div class="profile-posts">
-      <div *ngFor="let post of profile.posts">
+     <!-- <div *ngFor="let post of profile.posts; let i = index">
+        <div *ngIf="i % 3 == 0 && i != 0" class="profile-row" >
+          <div class="profile-column" style="margin-right: 2%">
+            <img src="{{profile.posts[i].url}}" alt="Snow" style="width:100%;">
+          </div>
+          <div class="profile-column" style="margin-right: 2%">
+            <img src="{{profile.posts[i-1].url}}" alt="Snow" style="width:100%;">
+          </div>
+          <div class="profile-column" style="margin-right: 2%">
+            <img src="{{profile.posts[i].url}}" alt="Snow" style="width:100%;">
+          </div>
+        </div>
 
+      </div>-->
+      <div class="profile-row">
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+        </div>
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+        </div>
+        <div class="profile-column">
+          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        </div>
+      </div>
+      <div class="profile-row">
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+        </div>
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+        </div>
+        <div class="profile-column">
+          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        </div>
+      </div>
+      <div class="profile-row">
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+        </div>
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+        </div>
+        <div class="profile-column">
+          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        </div>
+      </div>
+      <div class="profile-row">
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+        </div>
+        <div class="profile-column" style="margin-right: 2%">
+          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+        </div>
+        <div class="profile-column">
+          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        </div>
       </div>
     </div>
 

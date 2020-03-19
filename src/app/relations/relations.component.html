@@ -6,12 +6,12 @@
     <div *cdkVirtualFor="let relation of relations" class="post">
       <button class="relation-wrapper">
         <div fxLayout="row">
-        <div mat-card-avatar class="relation-photo"
-             [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
-        <div fxLayout="column" class="relation-data-wrapper">
-          <div class="relation-username"><span>{{relation.username}}</span></div>
-          <div class="relation-time">{{relation.time}}</div>
-        </div>
+          <div mat-card-avatar class="relation-photo"
+               [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
+          <div fxLayout="column" class="relation-data-wrapper">
+            <div class="relation-username"><span>{{relation.username}}</span></div>
+            <div class="relation-time">{{relation.time}}</div>
+          </div>
         </div>
       </button>
     </div>
@@ -22,12 +22,20 @@
 
 <div class="d-block d-lg-none relation-section-mobile">
   <div class="relation-section-wrapper-mobile">
-        <div  class="relation-mobile" *ngFor="let relation of relations" >
-          <div mat-card-avatar class="relation-photo-mobile"
-               [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
-          <div class="relation-username-mobile">
-            {{relation.username}}
-          </div>
-        </div>
+    <div style="min-width: 100px; display: flex; flex-direction: row" class="relation-mobile">
+      <div mat-card-avatar class="relation-photo-mobile"
+           [ngStyle]="{'background-image': 'url(https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1)'}"
+      ></div>
+      <div style="min-width: 100px"   class="relation-username-mobile">
+          Your relation
+      </div>
+    </div>
+    <div class="relation-mobile" *ngFor="let relation of relations">
+      <div mat-card-avatar class="relation-photo-mobile"
+           [ngStyle]="{'background-image': 'url(' + relation.profile_image +')'}"></div>
+      <div class="relation-username-mobile">
+        {{relation.username}}
+      </div>
+    </div>
   </div>
 </div>
