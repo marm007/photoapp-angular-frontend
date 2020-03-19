@@ -13,13 +13,17 @@
 
 .post-header{
   height: 60px;
-  padding: 16px;
+  /*padding: 16px;*/
+  padding-left: 16px;
+  padding-right: 16px;
   display: flex;
   flex-direction: row;
 }
 
 .post-header-image{
   background-size: cover;
+  margin-top: 10px;
+
 }
 
 .post-header-username{

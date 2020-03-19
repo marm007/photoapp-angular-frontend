@@ -4,18 +4,26 @@
       <a href="" style="cursor: pointer; color: rgba(0,0,0,.9);; text-decoration: none;">
         <div class="header-logo-container" fxLayout="row">
           <img style="width: 22px; height: 22px"
-               src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png" />
-          <p style="margin-left: 10px;">PhotoApp</p>
+               src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+          <p *ngIf="isDesktop || isTablet" class="d-none d-sm-block" style="margin-left: 10px;">PhotoApp</p>
+          <p *ngIf="isMobile" style="margin-left: 10px;">PhotoApp</p>
         </div>
       </a>
     </div>
-    <div class="header-search">
+    <div *ngIf="!isMobile" class="header-search">
       <input placeholder="Szukaj" class="header-search-input">
     </div>
     <div class="header-icons">
+      <div *ngIf="isLogin">
+        <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
+          insert_photo
+        </i>
         <a style="width: 22px; height: 22px">
-          <img style="width: 22px; height: 22px" src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1" />
+          <img class="header-user"
+               style="width: 22px; height: 22px"
+               src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1"/>
         </a>
+      </div>
     </div>
   </div>
 </div>

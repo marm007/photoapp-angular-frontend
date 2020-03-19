@@ -76,6 +76,17 @@
   justify-content: flex-end;
 }
 
+.header-user{
+  cursor: pointer;
+}
+
+.header-add-photo{
+  color: rgba(var(--b6a,219,219,219),1);
+  margin-right: 15px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
 .header-logo-container{
   align-items: center;
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;

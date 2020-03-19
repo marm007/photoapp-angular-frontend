@@ -14,13 +14,16 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
   declarations: [
     AppComponent,
     PostsComponent,
     RelationsComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { HeaderComponent } from './header/header.component';
     ScrollingModule,
     MatInputModule,
     FormsModule,
+    DeviceDetectorModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
