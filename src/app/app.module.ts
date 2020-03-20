@@ -26,6 +26,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { AddPostComponent } from './add-post/add-post.component';
 import {AuthGuard, AuthInterceptor, AuthService} from './auth.service';
+import { LoginTrueComponent } from './login-true/login-true.component';
 
 
 const appRoutes: Routes = [
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginTrueComponent,
   },
   {
     path: 'add',
@@ -63,6 +64,7 @@ const appRoutes: Routes = [
     ProfileComponent,
     HomepageComponent,
     AddPostComponent,
+    LoginTrueComponent,
   ],
   imports: [
     RouterModule.forRoot(
