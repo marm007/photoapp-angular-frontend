@@ -1,42 +1,49 @@
-<div style="margin-top: 65px" class="mr-5 ml-5 row-cols-10">
-  <div class="mb-4">
+<div style="margin-top: 65px">
+  <form #addPostForm="ngForm">
+    <div class="mb-4 col-12 col-md-8 col-lg-6 ml-auto mr-auto form-group ">
+        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half input-file">
+          <input #imageInput
+                 id="photo"
+                 accept="image/*"
+                 type="file"
+                 required
+                 class="inputfile"
+                 (change)="processFile(imageInput)"/>
+          <label for="photo" style="margin-bottom: 0">
+            <span>Add photo</span>
+          </label>
+          <img *ngIf="selectedFile"  class="embed-responsive-item" src="{{selectedFile.src}}"
+               style="outline:0; border-color: transparent"/>
+        </div>
+    </div>
+    <div class=" col-12 col-md-8 col-lg-6 ml-auto mr-auto ">
 
-    <div class="mb-4 ml-auto mr-auto col-10 ">
-      <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-        <input id="film" accept="video/mp4, video/ogg" type="file"
-               class="inputfile"/>
-        <label for="film">
-          <span>Add foto</span>
-        </label>
-        <span>or drop it here</span>
-        <img class="embed-responsive-item "/>
+      <div class="mb-4">
+        <div class="for-group">
+          <label for="description"></label>
+          <textarea class="form-control" id="description" required style="resize: none"
+                 placeholder="Description" aria-describedby="basic-addon1"></textarea>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="mb-2 col-10 ml-auto mr-auto">
 
-    <div class="mb-3 col-sm-12">
-      <div class="form-control"
-           placeholder="Title"
-           aria-label="Title"
-           aria-describedby="basic-addon1"
-           name="title"></div>
-
-    </div>
-
-    <div class="mb-3 col-sm-12">
-      <div class="form-control"
-           placeholder="Description"
-           as="textarea" aria-label="With textarea"
-           name="description"></div>
-    </div>
-
-    <div class="mb-3 col-sm-12">
-      <div class="form-group">
-        <button class="btn-success">
+      <div class="mb-1">
+        <button class="btn btn-primary" mat-button>
+          Add
         </button>
       </div>
     </div>
-  </div>
+<!--    <div *ngIf="selectedFile" class="img-preview-container">
 
+      <div class="img-preview{{selectedFile.status === 'fail' ? '-error' : ''}}"
+           [ngStyle]="{'background-image': 'url('+ selectedFile.src + ')'}">
+      </div>
+
+      <div *ngIf="selectedFile.pending" class="img-loading-overlay">
+        <div class="img-spinning-circle"></div>
+      </div>
+
+      <div *ngIf="selectedFile.status === 'ok'" class="alert alert-success"> Image Uploaded Succesfuly!</div>
+      <div *ngIf="selectedFile.status === 'fail'" class="alert alert-danger"> Image Upload Failed!</div>
+    </div>-->
+  </form>
 </div>

@@ -1,7 +1,7 @@
 <div class="header-container">
   <div class="header-content">
     <div class="header-logo">
-      <a href="" style="cursor: pointer; color: rgba(0,0,0,.9);; text-decoration: none;">
+      <a routerLink="/" style="cursor: pointer; color: rgba(0,0,0,.9);; text-decoration: none;">
         <div class="header-logo-container" fxLayout="row">
           <img style="width: 22px; height: 22px"
                src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
@@ -15,7 +15,7 @@
     </div>
     <div class="header-icons">
       <div *ngIf="isLogin" class="header-icons">
-        <button class="header-icons-button" mat-button style="margin-right: 15px;">
+        <button  routerLink="/add"  class="header-icons-button" mat-button style="margin-right: 15px;">
           <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
             insert_photo
           </i>
