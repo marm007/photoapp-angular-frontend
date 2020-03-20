@@ -42,9 +42,9 @@ const appRoutes: Routes = [
   {
     path: 'add',
     component: AddPostComponent,
+    canActivate: [AuthGuard]
   },
   { path: '',
-    pathMatch: 'full',
     component: HomepageComponent,
     canActivate: [AuthGuard]
   },

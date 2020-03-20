@@ -16,6 +16,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   private setSession(authResult) {
+    console.log("DLaldldaldal")
     const tokenAccess = authResult.access;
     console.log(tokenAccess)
     if ('refresh' in authResult) {
@@ -60,6 +61,7 @@ export class AuthService {
   }
 
   refreshToken() {
+    console.log("REFERS")
     console.log(this.getExpiration('token_access'))
     if (moment().isAfter(this.getExpiration('token_access'))) {
       const headers = new HttpHeaders({'Content-Type': 'application/json'});
@@ -94,6 +96,7 @@ export class AuthService {
 export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log('falaflafl')
     const token = localStorage.getItem('token_access');
 
     if (token) {
@@ -114,7 +117,8 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) { }
 
   canActivate() {
-    if (this.authService.isLoggedIn()) {
+    console.log("DAladladllad")
+    if (this.authService.tokenAccess && this.authService.isLoggedIn()) {
       console.log("L:OGGGED")
       this.authService.refreshToken();
 
