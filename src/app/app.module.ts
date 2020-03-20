@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,12 +25,18 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProfileComponent } from './profile/profile.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { AddPostComponent } from './add-post/add-post.component';
+import {AuthGuard, AuthInterceptor, AuthService} from './auth.service';
 
 
 const appRoutes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'add',
@@ -39,6 +45,7 @@ const appRoutes: Routes = [
   { path: '',
     pathMatch: 'full',
     component: HomepageComponent,
+    canActivate: [AuthGuard]
   },
   { path: '**', component: PageNotFoundComponent }
 ];
@@ -79,7 +86,14 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatDialogModule,
   ],
-  providers: [],
+  providers: [ AuthService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
