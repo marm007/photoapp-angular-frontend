@@ -24,12 +24,17 @@ import {RouterModule, Routes} from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { AddPostComponent } from './add-post/add-post.component';
 
 
 const appRoutes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+  },
+  {
+    path: 'add',
+    component: AddPostComponent,
   },
   { path: '',
     pathMatch: 'full',
@@ -50,6 +55,7 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     ProfileComponent,
     HomepageComponent,
+    AddPostComponent,
   ],
   imports: [
     RouterModule.forRoot(
