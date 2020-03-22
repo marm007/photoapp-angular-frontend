@@ -28,12 +28,17 @@ import { AddPostComponent } from './add-post/add-post.component';
 import {AuthGuard, AuthInterceptor, AuthService} from './services/auth/auth.service';
 import { ForgotComponent } from './forgot/forgot.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SinglePostComponent } from './single-post/single-post.component';
 
 
 const appRoutes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent
+  },
+  {
+    path: 'post/:id',
+    component: SinglePostComponent
   },
   {
     path: 'login',
@@ -69,6 +74,7 @@ const appRoutes: Routes = [
     HomepageComponent,
     AddPostComponent,
     ForgotComponent,
+    SinglePostComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -95,11 +101,11 @@ const appRoutes: Routes = [
   ],
   providers: [ AuthService,
     AuthGuard,
-    {
+   /* {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    },
+    },*/
   ],
   bootstrap: [AppComponent]
 })

@@ -21,6 +21,14 @@ export class PostsService {
       );
   }
 
+  getPost(id: string): Observable<Post> {
+    return this.http.get<Post>(this.postsUrl.concat(id + '/'))
+      .pipe(
+        tap(_ => console.log(_)),
+        catchError(this.handleError<Post>('getPost', null))
+      );
+  }
+
 
   /**
    * Handle Http operation that failed.
