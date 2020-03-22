@@ -1,50 +1,55 @@
-<div class="container">
-  <h1>Register</h1>
-  <form #registerForm="ngForm">
-    <div class="form-group">
-      <label for="nick">Nick</label>
-      <input type="text"
-             class="form-control"
-             id="nick"
-             required
-             [(ngModel)]="registerModel.nick" name="nick"
-             #nick="ngModel">
-       <div *ngIf="nick.errors && (nick.dirty)">
-         <small class="text-danger" *ngIf="nick.errors.required">Nick is required</small>
-       </div>
+<div [className]="dialogRef ? '' : 'register-container-wrapper'">
+  <div [className]="dialogRef ? '' : 'register-container'" class="container" [style]="isMobile ? 'border: none; ': ''" >
+    <div class="register-logo-container" fxLayout="row">
+      <img style="width: 55px; height: 55px"
+           src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+      <p class="register-logo" style="margin-left: 10px;">PhotoApp</p>
     </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email"
-             class="form-control"
-             id="email"
-             required
-             pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-             [(ngModel)]="registerModel.email" name="email"
-             #email="ngModel">
-       <div *ngIf="email.errors && (email.dirty)">
-         <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
-         <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
-       </div>
-    </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password"
-             class="form-control" id="password"
-             required
-             [(ngModel)]="registerModel.password"
-             name="password"
-             #password="ngModel">
-      <div *ngIf="password.errors && (password.dirty)">
-        <small class="text-danger" *ngIf="password.errors.required">Password is required</small>
+    <form #registerForm="ngForm">
+      <div class="form-group">
+        <label for="nick">Nick</label>
+        <input type="text"
+               class="form-control"
+               id="nick"
+               required
+               [(ngModel)]="registerData.nick" name="nick"
+               #nick="ngModel">
+        <div *ngIf="nick.errors && (nick.dirty)">
+          <small class="text-danger" *ngIf="nick.errors.required">Nick is required</small>
+        </div>
       </div>
-    </div>
-    <div>
-      <button type="submit" class="btn btn-primary"  [disabled]="!registerForm.form.valid" (click)="register(); registerForm.reset()">Register</button>
-    </div>
-  </form>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               required
+               pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+               [(ngModel)]="registerData.email" name="email"
+               #email="ngModel">
+        <div *ngIf="email.errors && (email.dirty)">
+          <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
+          <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password"
+               class="form-control" id="password"
+               required
+               [(ngModel)]="registerData.password"
+               name="password"
+               #password="ngModel">
+        <div *ngIf="password.errors && (password.dirty)">
+          <small class="text-danger" *ngIf="password.errors.required">Password is required</small>
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.form.valid"
+                (click)="register(); registerForm.reset()">Register
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-<mat-dialog-actions align="end">
-  <button  class="btn btn-primary" mat-button mat-dialog-close>Cancel</button>
-</mat-dialog-actions>

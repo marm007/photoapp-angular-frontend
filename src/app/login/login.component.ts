@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {AuthService} from '../services/auth/auth.service';
+import {DeviceDetectorService} from 'ngx-device-detector';
+import {Router} from '@angular/router';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
-import {UserService} from '../user.service';
-import {AuthService} from '../auth.service';
 
-export class LoginData {
-  constructor(public email: string,
-              public password: string) {
+class LoginData {
+  constructor( public email: string, public password: string) {
   }
 }
 
@@ -19,8 +19,31 @@ export class LoginComponent implements OnInit {
 
   model = new LoginData('', '');
 
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+
   submitted = false;
   error: any;
+  dialogRef = null;
+  registerDialog: MatDialog;
+
+  constructor(private authService: AuthService,
+              private deviceService: DeviceDetectorService,
+              private router: Router,
+              public dialog: MatDialog) {
+    this.isMobile = deviceService.isMobile();
+    this.isTablet = deviceService.isTablet();
+    this.isDesktop = deviceService.isDesktop();
+  }
+
+
+  ngOnInit(): void {
+    if (this.dialog.openDialogs) {
+      this.dialogRef = this.dialog.getDialogById('login');
+    }
+    console.log(this.dialog.openDialogs);
+    }
 
   onSubmit() { this.submitted = true; }
 
@@ -28,34 +51,31 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.model.email, this.model.password).subscribe(
       success => {
         console.log(success);
+        if (this.dialogRef == null){
+          this.router.navigate(['']);
+          this.model = new LoginData('', '');
+        } else {
+          this.dialogRef.close();
+        }
       },
       error => {
         console.log(error);
         this.error = error;
       }
     );
-    this.model = new LoginData('', '');
   }
 
-
-  constructor(
-    private userService: UserService,
-    public dialogRef: MatDialogRef<LoginComponent>,
-    public registerDialog: MatDialog,
-    private authService: AuthService) {}
-
-    ngOnInit() {
+  handleRegister() {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+      this.dialog.open(RegisterComponent, {
+        width: '600px',
+        height: '500px',
+        id: 'register'
+      });
+    } else {
+      this.router.navigate(['register']);
     }
-
-  openRegisterDialog(): void {
-    this.dialogRef.close();
-    this.registerDialog.open(RegisterComponent, {
-      width: '600px',
-      height: '500px',
-
-    });
   }
-
-
 
 }

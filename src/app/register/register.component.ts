@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import construct = Reflect.construct;
-import {MatDialogRef} from '@angular/material/dialog';
+import {DeviceDetectorService} from 'ngx-device-detector';
+import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
 
-export class RegisterData {
-  constructor(public nick: string, public email: string,
-              public password: string) {}
+class RegisterData {
+  constructor(public nick: string, public email: string, public password: string) {
+  }
 }
 
 @Component({
@@ -12,19 +14,25 @@ export class RegisterData {
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
-  registerModel = new RegisterData(null, null, null);
+  isMobile: boolean;
+  registerData = new RegisterData(null, null, null);
+  dialogRef = null;
+
+  constructor(private deviceService: DeviceDetectorService, public dialog: MatDialog) {
+    this.isMobile = deviceService.isMobile();
+  }
+
+  ngOnInit(): void {
+    if (this.dialog.openDialogs) {
+      this.dialogRef = this.dialog.getDialogById('register');
+    }
+    console.log(this.dialog.openDialogs);
+  }
 
   register() {
 
-  }
-
-  constructor(
-    public dialogRef: MatDialogRef<RegisterComponent>) {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 
 }

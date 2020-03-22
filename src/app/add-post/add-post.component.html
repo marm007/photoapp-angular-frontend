@@ -1,49 +1,63 @@
 <div style="margin-top: 65px">
   <form #addPostForm="ngForm">
-    <div class="mb-4 col-12 col-md-8 col-lg-6 ml-auto mr-auto form-group ">
-        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half input-file">
-          <input #imageInput
-                 id="photo"
-                 accept="image/*"
-                 type="file"
-                 required
-                 class="inputfile"
-                 (change)="processFile(imageInput)"/>
-          <label for="photo" style="margin-bottom: 0">
-            <span>Add photo</span>
-          </label>
-          <img *ngIf="selectedFile"  class="embed-responsive-item" src="{{selectedFile.src}}"
-               style="outline:0; border-color: transparent"/>
+    <div class="mb-4 col-12 col-md-8 col-lg-5 ml-auto mr-auto form-group ">
+      <div class="embed-responsive embed-responsive-16by9 z-depth-1-half input-file">
+        <input #imageInput
+               id="photo"
+               accept="image/*"
+               type="file"
+               required
+               class="inputfile"
+               (change)="processFile(imageInput)"
+        />
+        <label for="photo" style="margin-bottom: 0">
+          <span>Add photo </span>
+        </label>
+        <img *ngIf="selectedFile.file" class="embed-responsive-item" src="{{selectedFile.src}}"
+             style="outline:0; border-color: transparent" alt=""/>
+
+        <div *ngIf="selectedFile.file" style="left:0; top: 0; position: absolute; width: 100%; height: 100%"
+             class="add-item-opacity">
         </div>
+        <fa-icon [icon]="times" *ngIf="selectedFile.file"
+                 class="add-item-middle fa-3x"
+                 style="color: #ffffff" icon="times" (click)="resetImage()">
+        </fa-icon>
+      </div>
+
     </div>
     <div class=" col-12 col-md-8 col-lg-6 ml-auto mr-auto ">
 
       <div class="mb-4">
-        <div class="for-group">
+        <div class="form-group">
           <label for="description"></label>
           <textarea class="form-control" id="description" required style="resize: none"
-                 placeholder="Description" aria-describedby="basic-addon1"></textarea>
+                    placeholder="Description" aria-describedby="basic-addon1"
+                    [(ngModel)]="this.descriptionModel.text" name="description"
+                    #description="ngModel"></textarea>
+
+          <div *ngIf="description.errors && (description.dirty)">
+            <small class="text-danger" *ngIf="description.errors.required">Description is required</small>
+          </div>
         </div>
       </div>
 
       <div class="mb-1">
-        <button class="btn btn-primary" mat-button>
+        <button (click)="uploadPost()"
+                class="btn btn-primary" mat-button
+                [disabled]="!addPostForm.form.valid || (addPostForm.form.valid && !selectedFile.file)">
           Add
         </button>
+        <img *ngIf="selectedFile.pending" alt="loading..." class="pl-2"
+             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
       </div>
+      <div *ngIf="selectedFile.status == 'fail'" class="alert alert-danger" style="margin-top: 15px">{{errorMessage}}</div>
     </div>
-<!--    <div *ngIf="selectedFile" class="img-preview-container">
 
-      <div class="img-preview{{selectedFile.status === 'fail' ? '-error' : ''}}"
-           [ngStyle]="{'background-image': 'url('+ selectedFile.src + ')'}">
-      </div>
-
-      <div *ngIf="selectedFile.pending" class="img-loading-overlay">
-        <div class="img-spinning-circle"></div>
-      </div>
-
-      <div *ngIf="selectedFile.status === 'ok'" class="alert alert-success"> Image Uploaded Succesfuly!</div>
-      <div *ngIf="selectedFile.status === 'fail'" class="alert alert-danger"> Image Upload Failed!</div>
-    </div>-->
   </form>
 </div>
+
+<!--  <div *ngIf="selectedFile.pending" class="img-loading-overlay">
+    <div class="img-spinning-circle"></div>
+  </div>-->
+

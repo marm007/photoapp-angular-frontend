@@ -16,9 +16,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   private setSession(authResult) {
-    console.log("DLaldldaldal")
-    const tokenAccess = authResult.access;
-    console.log(tokenAccess)
+
     if ('refresh' in authResult) {
       localStorage.setItem('token_refresh', authResult.refresh);
     }
@@ -32,6 +30,11 @@ export class AuthService {
 
   get tokenRefresh(): string {
     return localStorage.getItem('token_refresh');
+  }
+
+  get jwtAuthHeaders(): HttpHeaders {
+
+    return new HttpHeaders({Authorization: 'JWT ' + this.tokenAccess});
   }
 
   login(email: string, password: string) {
@@ -61,8 +64,6 @@ export class AuthService {
   }
 
   refreshToken() {
-    console.log("REFERS")
-    console.log(this.getExpiration('token_access'))
     if (moment().isAfter(this.getExpiration('token_access'))) {
       const headers = new HttpHeaders({'Content-Type': 'application/json'});
       return this.http.post(
@@ -83,6 +84,9 @@ export class AuthService {
   }
 
   isLoggedIn() {
+    if (this.tokenAccess == null) {
+      return false;
+    }
     return moment().isBefore(this.getExpiration('token_access')) ||
       moment().isBefore(this.getExpiration('token_refresh'));
   }
@@ -96,7 +100,6 @@ export class AuthService {
 export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('falaflafl')
     const token = localStorage.getItem('token_access');
 
     if (token) {
@@ -117,16 +120,12 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) { }
 
   canActivate() {
-    console.log("DAladladllad")
-    if (this.authService.tokenAccess && this.authService.isLoggedIn()) {
-      console.log("L:OGGGED")
+    if (this.authService.isLoggedIn()) {
       this.authService.refreshToken();
-
       return true;
     } else {
       this.authService.logout();
       this.router.navigate(['login']);
-
       return false;
     }
   }

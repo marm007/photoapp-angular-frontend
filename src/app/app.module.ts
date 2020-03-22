@@ -25,19 +25,23 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProfileComponent } from './profile/profile.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { AddPostComponent } from './add-post/add-post.component';
-import {AuthGuard, AuthInterceptor, AuthService} from './auth.service';
-import { LoginTrueComponent } from './login-true/login-true.component';
+import {AuthGuard, AuthInterceptor, AuthService} from './services/auth/auth.service';
+import { ForgotComponent } from './forgot/forgot.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 const appRoutes: Routes = [
   {
     path: 'profile',
-    component: ProfileComponent,
-    canActivate: [AuthGuard]
+    component: ProfileComponent
   },
   {
     path: 'login',
-    component: LoginTrueComponent,
+    component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'add',
@@ -64,12 +68,12 @@ const appRoutes: Routes = [
     ProfileComponent,
     HomepageComponent,
     AddPostComponent,
-    LoginTrueComponent,
+    ForgotComponent,
   ],
   imports: [
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      /*{ enableTracing: true } // <-- debugging purposes only*/
     ),
     BrowserModule,
     TruncateModule,
@@ -87,6 +91,7 @@ const appRoutes: Routes = [
     DeviceDetectorModule.forRoot(),
     MatMenuModule,
     MatDialogModule,
+    FontAwesomeModule,
   ],
   providers: [ AuthService,
     AuthGuard,

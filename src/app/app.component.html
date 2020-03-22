@@ -1,4 +1,4 @@
 <!-- fxLayout="column" fxFlex="30%"   fxFlexOffset="35%"-->
-<app-header></app-header>
-<app-footer class="d-flex d-lg-none"></app-footer>
+<app-header *ngIf="showHeader"></app-header>
+<app-footer *ngIf="showHeader" class="d-flex d-lg-none"></app-footer>
 <router-outlet></router-outlet>
