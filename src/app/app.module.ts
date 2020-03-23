@@ -101,7 +101,7 @@ const appRoutes: Routes = [
   ],
   providers: [ AuthService,
     AuthGuard,
-   /* {
+    /*{
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,

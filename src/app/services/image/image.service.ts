@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import apiRoot from './rest-config';
-import {AuthService} from './services/auth/auth.service';
+import apiRoot from '../../rest-config';
+import {AuthService} from '../auth/auth.service';
 
 
 @Injectable({
@@ -12,14 +12,6 @@ export class ImageService {
   private apiRoot = 'http://localhost:8000/api/';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
-
-  /*public uploadImage(image: File): Observable<Response> {
-    const formData = new FormData();
-
-    formData.append('image', image);
-
-    return this.http.post('/api/v1/image-upload', formData);
-  }*/
 
   public uploadImage(image: File, description: string): Observable<Response> {
     const formData = new FormData();

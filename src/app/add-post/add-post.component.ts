@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ImageService} from '../image.service';
+import {ImageService} from '../services/image/image.service';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 class ImageSnippet {

@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {CanActivate, Router} from '@angular/router';
-
-import {Observable} from 'rxjs';
-import {shareReplay, tap} from 'rxjs/operators';
-
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, filter, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import * as jwtDecode from 'jwt-decode';
 import moment from 'moment';
 
@@ -34,7 +32,7 @@ export class AuthService {
 
   get jwtAuthHeaders(): HttpHeaders {
 
-    return new HttpHeaders({Authorization: 'JWT ' + this.tokenAccess});
+    return new HttpHeaders({Authorization: 'Bearer ' + this.tokenAccess});
   }
 
   login(email: string, password: string) {
@@ -65,7 +63,9 @@ export class AuthService {
 
   refreshToken() {
     if (moment().isAfter(this.getExpiration('token_access'))) {
-      const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+      const headers = new HttpHeaders({'Content-Type': 'application/json',
+        Authorization: 'JWT ' + this.tokenAccess});
       return this.http.post(
         this.apiRoot.concat('token/refresh/'),
         { refresh: this.tokenRefresh },
@@ -98,19 +98,57 @@ export class AuthService {
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  // Refresh Token Subject tracks the current token, or is null if no token is currently
+  // available (e.g. refresh pending).
+  constructor(public authService: AuthService) {
+  }
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token_access');
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
 
-    if (token) {
-      const cloned = req.clone({
-        headers: req.headers.set('Authorization', 'JWT '.concat(token))
-      });
+      return this.authService.refreshToken().pipe(
+        switchMap((token: any) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(token.jwt);
+          return next.handle(this.addToken(request, token.jwt));
+        }));
 
-      return next.handle(cloned);
     } else {
-      return next.handle(req);
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(jwt => {
+          return next.handle(this.addToken(request, jwt));
+        }));
     }
+  }
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+     if (this.authService.tokenAccess) {
+      request = this.addToken(request, this.authService.tokenAccess);
+    }
+
+     return next.handle(request).pipe(catchError(error => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        return this.handle401Error(request, next);
+      } else {
+        return throwError(error);
+      }
+    })) as any;
+  }
+
+  private addToken(request: HttpRequest<any>, token: string) {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 }
 
@@ -121,6 +159,8 @@ export class AuthGuard implements CanActivate {
 
   canActivate() {
     if (this.authService.isLoggedIn()) {
+      console.log('REFEREREadadad');
+
       this.authService.refreshToken();
       return true;
     } else {

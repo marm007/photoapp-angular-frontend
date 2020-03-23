@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as data from '../posts_data.json';
-import {Post} from '../posts/post';
+import {Post} from '../models/post';
 import {ActivatedRoute} from '@angular/router';
-import {PostsService} from '../posts/posts.service';
+import {PostsService} from '../services/post/posts.service';
+import {CommentService} from '../services/comment/comment.service';
+import {Comment} from '../models/comment';
 
 @Component({
   selector: 'app-single-post',
@@ -10,13 +12,17 @@ import {PostsService} from '../posts/posts.service';
   styleUrls: ['./single-post.component.css']
 })
 export class SinglePostComponent implements OnInit {
+
   post: Post;
+  addCommentContent: string;
   showDescription = false;
   showMoreComments = false;
   userCommentContent = '';
   apiRoot = 'http://127.0.0.1:8000';
 
-  constructor(private activatedRoute: ActivatedRoute, private postsService: PostsService) {
+  constructor(private activatedRoute: ActivatedRoute,
+              private postsService: PostsService,
+              private commentService: CommentService) {
   }
 
   ngOnInit() {
@@ -35,7 +41,12 @@ export class SinglePostComponent implements OnInit {
     });
   }
 
-  sendValues(post: Post): void {
-    console.log(post.userCommentContent);
+  addComment(commentText: string): void {
+    console.log(commentText);
+    const comment = {body: commentText, photo_id: this.post.id, author_name: this.post.user.username};
+    this.commentService.addComment(comment).subscribe(c => {
+      const commentAdded = {body: c.body, author_name: c.author_name};
+      this.post.comments.push(commentAdded as Comment);
+    });
   }
 }

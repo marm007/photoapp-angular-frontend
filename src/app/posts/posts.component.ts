@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Post} from './post';
-import {PostsService} from './posts.service';
+import {Post} from '../models/post';
+import {PostsService} from '../services/post/posts.service';
 import * as data from '../posts_data.json';
 
 
@@ -25,7 +25,6 @@ export class PostsComponent implements OnInit {
   }
 
   sendValues(post: Post): void {
-    console.log(post.userCommentContent);
   }
 
 
