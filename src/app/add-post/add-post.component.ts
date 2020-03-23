@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ImageService} from '../services/image/image.service';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import {Router} from '@angular/router';
+import {Post} from '../models/post';
 
 class ImageSnippet {
   pending = false;
@@ -22,7 +24,7 @@ export class AddPostComponent implements OnInit {
   times = faTimes ;
   errorMessage: string;
 
-  constructor(private imageService: ImageService) {
+  constructor(private imageService: ImageService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -65,8 +67,9 @@ export class AddPostComponent implements OnInit {
     console.log(this.selectedFile.file);
     if (this.selectedFile.file.type === 'image/jpeg') {
     this.imageService.uploadImage(this.selectedFile.file, this.descriptionModel.text).subscribe(
-      (res) => {
+      (res: Post) => {
         this.onSuccess();
+        this.router.navigate(['post/'.concat(String(res.id))]);
       },
       (err) => {
         console.log(err);

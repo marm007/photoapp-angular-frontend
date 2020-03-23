@@ -1,4 +1,4 @@
-<div class="d-none d-lg-block relation-section-wrapper">
+<div class="d-none d-lg-block relation-section-wrapper" *ngIf="(postsLoaded | async) == true">
   <div id="relation-header-box">
     <div id="relation-header-text">Relacje</div>
   </div>
@@ -20,7 +20,7 @@
 
 </div>
 
-<div class="d-block d-lg-none relation-section-mobile">
+<div class="d-block d-lg-none relation-section-mobile" *ngIf="(postsLoaded | async) == true">
   <div class="relation-section-wrapper-mobile">
     <div style="min-width: 100px; display: flex; flex-direction: row" class="relation-mobile">
       <div mat-card-avatar class="relation-photo-mobile"

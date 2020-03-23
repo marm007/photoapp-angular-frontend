@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import * as data from '../posts_data.json';
 import {Post} from '../models/post';
 import {ActivatedRoute} from '@angular/router';
@@ -13,11 +13,13 @@ import {Comment} from '../models/comment';
 })
 export class SinglePostComponent implements OnInit {
 
-  post: Post;
+  @Input() post: Post;
+
   addCommentContent: string;
   showDescription = false;
   showMoreComments = false;
-  userCommentContent = '';
+  addPaddingToTop: boolean;
+
   apiRoot = 'http://127.0.0.1:8000';
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -26,11 +28,20 @@ export class SinglePostComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Note: Below 'queryParams' can be replaced with 'params' depending on your requirements
-    this.activatedRoute.params.subscribe(params => {
-      console.log(params);
-      this.getPost(params.id);
-    });
+    if (this.post == null) {
+      this.addPaddingToTop = true;
+      console.log("TATAGBBGBB");
+
+      // Note: Below 'queryParams' can be replaced with 'params' depending on your requirements
+      this.activatedRoute.params.subscribe(params => {
+        console.log(params);
+        this.getPost(params.id);
+      });
+    } else {
+      this.addPaddingToTop = false;
+      this.post.image = this.apiRoot + this.post.image;
+      this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+    }
   }
 
   getPost(id: string) {
@@ -42,11 +53,11 @@ export class SinglePostComponent implements OnInit {
   }
 
   addComment(commentText: string): void {
-    console.log(commentText);
     const comment = {body: commentText, photo_id: this.post.id, author_name: this.post.user.username};
     this.commentService.addComment(comment).subscribe(c => {
       const commentAdded = {body: c.body, author_name: c.author_name};
       this.post.comments.push(commentAdded as Comment);
+      this.addCommentContent = '';
     });
   }
 }

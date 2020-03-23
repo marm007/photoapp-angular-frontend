@@ -77,6 +77,15 @@ export class AuthService {
     }
   }
 
+  refreshTokenOne() {
+    return this.http.post<any>(this.apiRoot.concat('token/refresh/'), {
+      refresh: this.tokenRefresh
+    }).pipe(tap(response => {
+      this.setSession(response);
+    }));
+  }
+
+
   getExpiration(tokenString: string) {
     const token = localStorage.getItem(tokenString);
     const payload = jwtDecode(token) as JWTPayload;
@@ -110,11 +119,13 @@ export class AuthInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
-      return this.authService.refreshToken().pipe(
+      return this.authService.refreshTokenOne().pipe(
         switchMap((token: any) => {
+          console.log("TOWTKWKKTWK")
+          console.log(token)
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(token.jwt);
-          return next.handle(this.addToken(request, token.jwt));
+          this.refreshTokenSubject.next(token.access);
+          return next.handle(this.addToken(request, token.access));
         }));
 
     } else {
@@ -130,9 +141,9 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-     if (this.authService.tokenAccess) {
+   /*  if (this.authService.tokenAccess) {
       request = this.addToken(request, this.authService.tokenAccess);
-    }
+    }*/
 
      return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {

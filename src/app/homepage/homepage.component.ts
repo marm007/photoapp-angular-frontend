@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {DeviceDetectorService} from 'ngx-device-detector';
 
 @Component({
   selector: 'app-homepage',
@@ -7,5 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomepageComponent {
 
-  constructor() { }
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+
+  innerWidth: any;
+
+  constructor(private deviceService: DeviceDetectorService) {
+    this.innerWidth = window.innerWidth;
+    this.isMobile = deviceService.isMobile();
+    this.isTablet = deviceService.isTablet();
+    this.isDesktop = deviceService.isDesktop();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+  }
 }

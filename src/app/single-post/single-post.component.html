@@ -1,4 +1,4 @@
-<div *ngIf="post != null" class="d-none d-lg-block post-section-wrapper">
+<div *ngIf="post != null" class="d-none d-lg-block post-section-wrapper" [style]="addPaddingToTop ? 'padding-top:120px' : ''">
   <div class="post-section">
     <mat-card class="post">
       <mat-card-header class="post-header">
@@ -48,10 +48,11 @@
 
             </div>
             <div *ngIf="showMoreComments && post.comments[2]">
-              <div *ngFor="let comment of post.comments; index as i"
-                   fxLayout="row" class="post-comment">
-                <a>{{post.comments[i].author_name}}</a>
-                <span>{{post.comments[i].body}}</span>
+              <div *ngFor="let comment of post.comments; index as i">
+                <div *ngIf="i != 0 && i != 1" fxLayout="row" class="post-comment">
+                  <a>{{post.comments[i].author_name}}</a>
+                  <span>{{post.comments[i].body}}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -128,10 +129,11 @@
 
           </div>
           <div *ngIf="showMoreComments && post.comments[2]">
-            <div *ngFor="let comment of post.comments; index as i"
-                 fxLayout="row" class="post-comment">
-              <a>{{post.comments[i].author_name}}</a>
-              <span>{{post.comments[i].body}}</span>
+            <div *ngFor="let comment of post.comments; index as i">
+              <div *ngIf="i != 0 && i != 1" fxLayout="row" class="post-comment">
+                <a>{{post.comments[i].author_name}}</a>
+                <span>{{post.comments[i].body}}</span>
+              </div>
             </div>
           </div>
         </div>
