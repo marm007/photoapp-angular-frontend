@@ -29,6 +29,8 @@ import {AuthGuard, AuthInterceptor, AuthService} from './services/auth/auth.serv
 import { ForgotComponent } from './forgot/forgot.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SinglePostComponent } from './single-post/single-post.component';
+import { SingleRelationComponent } from './single-relation/single-relation.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 const appRoutes: Routes = [
   {
@@ -74,30 +76,32 @@ const appRoutes: Routes = [
     AddPostComponent,
     ForgotComponent,
     SinglePostComponent,
+    SingleRelationComponent,
   ],
-  imports: [
-    RouterModule.forRoot(
-      appRoutes,
-      /*{ enableTracing: true } // <-- debugging purposes only*/
-    ),
-    BrowserModule,
-    TruncateModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatCardModule,
-    MatButtonModule,
-    FlexLayoutModule.withConfig({
-      useColumnBasisZero: false,
-      printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
-    }),
-    ScrollingModule,
-    MatInputModule,
-    FormsModule,
-    DeviceDetectorModule.forRoot(),
-    MatMenuModule,
-    MatDialogModule,
-    FontAwesomeModule,
-  ],
+    imports: [
+        RouterModule.forRoot(
+            appRoutes,
+            /*{ enableTracing: true } // <-- debugging purposes only*/
+        ),
+        BrowserModule,
+        TruncateModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatButtonModule,
+        FlexLayoutModule.withConfig({
+            useColumnBasisZero: false,
+            printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
+        }),
+        ScrollingModule,
+        MatInputModule,
+        FormsModule,
+        DeviceDetectorModule.forRoot(),
+        MatMenuModule,
+        MatDialogModule,
+        FontAwesomeModule,
+        MatProgressBarModule,
+    ],
   providers: [ AuthService,
     AuthGuard,
     {

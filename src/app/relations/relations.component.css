@@ -1,5 +1,5 @@
 .relation-section-wrapper{
-  border: 1px solid rgba(var(--b6a,219,219,219),1);
+  border: 1px solid rgba(219,219,219,1);
   position: fixed;
   /*margin-top: 4px;*/
 }
@@ -132,3 +132,11 @@
 }
 
 
+
+.custom-dialog-container .mat-dialog-container {
+  padding: 5px;
+}
+
+.custom-dialog-container .mat-card-header-text {
+  margin: 5px;
+}

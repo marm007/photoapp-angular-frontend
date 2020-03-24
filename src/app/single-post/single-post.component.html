@@ -104,10 +104,14 @@
     </div>
     <div class="post-footer">
       <mat-card-actions>
-        <button mat-button style="outline: 0">
-          <i class="material-icons">
+        <button (click)="handleClick(true)" mat-button style="outline: 0">
+          <i *ngIf="!isLiked" class="material-icons">
             favorite_border
-          </i></button>
+          </i>
+          <i *ngIf="isLiked" class="material-icons">
+            favorite
+          </i>
+        </button>
       </mat-card-actions>
       <div class="post-likes">
         Liczba polubień:

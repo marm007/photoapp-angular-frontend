@@ -1,10 +1,11 @@
 .post-section-wrapper {
-  margin: 0 auto;
   position: relative;
   width: 100%;
   display: flex;
   flex-grow: 1;
   max-width: 614px;
+  margin: 0 28px 0 auto;
+
 }
 
 .post-section {
@@ -13,7 +14,7 @@
 
 .post{
   padding: 0;
-  border: 1px solid rgba(var(--b6a,219,219,219),1);
+  border: 1px solid rgba(219,219,219,1);
   border-radius: 3px;
   margin-bottom: 60px;
 }

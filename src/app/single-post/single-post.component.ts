@@ -1,4 +1,4 @@
-import {Component, HostBinding, Input, OnInit} from '@angular/core';
+import {Component, HostBinding, HostListener, Input, OnInit} from '@angular/core';
 import {Post} from '../models/post';
 import {ActivatedRoute} from '@angular/router';
 import {PostsService} from '../services/post/posts.service';
@@ -55,6 +55,7 @@ export class SinglePostComponent implements OnInit {
 
   likeIcon = faHeart;
 
+
   apiRoot = 'http://127.0.0.1:8000';
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -62,6 +63,8 @@ export class SinglePostComponent implements OnInit {
               private commentService: CommentService,
               private authService: AuthService) {
   }
+
+
 
   ngOnInit() {
     if (this.post == null) {

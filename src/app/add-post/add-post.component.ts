@@ -3,13 +3,9 @@ import {ImageService} from '../services/image/image.service';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Post} from '../models/post';
+import {ImageSnippet} from '../models/imageSnippet';
 
-class ImageSnippet {
-  pending = false;
-  status = 'init';
-  constructor(public src: string, public file: File) {
-  }
-}
+
 
 @Component({
   selector: 'app-add-post',

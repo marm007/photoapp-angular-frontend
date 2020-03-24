@@ -1,9 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
 import * as data from '../relations_data.json';
-import {PostsService} from '../services/post/posts.service';
 import {MessageService} from '../services/message/message.service';
+import {MatDialog} from '@angular/material/dialog';
+import {SingleRelationComponent} from '../single-relation/single-relation.component';
+
+export enum DIALOG_MODE {
+  ADD,
+  WATCH
+}
 
 @Component({
   selector: 'app-relations',
@@ -22,7 +27,8 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   postsLoaded: Subject<boolean> = new Subject();
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService,
+              public dialog: MatDialog) {
     console.log(this.relations);
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
@@ -38,6 +44,20 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  addRelation() {
+    const dialogRef = this.dialog.open(SingleRelationComponent, {
+      panelClass: 'custom-dialog-container',
+      data: DIALOG_MODE.ADD
+    });
+  }
+
+  playRelation() {
+    const dialogRef = this.dialog.open(SingleRelationComponent, {
+      panelClass: 'custom-dialog-container',
+      data: DIALOG_MODE.WATCH
+    });
   }
 
 }
