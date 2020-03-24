@@ -14,3 +14,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-card-image {
   margin: 0 -16px 0px -16px !important;
 }
+
+.clickable {
+  cursor: pointer;
+}

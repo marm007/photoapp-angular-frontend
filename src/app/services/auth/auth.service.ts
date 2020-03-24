@@ -35,6 +35,17 @@ export class AuthService {
     return new HttpHeaders({Authorization: 'Bearer ' + this.tokenAccess});
   }
 
+  get userId(): number {
+    if (this.isLoggedIn()) {
+      this.refreshToken();
+      const payload = jwtDecode(this.tokenAccess) as JWTPayload;
+      return payload.user_id;
+    } else {
+      this.logout();
+      return -1;
+    }
+  }
+
   login(email: string, password: string) {
 
     const loginToken = window.btoa(email + ':' + password);
@@ -121,8 +132,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
       return this.authService.refreshTokenOne().pipe(
         switchMap((token: any) => {
-          console.log("TOWTKWKKTWK")
-          console.log(token)
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.access);
           return next.handle(this.addToken(request, token.access));
@@ -170,8 +179,6 @@ export class AuthGuard implements CanActivate {
 
   canActivate() {
     if (this.authService.isLoggedIn()) {
-      console.log('REFEREREadadad');
-
       this.authService.refreshToken();
       return true;
     } else {

@@ -2,21 +2,28 @@
   <div class="post-section">
     <mat-card class="post">
       <mat-card-header class="post-header">
-        <div mat-card-avatar class="post-header-image"
+        <div mat-card-avatar class="post-header-image clickable"
              [ngStyle]="{'background-image': 'url(' + post.user.profile.photo +')'}"></div>
         <div class="post-header-username">
           <p>{{post.user.username}}</p>
         </div>
       </mat-card-header>
-      <div class="post-photo-block">
-        <img class="post-photo" mat-card-image src="{{post.image}}" alt="Photo of a Shiba Inu">
+      <div class="post-photo-block" (dblclick)="handleClick()">
+        <img class="post-photo" mat-card-image src="{{post.image}}" alt="">
+          <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger"
+                   [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
+          </fa-icon>
       </div>
       <div class="post-footer">
         <mat-card-actions>
-          <button mat-button style="outline: 0">
-            <i class="material-icons">
+          <button (click)="handleClick(true)" mat-button style="outline: 0">
+            <i *ngIf="!isLiked" class="material-icons">
               favorite_border
-            </i></button>
+            </i>
+            <i *ngIf="isLiked" class="material-icons">
+              favorite
+            </i>
+          </button>
         </mat-card-actions>
         <div class="post-likes">
           Liczba polubień:
@@ -83,14 +90,17 @@
 <div *ngIf="post != null" class="d-block d-lg-none post-section-mobile">
   <mat-card class="post">
     <mat-card-header class="post-header">
-      <div mat-card-avatar class="post-header-image"
+      <div mat-card-avatar class="post-header-image  clickable"
            [ngStyle]="{'background-image': 'url(' + post.user.profile.photo +')'}"></div>
       <div class="post-header-username">
         <p>{{post.user.username}}</p>
       </div>
     </mat-card-header>
-    <div class="post-photo-block">
-      <img class="post-photo" mat-card-image src="{{post.image}}" alt="Photo of a Shiba Inu">
+    <div class="post-photo-block" (dblclick)="handleClick()">
+      <img class="post-photo" mat-card-image src="{{post.image}}" alt="">
+      <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger"
+               [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
+      </fa-icon>
     </div>
     <div class="post-footer">
       <mat-card-actions>

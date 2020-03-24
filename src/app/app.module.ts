@@ -30,7 +30,6 @@ import { ForgotComponent } from './forgot/forgot.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SinglePostComponent } from './single-post/single-post.component';
 
-
 const appRoutes: Routes = [
   {
     path: 'profile',

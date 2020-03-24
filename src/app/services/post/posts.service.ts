@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {Post} from '../../models/post';
 import {catchError, map, tap} from 'rxjs/operators';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class PostsService {
 
   private postsUrl = 'http://127.0.0.1:8000/api/photos/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.postsUrl)
@@ -29,6 +30,14 @@ export class PostsService {
       );
   }
 
+  likePost(id: string): Observable<Post> {
+    return this.http.patch<Post>(this.postsUrl.concat(id + '/like/'),
+      null, {headers: this.authService.jwtAuthHeaders})
+      .pipe(
+        tap(_ => console.log(_)),
+        catchError(this.handleError<Post>('likePost', null))
+      );
+  }
 
   /**
    * Handle Http operation that failed.
