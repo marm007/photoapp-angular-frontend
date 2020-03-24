@@ -110,3 +110,14 @@
   align-items: center;
   text-align: center;
 }
+
+.s-relation-buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.s-relation-button {
+  text-align: center;
+  margin: 10px;
+  outline: none;
+}

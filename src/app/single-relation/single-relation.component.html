@@ -6,7 +6,7 @@
   </div>-->
 <div *ngIf="showRelation">
   <div class="s-relation-header-options-wrapper">
-    <div class="s-relation-header-options-more clickable" style="user-select: none">
+    <div  *ngIf="mode === 1" class="s-relation-header-options-more clickable" style="user-select: none">
       <fa-icon [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
       </fa-icon>
     </div>
@@ -27,9 +27,9 @@
 
   <mat-progress-bar *ngIf="mode === 1" mode="determinate" value="{{this.timeLeft}}"></mat-progress-bar>
 
-  <div class="s-relation-image-wrapper" >
+  <div  class="s-relation-image-wrapper">
     <div *ngIf="isDesktop && !selectedFile.file" class="s-relation-input-file" [ngStyle]="{
-          'height': (this.innerHeight - 150 +'px'),
+          'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
           'width': (this.innerWidth / 2.0 + 'px')}">
       <input #imageInput
              id="photo"
@@ -39,13 +39,13 @@
              class="s-relation-inputfile"
              (change)="processFile(imageInput)"
       />
-      <label  for="photo" style="margin-bottom: 0">
+      <label for="photo" style="margin-bottom: 0">
         <span>Add photo </span>
       </label>
     </div>
     <div *ngIf="!isDesktop && !selectedFile.file" class="s-relation-input-file" [ngStyle]="{
      'height': (this.innerHeight - this.innerHeight*0.5 +'px'),
-     'width': (this.innerWidth - this.innerWidth*0.05 + 'px')}">
+     'width': (this.innerWidth - this.innerWidth*0.25 + 'px')}">
       <input #imageInput
              id="photo-mobile"
              accept="image/*"
@@ -54,7 +54,7 @@
              class="s-relation-inputfile"
              (change)="processFile(imageInput)"
       />
-      <label  for="photo-mobile" style="margin-bottom: 0">
+      <label for="photo-mobile" style="margin-bottom: 0">
         <span>Add photo </span>
       </label>
     </div>
@@ -65,9 +65,13 @@
          src="{{selectedFile.src}}"
          alt=""/>
     <img *ngIf="isDesktop && selectedFile.file" class="s-relation-image" [ngStyle]="{
-          'height': (this.innerHeight - 150 +'px'),
+          'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
           'width': (this.innerWidth / 2.0 + 'px')}"
          src="{{selectedFile.src}}"
          alt=""/>
+  </div>
+  <div *ngIf="selectedFile.file" class="s-relation-buttons-wrapper">
+    <button class="s-relation-button" mat-menu-item>Dodaj</button>
+    <button class="s-relation-button" mat-menu-item>Anuluj</button>
   </div>
 </div>
