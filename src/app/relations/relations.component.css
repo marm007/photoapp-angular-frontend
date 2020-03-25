@@ -121,14 +121,23 @@
 }
 
 .relation-username-mobile{
-  color: rgba(var(--f52,153,153,153),1);
+  color: rgba(153,153,153,1);
   font-size: 12px;
-  line-height: 14px;
   overflow: hidden;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 40px;
+}
+
+.relation-mobile-others {
+  display: flex;
+  height: auto;
+  margin: 0 10px;
+  width: 50px;
+  justify-content: center;
+  flex-wrap: wrap;
+  cursor: pointer;
+  min-width: 50px;
 }
 
 

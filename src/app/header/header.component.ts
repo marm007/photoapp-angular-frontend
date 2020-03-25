@@ -4,6 +4,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../services/auth/auth.service';
 import {LoginComponent} from '../login/login.component';
 import {Router} from '@angular/router';
+import {UserService} from '../user.service';
+import {User} from '../models/user';
 
 @Component({
   selector: 'app-header',
@@ -15,14 +17,18 @@ export class HeaderComponent implements OnInit {
   isTablet: boolean;
   isDesktop: boolean;
 
+  user: User;
+  isLogged: boolean;
 
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
               public authService: AuthService,
-              public router: Router) {
+              public router: Router,
+              private userService: UserService) {
     this.isMobile = deviceService.isMobile();
     this.isTablet = deviceService.isTablet();
     this.isDesktop = deviceService.isDesktop();
+    this.getLoggedUserData();
   }
 
   openDialog(): void {
@@ -40,6 +46,18 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isLoggedIn(): boolean {
+    const isLogged = this.authService.isLoggedIn();
+    console.log(isLogged);
+
+    if (isLogged !== this.isLogged) {
+      this.getLoggedUserData();
+      this.isLogged = isLogged;
+    }
+
+    return isLogged;
+  }
+
   logout(): void {
     this.authService.logout();
     if (this.router.url === '/') {
@@ -47,4 +65,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  getLoggedUserData() {
+    this.userService.getLoggedUserData().subscribe(user => {
+      this.user = user;
+      console.log(this.user);
+    });
+  }
 }

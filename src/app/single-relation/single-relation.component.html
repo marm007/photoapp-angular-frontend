@@ -1,12 +1,6 @@
-<!--  <div class="s-relation-wrapper">
-    &lt;!&ndash;<div class="img-spinning-circle"></div>&ndash;&gt;
-    <div class="s-relation-header">
-    </div>
-
-  </div>-->
 <div *ngIf="showRelation">
   <div class="s-relation-header-options-wrapper">
-    <div  *ngIf="mode === 1" class="s-relation-header-options-more clickable" style="user-select: none">
+    <div *ngIf="mode === 1" class="s-relation-header-options-more clickable" style="user-select: none">
       <fa-icon [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
       </fa-icon>
     </div>
@@ -18,16 +12,28 @@
   </div>
   <mat-card-header class="s-relation-header">
     <div mat-card-avatar class="s-relation-header-image clickable"
-         [ngStyle]="{'background-image': 'url(https://pbs.twimg.com/profile_images/633782900077408256/F541mrSs_400x400.jpg)'}"></div>
+         [ngStyle]="{'background-image': 'url(' + relation.user.profile.photo + ')'}"></div>
     <div class="s-relation-header-username">
-      <p>Janek</p>
+      <p>{{relation.user.username}}</p>
     </div>
-
   </mat-card-header>
 
   <mat-progress-bar *ngIf="mode === 1" mode="determinate" value="{{this.timeLeft}}"></mat-progress-bar>
 
-  <div  class="s-relation-image-wrapper">
+  <div *ngIf="mode === 1" class="s-relation-image-wrapper">
+    <img *ngIf="!isDesktop" class="s-relation-image" [ngStyle]="{
+    'height': (this.innerHeight - this.innerHeight*0.5 +'px'),
+     'width': (this.innerWidth - this.innerWidth*0.05 + 'px')}"
+         src="{{relation.image}}"
+         alt=""/>
+    <img *ngIf="isDesktop" class="s-relation-image" [ngStyle]="{
+          'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
+          'width': (this.innerWidth / 2.0 + 'px')}"
+         src="{{relation.image}}"
+         alt=""/>
+  </div>
+
+  <div *ngIf="mode !== 1" class="s-relation-image-wrapper">
     <div *ngIf="isDesktop && !selectedFile.file" class="s-relation-input-file" [ngStyle]="{
           'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
           'width': (this.innerWidth / 2.0 + 'px')}">
@@ -71,7 +77,7 @@
          alt=""/>
   </div>
   <div *ngIf="selectedFile.file" class="s-relation-buttons-wrapper">
-    <button class="s-relation-button" mat-menu-item>Dodaj</button>
-    <button class="s-relation-button" mat-menu-item>Anuluj</button>
+    <button class="s-relation-button" mat-menu-item (click)="handleAdd()">Dodaj</button>
+    <button class="s-relation-button" mat-menu-item (click)="handleClose()">Anuluj</button>
   </div>
 </div>

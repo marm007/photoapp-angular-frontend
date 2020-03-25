@@ -4,10 +4,19 @@ import * as data from '../relations_data.json';
 import {MessageService} from '../services/message/message.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SingleRelationComponent} from '../single-relation/single-relation.component';
+import {RelationService} from '../services/relation/relation.service';
+import {Post} from '../models/post';
+import {Relation} from '../models/relation';
+import {User} from '../models/user';
 
 export enum DIALOG_MODE {
   ADD,
   WATCH
+}
+
+interface RelationsByUser {
+  user: User;
+  relations: Relation[];
 }
 
 @Component({
@@ -18,18 +27,20 @@ export enum DIALOG_MODE {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RelationsComponent implements OnInit, OnDestroy {
+  private url = 'http://127.0.0.1:8000/api/';
+
+  relations: Relation[];
+  relationsByUser: RelationsByUser[];
+
   subscription: Subscription;
 
   message: string = null;
 
-  // @ts-ignore
-  relations = data.default;
-
   postsLoaded: Subject<boolean> = new Subject();
 
   constructor(private messageService: MessageService,
-              public dialog: MatDialog) {
-    console.log(this.relations);
+              public dialog: MatDialog,
+              public relationService: RelationService) {
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'posts loaded') {
@@ -37,6 +48,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
         }
         this.message = myMessage;
       });
+    this.getRelations();
   }
 
   ngOnInit(): void {
@@ -46,18 +58,45 @@ export class RelationsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  addRelation() {
-    const dialogRef = this.dialog.open(SingleRelationComponent, {
-      panelClass: 'custom-dialog-container',
-      data: DIALOG_MODE.ADD
+  getRelations() {
+    this.relationService.getRelations().subscribe(relations => {
+      console.log(relations);
+      relations.forEach(relation => {
+      });
+      this.relations = relations;
     });
   }
 
-  playRelation() {
+  addRelation() {
     const dialogRef = this.dialog.open(SingleRelationComponent, {
       panelClass: 'custom-dialog-container',
-      data: DIALOG_MODE.WATCH
+      data: { mode: DIALOG_MODE.ADD, relation: null }
     });
+
+    dialogRef.afterClosed().subscribe(relationData => {
+      this.relationService.addRelation(relationData).subscribe(
+        (res: any) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        });
+      console.log('DALDALadldaldla');
+    });
+  }
+
+  playRelation(i?: number) {
+    if (i !== null) {
+      const dialogRef = this.dialog.open(SingleRelationComponent, {
+        panelClass: 'custom-dialog-container',
+        data: { mode: DIALOG_MODE.WATCH, relation: this.relations[i] }
+      });
+    } else {
+      const dialogRef = this.dialog.open(SingleRelationComponent, {
+        panelClass: 'custom-dialog-container',
+        data: { mode: DIALOG_MODE.WATCH, relation: null }
+      });
+    }
   }
 
 }

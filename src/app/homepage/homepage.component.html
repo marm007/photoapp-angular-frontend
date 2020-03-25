@@ -1,6 +1,5 @@
 <div>
   <div [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
-    <app-posts></app-posts>
-    <app-relations></app-relations>
+    <app-posts *ngIf="user" [followed]="user.followed"></app-posts>
   </div>
 </div>

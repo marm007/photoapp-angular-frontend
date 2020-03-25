@@ -1,9 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Post} from '../models/post';
 import {PostsService} from '../services/post/posts.service';
 import * as data from '../posts_data.json';
 import {MessageService} from '../services/message/message.service';
 import {Subscription} from 'rxjs';
+import {Followed} from '../models/followed';
 
 
 @Component({
@@ -12,6 +13,9 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit, OnDestroy {
+
+  @Input()
+  followed: Followed[] = null;
 
   posts: Post[] = null;
 
@@ -22,6 +26,7 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   constructor(private postService: PostsService, private messageService: MessageService) {
     console.log('.posts');
+    console.log(this.followed);
     console.log(this.posts);
 
   /*  this.postsMock.forEach((item) => {
@@ -33,6 +38,9 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getPosts();
+    console.log('.posts');
+    console.log(this.followed);
+
   }
 
   ngOnDestroy() {

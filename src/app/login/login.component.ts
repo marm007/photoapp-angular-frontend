@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth/auth.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {Router} from '@angular/router';
@@ -16,7 +16,6 @@ class LoginData {
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   model = new LoginData('', '');
 
   isMobile: boolean;
@@ -49,8 +48,8 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authService.login(this.model.email, this.model.password).subscribe(
-      success => {
-        console.log(success);
+      auth => {
+        console.log(auth);
         if (this.dialogRef == null){
           this.router.navigate(['']);
           this.model = new LoginData('', '');
