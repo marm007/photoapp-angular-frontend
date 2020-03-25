@@ -54,7 +54,7 @@ export class SinglePostComponent implements OnInit {
   addPaddingToTop: boolean;
 
   likeIcon = faHeart;
-
+  userId: number;
 
   apiRoot = 'http://127.0.0.1:8000';
 
@@ -62,6 +62,8 @@ export class SinglePostComponent implements OnInit {
               private postsService: PostsService,
               private commentService: CommentService,
               private authService: AuthService) {
+    this.userId = this.authService.userId;
+
   }
 
 
@@ -81,7 +83,7 @@ export class SinglePostComponent implements OnInit {
   }
 
   get isLiked(): boolean {
-    return this.post.liked.some(like => like.user_id === this.authService.userId);
+    return this.post.liked.some(like => like.user_id === this.userId);
   }
 
   handleClick(buttonClicked?: boolean) {
@@ -105,8 +107,6 @@ export class SinglePostComponent implements OnInit {
   likePost(id: string, buttonClicked?: boolean) {
     if (buttonClicked !== true) {
       if (!this.isLiked) {
-        console.log('addadadaad');
-        console.log(this.authService.userId);
         this.postsService.likePost(id).subscribe(post => {
           this.post = post;
           this.post.image = this.apiRoot + this.post.image;

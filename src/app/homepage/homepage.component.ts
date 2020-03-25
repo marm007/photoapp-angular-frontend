@@ -34,7 +34,6 @@ export class HomepageComponent {
 
   getLoggedUserData() {
     this.userService.getLoggedUserData().subscribe(user => {
-      console.log(user);
       this.user = user;
     });
   }

@@ -4,6 +4,7 @@ import {AuthService} from '../auth/auth.service';
 import {Observable} from 'rxjs';
 import {Comment} from '../../models/comment';
 import {Relation} from '../../models/relation';
+import {UserRelations} from '../../models/userRelations';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,15 @@ export class RelationService {
     return this.http.get<Relation[]>(this.url.concat('relations/'));
   }
 
-  public getRelation(id: number): Observable<Relation> {
+  public getRelation(id: number): Observable<UserRelations> {
+    return this.http.get<UserRelations>(this.url.concat('users/').concat(String(id).concat('/relations/')));
+  }
+
+  public getRelation1(id: number): Observable<Relation> {
     return this.http.get<Relation>(this.url.concat('relations/').concat(String(id)));
   }
 
   public addRelation(image: File): Observable<Relation> {
-    console.log('asdsasa');
-
     const formData = new FormData();
     formData.append('image', image);
     return this.http.post<Relation>(this.url.concat('relations/'),

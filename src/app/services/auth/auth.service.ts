@@ -107,6 +107,8 @@ export class AuthService {
     if (this.tokenAccess == null) {
       return false;
     }
+    // TODO delete this log
+    console.log('IS_LOGGED_IN');
     return moment().isBefore(this.getExpiration('token_access')) ||
       moment().isBefore(this.getExpiration('token_refresh'));
   }
@@ -180,6 +182,7 @@ export class AuthGuard implements CanActivate {
   canActivate() {
     if (this.authService.isLoggedIn()) {
       this.authService.refreshToken();
+      console.log('CAN_ACTIVATE')
       return true;
     } else {
       this.authService.logout();

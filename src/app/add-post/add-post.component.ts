@@ -43,7 +43,6 @@ export class AddPostComponent implements OnInit {
   }
 
   processFile(imageInput: any) {
-    console.log(imageInput);
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
@@ -60,7 +59,6 @@ export class AddPostComponent implements OnInit {
   }
 
   uploadPost() {
-    console.log(this.selectedFile.file);
     if (this.selectedFile.file.type === 'image/jpeg') {
     this.imageService.uploadImage(this.selectedFile.file, this.descriptionModel.text).subscribe(
       (res: Post) => {

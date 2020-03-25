@@ -16,7 +16,6 @@ export class ProfileComponent implements OnInit {
   profileUrls: Array<Array<number>>;
 
   constructor() {
-    console.log(this.profile.posts.length);
     this.loopIteration = this.profile.posts.length / 3;
   }
 

@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
     this.isMobile = deviceService.isMobile();
     this.isTablet = deviceService.isTablet();
     this.isDesktop = deviceService.isDesktop();
+    this.isLogged = this.authService.isLoggedIn();
     this.getLoggedUserData();
   }
 
@@ -39,27 +40,20 @@ export class HeaderComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      if (result === 'logged_in') {
+        this.isLogged = true;
+        this.getLoggedUserData();
+      }
     });
   }
 
   ngOnInit(): void {
   }
 
-  isLoggedIn(): boolean {
-    const isLogged = this.authService.isLoggedIn();
-    console.log(isLogged);
-
-    if (isLogged !== this.isLogged) {
-      this.getLoggedUserData();
-      this.isLogged = isLogged;
-    }
-
-    return isLogged;
-  }
-
   logout(): void {
     this.authService.logout();
+    this.isLogged = false;
+    this.user = null;
     if (this.router.url === '/') {
       this.router.navigate(['login']);
     }
@@ -68,7 +62,6 @@ export class HeaderComponent implements OnInit {
   getLoggedUserData() {
     this.userService.getLoggedUserData().subscribe(user => {
       this.user = user;
-      console.log(this.user);
     });
   }
 }

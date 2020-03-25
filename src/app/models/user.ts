@@ -1,7 +1,7 @@
 import {Profile} from './profile';
 import {Like} from './like';
 import {Relation} from './relation';
-import {Followed} from './followed';
+import {UserFollowed} from './userFollowed';
 
 export interface User {
   id: number;
@@ -15,6 +15,6 @@ export interface UserFull {
   profile: Profile;
   liked: Like[];
   relations: Relation[];
-  followers: Followed[];
-  followed: Followed[];
+  followers: UserFollowed[];
+  followed: UserFollowed[];
 }

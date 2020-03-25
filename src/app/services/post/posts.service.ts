@@ -4,21 +4,31 @@ import {Observable, of} from 'rxjs';
 import {Post} from '../../models/post';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
+import {UserPosts} from '../../models/userPosts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostsService {
+  private url = 'http://127.0.0.1:8000/api/';
 
   private postsUrl = 'http://127.0.0.1:8000/api/photos/';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getPosts(): Observable<Post[]> {
+  getPosts1(): Observable<Post[]> {
     return this.http.get<Post[]>(this.postsUrl)
       .pipe(
         tap(_ => console.log(_)),
           catchError(this.handleError<Post[]>('getPosts', []))
+      );
+  }
+
+  getPosts(id: number): Observable<UserPosts> {
+    return this.http.get<UserPosts>(this.url.concat('users/').concat(String(id)).concat('/posts/'))
+      .pipe(
+        tap(_ => console.log(_)),
+          catchError(this.handleError<UserPosts>('getPosts', null))
       );
   }
 

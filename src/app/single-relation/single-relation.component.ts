@@ -2,9 +2,10 @@ import {AfterContentInit, Component, HostListener, Inject, OnDestroy, OnInit} fr
 import {faEllipsisH, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DeviceDetectorService} from 'ngx-device-detector';
-import {DIALOG_MODE} from '../relations/relations.component';
 import {ImageSnippet} from '../models/imageSnippet';
 import {Relation} from '../models/relation';
+import {DIALOG_MODE} from '../models/DIALOG_MODE';
+import {AuthService} from '../services/auth/auth.service';
 
 interface DataRelation {
   relation: Relation;
@@ -19,6 +20,7 @@ interface DataRelation {
 export class SingleRelationComponent implements OnInit, AfterContentInit, OnDestroy {
   mode: DIALOG_MODE;
   relation: Relation;
+  isOwner: boolean;
 
   isDesktop: boolean;
 
@@ -28,7 +30,7 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
   closeIcon = faTimes;
   moreIcon = faEllipsisH;
 
-  timeLeft = 100;
+  timeLeft = 100.0;
   interval;
 
   showRelation = false;
@@ -37,24 +39,20 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
 
   constructor(public dialogRef: MatDialogRef<SingleRelationComponent>,
               private deviceService: DeviceDetectorService,
-              @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation) {
-    console.log('CONSTRUCTOR');
-    console.log(dataRelation);
+              @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
+              private authService: AuthService) {
     this.isDesktop = deviceService.isDesktop();
     this.mode = dataRelation.mode;
     this.relation = dataRelation.relation;
+    this.isOwner = this.relation.user.id === this.authService.userId;
   }
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
-    console.log(this.innerWidth);
-    console.log(this.innerHeight);
-    console.log('INIT');
   }
 
   ngAfterContentInit(): void {
-    console.log('CONTENT');
     this.showRelation = true;
     if (this.mode === DIALOG_MODE.WATCH) {
       this.startTimer();
@@ -90,12 +88,11 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
   startTimer() {
     this.interval = setInterval(() => {
       if (this.timeLeft > 0) {
-        this.timeLeft--;
-        console.log(this.timeLeft)
+        this.timeLeft -= 5;
       } else {
         this.handleClose();
       }
-    }, 50);
+    }, 150);
   }
 
   ngOnDestroy(): void {

@@ -26,11 +26,11 @@
     </mat-menu>
     <div
       style="width: 100%; height: 1px;  margin-bottom: 10px; margin-top: 10px; border-bottom: 1px solid rgba(219,219,219,1);"></div>
-    <div *cdkVirtualFor="let relation of relations" class="post">
-      <button class="relation-wrapper">
-        <div fxLayout="row">
+    <div *ngFor="let relation of relations; index as i" class="post">
+      <button class="relation-wrapper" style="outline: 0;">
+        <div fxLayout="row" (click)="playRelation(i)">
           <div mat-card-avatar class="relation-photo"
-               [ngStyle]="{'background-image': 'url(' + relation.user.profile.photo +')'}"></div>
+               [ngStyle]="{'background-image': 'url(' + relation.image +')'}"></div>
           <div fxLayout="column" class="relation-data-wrapper">
             <div class="relation-username"><span>{{relation.user.username}}</span></div>
             <div class="relation-time">5</div>
@@ -60,9 +60,10 @@
     </mat-menu>
     <div class="relation-mobile-others" *ngFor="let relation of relations; index as i">
         <div mat-card-avatar class="relation-photo-mobile" (click)="playRelation(i)"
-             [ngStyle]="{'background-image': 'url(' + relation.user.profile.photo +')'}"></div>
+             [ngStyle]="{'background-image': 'url(' + relation.image +')'}"></div>
         <div (click)="playRelation(i)"
              style="min-width: 50px" class="relation-username-mobile">{{relation.user.username}}</div>
     </div>
   </div>
 </div>
+<!-- trackBy: trackItem-->

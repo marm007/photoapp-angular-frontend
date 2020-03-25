@@ -28,7 +28,6 @@ export class RegisterComponent implements OnInit {
     if (this.dialog.openDialogs) {
       this.dialogRef = this.dialog.getDialogById('register');
     }
-    console.log(this.dialog.openDialogs);
   }
 
   register() {

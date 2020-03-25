@@ -6,7 +6,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
 
 class LoginData {
-  constructor( public email: string, public password: string) {
+  constructor(public email: string, public password: string) {
   }
 }
 
@@ -41,20 +41,21 @@ export class LoginComponent implements OnInit {
     if (this.dialog.openDialogs) {
       this.dialogRef = this.dialog.getDialogById('login');
     }
-    console.log(this.dialog.openDialogs);
-    }
+  }
 
-  onSubmit() { this.submitted = true; }
+  onSubmit() {
+    this.submitted = true;
+  }
 
   login() {
     this.authService.login(this.model.email, this.model.password).subscribe(
       auth => {
         console.log(auth);
-        if (this.dialogRef == null){
+        if (this.dialogRef == null) {
           this.router.navigate(['']);
           this.model = new LoginData('', '');
         } else {
-          this.dialogRef.close();
+          this.dialogRef.close('logged_in');
         }
       },
       error => {

@@ -1,6 +1,6 @@
 <div *ngIf="showRelation">
   <div class="s-relation-header-options-wrapper">
-    <div *ngIf="mode === 1" class="s-relation-header-options-more clickable" style="user-select: none">
+    <div *ngIf="mode === 1 && isOwner" class="s-relation-header-options-more clickable" style="user-select: none">
       <fa-icon [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
       </fa-icon>
     </div>

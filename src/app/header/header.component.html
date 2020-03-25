@@ -14,7 +14,7 @@
       <input placeholder="Szukaj" class="header-search-input">
     </div>
     <div class="header-icons">
-      <div *ngIf="isLoggedIn() && user" class="header-icons">
+      <div *ngIf="isLogged && user" class="header-icons">
         <button  routerLink="/add"  class="header-icons-button" mat-button style="margin-right: 15px;">
           <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
             insert_photo
@@ -36,7 +36,7 @@
           <button mat-menu-item style="outline: 0;" (click)="logout()">Wyloguj</button>
         </mat-menu>
       </div>
-      <div *ngIf="!authService.isLoggedIn()">
+      <div *ngIf="!isLogged">
         <button mat-button style="outline: 0;"  (click)="openDialog()">Login</button>
       </div>
     </div>

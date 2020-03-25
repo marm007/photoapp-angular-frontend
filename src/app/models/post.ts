@@ -10,4 +10,5 @@ export interface Post {
   user: User;
   liked: Like[];
   comments: Array<Comment>;
+  created: Date;
 }
