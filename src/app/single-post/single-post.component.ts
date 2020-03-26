@@ -45,6 +45,7 @@ import {Like} from '../models/like';
 export class SinglePostComponent implements OnInit {
 
   @Input() post: Post;
+  @Input() userID: number;
   @HostBinding('@like')
   public likeTrigger = false;
 
@@ -54,7 +55,6 @@ export class SinglePostComponent implements OnInit {
   addPaddingToTop: boolean;
 
   likeIcon = faHeart;
-  userId: number;
 
   apiRoot = 'http://127.0.0.1:8000';
 
@@ -62,13 +62,14 @@ export class SinglePostComponent implements OnInit {
               private postsService: PostsService,
               private commentService: CommentService,
               private authService: AuthService) {
-    this.userId = this.authService.userId;
-
   }
 
 
 
   ngOnInit() {
+    if (this.userID === null) {
+      this.userID = this.authService.userID;
+    }
     if (this.post == null) {
       this.addPaddingToTop = true;
       this.activatedRoute.params.subscribe(params => {
@@ -83,7 +84,7 @@ export class SinglePostComponent implements OnInit {
   }
 
   get isLiked(): boolean {
-    return this.post.liked.some(like => like.user_id === this.userId);
+    return this.post.liked.some(like => like.user_id === this.userID);
   }
 
   handleClick(buttonClicked?: boolean) {
@@ -108,16 +109,20 @@ export class SinglePostComponent implements OnInit {
     if (buttonClicked !== true) {
       if (!this.isLiked) {
         this.postsService.likePost(id).subscribe(post => {
-          this.post = post;
-          this.post.image = this.apiRoot + this.post.image;
-          this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+          if (post !== null) {
+            this.post = post;
+            this.post.image = this.apiRoot + this.post.image;
+            this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+          }
         });
       }
     } else {
       this.postsService.likePost(id).subscribe(post => {
-        this.post = post;
-        this.post.image = this.apiRoot + this.post.image;
-        this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+        if (post !== null) {
+          this.post = post;
+          this.post.image = this.apiRoot + this.post.image;
+          this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+        }
       });
     }
 

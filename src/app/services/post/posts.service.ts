@@ -5,6 +5,7 @@ import {Post} from '../../models/post';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
 import {UserPosts} from '../../models/userPosts';
+import handleError from '../errorHandler';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class PostsService {
     return this.http.get<Post[]>(this.postsUrl)
       .pipe(
         tap(_ => console.log(_)),
-          catchError(this.handleError<Post[]>('getPosts', []))
+          catchError(handleError<Post[]>('getPosts', []))
       );
   }
 
@@ -28,7 +29,7 @@ export class PostsService {
     return this.http.get<UserPosts>(this.url.concat('users/').concat(String(id)).concat('/posts/'))
       .pipe(
         tap(_ => console.log(_)),
-          catchError(this.handleError<UserPosts>('getPosts', null))
+          catchError(handleError<UserPosts>('getPosts', null))
       );
   }
 
@@ -36,7 +37,7 @@ export class PostsService {
     return this.http.get<Post>(this.postsUrl.concat(id + '/'))
       .pipe(
         tap(_ => console.log(_)),
-        catchError(this.handleError<Post>('getPost', null))
+        catchError(handleError<Post>('getPost', null))
       );
   }
 
@@ -45,27 +46,7 @@ export class PostsService {
       null, {headers: this.authService.jwtAuthHeaders})
       .pipe(
         tap(_ => console.log(_)),
-        catchError(this.handleError<Post>('likePost', null))
+        catchError(handleError<Post>('likePost', null))
       );
-  }
-
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      console.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
   }
 }

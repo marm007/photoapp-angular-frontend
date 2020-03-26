@@ -31,10 +31,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SinglePostComponent } from './single-post/single-post.component';
 import { SingleRelationComponent } from './single-relation/single-relation.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { OptionsComponent } from './options/options.component';
 
 const appRoutes: Routes = [
   {
-    path: 'profile',
+    path: 'profile/:id',
     component: ProfileComponent
   },
   {
@@ -77,6 +78,7 @@ const appRoutes: Routes = [
     ForgotComponent,
     SinglePostComponent,
     SingleRelationComponent,
+    OptionsComponent,
   ],
     imports: [
         RouterModule.forRoot(

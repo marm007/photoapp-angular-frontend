@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Relation} from './models/relation';
-import {UserFull} from './models/user';
-import {AuthService} from './services/auth/auth.service';
+import {Relation} from '../../models/relation';
+import {UserFull} from '../../models/user';
+import {AuthService} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   public getLoggedUserData(): Observable<UserFull> {
-    const id = this.authService.userId;
+    const id = this.authService.userID;
     return this.http.get<UserFull>(this.url.concat('users/').concat(String(id)).concat('/'));
   }
 

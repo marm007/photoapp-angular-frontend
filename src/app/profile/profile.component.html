@@ -1,29 +1,29 @@
-<main>
+<main *ngIf="profileLoaded">
   <div class="profile-section">
     <header class="d-none d-md-flex profile-header">
-      <div class="profile-image-wrapper">
-        <img class="profile-image" src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1" />
+      <div mat-card-avatar class="profile-image-wrapper">
+        <img  mat-card-avatar class="profile-image" src="{{profile.profile.photo}}" />
       </div>
       <section class="profile-data">
         <div class="profile-data-wrapper">
           <div  class="profile-username">
-            {{profile.nick}}
+            {{profile.username}}
           </div>
           <button mat-button class="profile-follow">Obserwuj</button>
         </div>
         <div class="profile-data-wrapper">
           <div class="profile-data-statistics">
-            Posty: <b>{{profile.post_number}}</b>
+            Posty: <b>{{profile.posts.length}}</b>
           </div>
           <div class="profile-data-statistics">
-            Obeswujacych: <b>{{profile.followers}}</b>
+            Obeswujacych: <b>{{profile.followers.length}}</b>
           </div>
           <div style="margin-right: 0" class="profile-data-statistics">
-            Obserwoawni: <b>{{profile.following}}</b>
+            Obserwoawni: <b>{{profile.followed.length}}</b>
           </div>
         </div>
         <div>
-         {{profile.first_name}} {{profile.last_name}}
+        <!-- {{profile.first_name}} {{profile.last_name}}-->
         </div>
       </section>
 
@@ -35,12 +35,12 @@
       <section class="profile-data">
         <div class="profile-data-wrapper" style="margin-bottom: 5px">
         <div class="profile-nick">
-          {{profile.nick}}
+          {{profile.username}}
         </div>
         <button mat-button class="profile-follow">Obserwuj</button>
         </div>
         <div>
-          {{profile.first_name}} {{profile.last_name}}
+         <!-- {{profile.first_name}} {{profile.last_name}}-->
         </div>
       </section>
     </header>
@@ -50,7 +50,7 @@
           Posty:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{profile.post_number}}
+          {{profile.posts.length}}
         </span>
       </li>
       <li class="profile-data-statistics-mobile">
@@ -58,7 +58,7 @@
           Obeswujacych:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{profile.followers}}
+          {{profile.followers.length}}
         </span>
       </li>
       <li class="profile-data-statistics-mobile">
@@ -66,7 +66,7 @@
           Obserwoawni:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{profile.following}}
+          {{profile.followed.length}}
         </span>
       </li>
     </ul>
@@ -85,11 +85,14 @@
         </div>
 
       </div>-->
-      <div class="profile-row">
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+      <div class="profile-row" *ngFor="let row_posts of posts">
+        <div *ngFor="let post of row_posts; index as i">
+          <div class="profile-column" [style]="i !== 2 ? 'margin-right: 2%': ''">
+            <img src="{{post.image}}" alt="Snow" style="width:100%;">
+          </div>
         </div>
-        <div class="profile-column" style="margin-right: 2%">
+      </div>
+    <!--    <div class="profile-column" style="margin-right: 2%">
           <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
         </div>
         <div class="profile-column">
@@ -128,7 +131,7 @@
         <div class="profile-column">
           <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
         </div>
-      </div>
+      </div>-->
     </div>
 
   </div>

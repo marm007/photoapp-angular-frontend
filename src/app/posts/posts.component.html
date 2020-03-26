@@ -1,7 +1,8 @@
 <div *ngIf="postsLoaded" class="post-section">
 
     <app-single-post *ngFor="let _post of posts"
-                     [post]="_post">
+                     [post]="_post"
+                     [userID]="userID">
     </app-single-post>
 
 </div>

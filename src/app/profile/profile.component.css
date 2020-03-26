@@ -29,6 +29,9 @@
   background-size: cover;
   width: 150px;
   height: 150px;
+  cursor: pointer;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .profile-data{

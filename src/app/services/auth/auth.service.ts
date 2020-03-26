@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import * as jwtDecode from 'jwt-decode';
 import moment from 'moment';
+import {MatDialog} from '@angular/material/dialog';
 
 @Injectable()
 export class AuthService {
@@ -31,11 +32,10 @@ export class AuthService {
   }
 
   get jwtAuthHeaders(): HttpHeaders {
-
     return new HttpHeaders({Authorization: 'Bearer ' + this.tokenAccess});
   }
 
-  get userId(): number {
+  get userID(): number {
     if (this.isLoggedIn()) {
       this.refreshToken();
       const payload = jwtDecode(this.tokenAccess) as JWTPayload;
@@ -122,7 +122,9 @@ export class AuthService {
 export class AuthInterceptor implements HttpInterceptor {
   // Refresh Token Subject tracks the current token, or is null if no token is currently
   // available (e.g. refresh pending).
-  constructor(public authService: AuthService) {
+  constructor(public authService: AuthService,
+              public router: Router,
+              public dialog: MatDialog) {
   }
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -131,7 +133,6 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
-
       return this.authService.refreshTokenOne().pipe(
         switchMap((token: any) => {
           this.isRefreshing = false;
@@ -140,6 +141,14 @@ export class AuthInterceptor implements HttpInterceptor {
         }));
 
     } else {
+      if (this.authService.tokenAccess === null) {
+        this.isRefreshing = false;
+        this.refreshTokenSubject.next(null);
+        this.dialog.closeAll();
+        this.router.navigate(['login']);
+        return next.handle(request);
+      }
+
       return this.refreshTokenSubject.pipe(
         filter(token => token != null),
         take(1),
@@ -152,14 +161,15 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-   /*  if (this.authService.tokenAccess) {
-      request = this.addToken(request, this.authService.tokenAccess);
-    }*/
-
      return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
         return this.handle401Error(request, next);
       } else {
+        if ((error.status === 400  && error.url === 'http://localhost:8000/api/token/refresh/') ||
+          error.status === 404) {
+          this.dialog.closeAll();
+          this.router.navigate(['login']);
+        }
         return throwError(error);
       }
     })) as any;
@@ -182,7 +192,7 @@ export class AuthGuard implements CanActivate {
   canActivate() {
     if (this.authService.isLoggedIn()) {
       this.authService.refreshToken();
-      console.log('CAN_ACTIVATE')
+      console.log('CAN_ACTIVATE');
       return true;
     } else {
       this.authService.logout();

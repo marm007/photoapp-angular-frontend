@@ -4,7 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../services/auth/auth.service';
 import {LoginComponent} from '../login/login.component';
 import {Router} from '@angular/router';
-import {UserService} from '../user.service';
+import {UserService} from '../services/user/user.service';
 import {User} from '../models/user';
 
 @Component({
@@ -13,6 +13,8 @@ import {User} from '../models/user';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  private url = 'http://127.0.0.1:8000';
+
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
@@ -62,6 +64,8 @@ export class HeaderComponent implements OnInit {
   getLoggedUserData() {
     this.userService.getLoggedUserData().subscribe(user => {
       this.user = user;
+      this.user.profile.photo = this.url + this.user.profile.photo;
+
     });
   }
 }

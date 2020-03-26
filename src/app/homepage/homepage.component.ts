@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {DeviceDetectorService} from 'ngx-device-detector';
-import {UserService} from '../user.service';
+import {UserService} from '../services/user/user.service';
 import {User, UserFull} from '../models/user';
 
 @Component({

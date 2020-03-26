@@ -1,15 +1,20 @@
 import {AfterContentInit, Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {faEllipsisH, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {ImageSnippet} from '../models/imageSnippet';
 import {Relation} from '../models/relation';
-import {DIALOG_MODE} from '../models/DIALOG_MODE';
+import {DialogMode} from '../models/dialogMode';
 import {AuthService} from '../services/auth/auth.service';
+import {RegisterComponent} from '../register/register.component';
+import {MessageService} from '../services/message/message.service';
+import {OptionsComponent} from '../options/options.component';
+import {RelationService} from '../services/relation/relation.service';
+import moment from 'moment';
 
 interface DataRelation {
   relation: Relation;
-  mode: DIALOG_MODE;
+  mode: DialogMode;
 }
 
 @Component({
@@ -18,7 +23,7 @@ interface DataRelation {
   styleUrls: ['./single-relation.component.css']
 })
 export class SingleRelationComponent implements OnInit, AfterContentInit, OnDestroy {
-  mode: DIALOG_MODE;
+  mode: DialogMode;
   relation: Relation;
   isOwner: boolean;
 
@@ -38,23 +43,27 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
   selectedFile = new ImageSnippet(null, null);
 
   constructor(public dialogRef: MatDialogRef<SingleRelationComponent>,
+              public dialog: MatDialog,
               private deviceService: DeviceDetectorService,
               @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private relationService: RelationService) {
     this.isDesktop = deviceService.isDesktop();
     this.mode = dataRelation.mode;
     this.relation = dataRelation.relation;
-    this.isOwner = this.relation.user.id === this.authService.userId;
+
+    this.isOwner = this.relation.user.id === this.authService.userID;
   }
 
   ngOnInit(): void {
-    this.innerWidth = window.innerWidth;
-    this.innerHeight = window.innerHeight;
+
   }
 
   ngAfterContentInit(): void {
     this.showRelation = true;
-    if (this.mode === DIALOG_MODE.WATCH) {
+    this.setSize();
+
+    if (this.mode === DialogMode.WATCH) {
       this.startTimer();
     }
   }
@@ -79,10 +88,36 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
     this.dialogRef.close(this.selectedFile.file);
   }
 
+  handleOptionsClick() {
+    clearInterval(this.interval);
+    const optionsDialogRef = this.dialog.open(OptionsComponent, {
+      autoFocus: false
+    });
+
+    optionsDialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.relationService.removeRelation(this.relation.id)
+          .subscribe(res => this.dialogRef.close('deleted'));
+      } else {
+        this.startTimer();
+      }
+    });
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.innerWidth = window.innerWidth;
-    this.innerHeight = window.innerHeight;
+    this.setSize();
+  }
+
+  setSize() {
+    const options = document.getElementById('s-relation-header-options').clientHeight;
+    const header = document.getElementById('s-relation-header').clientHeight;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight - options - header;
+
+    this.innerWidth = this.isDesktop ? width / 2.0 : width * 0.95;
+    this.innerHeight = this.isDesktop ? height * 0.7 : height * 0.5;
   }
 
   startTimer() {

@@ -1,7 +1,8 @@
-<div *ngIf="showRelation">
-  <div class="s-relation-header-options-wrapper">
-    <div *ngIf="mode === 1 && isOwner" class="s-relation-header-options-more clickable" style="user-select: none">
-      <fa-icon [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
+<div [hidden]="!showRelation">
+  <div class="s-relation-header-options-wrapper" id="s-relation-header-options">
+    <div *ngIf="mode === 1 && isOwner" (click)="handleOptionsClick()"
+         class="s-relation-header-options-more clickable" style="user-select: none">
+      <fa-icon  [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
       </fa-icon>
     </div>
     <div class="s-relation-header-options-close clickable" style="user-select: none">
@@ -10,7 +11,7 @@
       </fa-icon>
     </div>
   </div>
-  <mat-card-header class="s-relation-header">
+  <mat-card-header class="s-relation-header" id="s-relation-header">
     <div mat-card-avatar class="s-relation-header-image clickable"
          [ngStyle]="{'background-image': 'url(' + relation.user.profile.photo + ')'}"></div>
     <div class="s-relation-header-username">
@@ -18,40 +19,19 @@
     </div>
   </mat-card-header>
 
-  <mat-progress-bar *ngIf="mode === 1" mode="determinate" value="{{this.timeLeft}}"></mat-progress-bar>
+  <mat-progress-bar id="progress-bar" *ngIf="mode === 1" mode="determinate" style="margin-bottom: 10px" value="{{this.timeLeft}}"></mat-progress-bar>
 
   <div *ngIf="mode === 1" class="s-relation-image-wrapper">
-    <img *ngIf="!isDesktop" class="s-relation-image" [ngStyle]="{
-    'height': (this.innerHeight - this.innerHeight*0.5 +'px'),
-     'width': (this.innerWidth - this.innerWidth*0.05 + 'px')}"
-         src="{{relation.image}}"
-         alt=""/>
-    <img *ngIf="isDesktop" class="s-relation-image" [ngStyle]="{
-          'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
-          'width': (this.innerWidth / 2.0 + 'px')}"
+    <img class="s-relation-image" [ngStyle]="{
+          'height': this.innerHeight +'px',
+          'width': this.innerWidth +'px'}"
          src="{{relation.image}}"
          alt=""/>
   </div>
 
   <div *ngIf="mode !== 1" class="s-relation-image-wrapper">
-    <div *ngIf="isDesktop && !selectedFile.file" class="s-relation-input-file" [ngStyle]="{
-          'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
-          'width': (this.innerWidth / 2.0 + 'px')}">
-      <input #imageInput
-             id="photo"
-             accept="image/*"
-             type="file"
-             required
-             class="s-relation-inputfile"
-             (change)="processFile(imageInput)"
-      />
-      <label for="photo" style="margin-bottom: 0">
-        <span>Add photo </span>
-      </label>
-    </div>
-    <div *ngIf="!isDesktop && !selectedFile.file" class="s-relation-input-file" [ngStyle]="{
-     'height': (this.innerHeight - this.innerHeight*0.5 +'px'),
-     'width': (this.innerWidth - this.innerWidth*0.25 + 'px')}">
+    <div *ngIf="!selectedFile.file" class="s-relation-input-file" [ngStyle]="{
+          'height': this.innerHeight +'px', 'width': this.innerWidth +'px'}">
       <input #imageInput
              id="photo-mobile"
              accept="image/*"
@@ -64,15 +44,9 @@
         <span>Add photo </span>
       </label>
     </div>
-
-    <img *ngIf="!isDesktop && selectedFile.file" class="s-relation-image" [ngStyle]="{
-    'height': (this.innerHeight - this.innerHeight*0.5 +'px'),
-     'width': (this.innerWidth - this.innerWidth*0.05 + 'px')}"
-         src="{{selectedFile.src}}"
-         alt=""/>
-    <img *ngIf="isDesktop && selectedFile.file" class="s-relation-image" [ngStyle]="{
-          'height': (this.innerHeight - this.innerHeight*0.4 +'px'),
-          'width': (this.innerWidth / 2.0 + 'px')}"
+    <img *ngIf="selectedFile.file" class="s-relation-image" [ngStyle]="{
+          'height': this.innerHeight +'px',
+          'width': this.innerWidth + 'px'}"
          src="{{selectedFile.src}}"
          alt=""/>
   </div>

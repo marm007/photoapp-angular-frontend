@@ -16,7 +16,7 @@
             </span>
 
           </div>
-          <div class="relation-time">10</div>
+          <!--<div class="relation-time">10</div>-->
         </div>
       </div>
     </button>
@@ -33,7 +33,7 @@
                [ngStyle]="{'background-image': 'url(' + relation.image +')'}"></div>
           <div fxLayout="column" class="relation-data-wrapper">
             <div class="relation-username"><span>{{relation.user.username}}</span></div>
-            <div class="relation-time">5</div>
+            <div class="relation-time">{{relation.created}}</div>
           </div>
         </div>
       </button>

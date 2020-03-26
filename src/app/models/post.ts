@@ -12,3 +12,13 @@ export interface Post {
   comments: Array<Comment>;
   created: Date;
 }
+
+export interface PostNoUser {
+  id: number;
+  image: string;
+  likes: number;
+  description: string;
+  liked: Like[];
+  comments: Array<Comment>;
+  created: Date;
+}

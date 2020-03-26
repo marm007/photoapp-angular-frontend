@@ -5,7 +5,6 @@ import {MessageService} from '../services/message/message.service';
 import {UserFollowed} from '../models/userFollowed';
 import {AuthService} from '../services/auth/auth.service';
 import {User} from '../models/user';
-import {UserRelations} from '../models/userRelations';
 import {UserPosts} from '../models/userPosts';
 
 
@@ -26,9 +25,13 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   message: string;
 
+  userID: number;
+
   constructor(private postService: PostsService,
               private messageService: MessageService,
               private authService: AuthService) {
+    console.log(messageService)
+    this.userID = this.authService.userID;
   }
 
   ngOnInit(): void {
@@ -64,7 +67,7 @@ export class PostsComponent implements OnInit, OnDestroy {
     });
 
     requests.push(
-      this.getPost(this.authService.userId).then(value => {
+      this.getPost(this.authService.userID).then(value => {
       this.posts = this.posts.concat(value.posts);
 
     }));
@@ -78,29 +81,6 @@ export class PostsComponent implements OnInit, OnDestroy {
       this.postsLoaded = true;
       this.messageService.updateMessage('posts loaded');
     });
-  }
-
-  getPost1s(): void {
-      let itemsProcessed = 0;
-      this.usersFollowed.forEach((followed, index) => {
-        this.postService.getPosts(followed.followed)
-          .subscribe(followedData => {
-            const user: User = {username: followedData.username, profile: followedData.profile, id: followedData.id };
-            followedData.posts.forEach(post => post.user = JSON.parse(JSON.stringify(user)));
-            this.posts = this.posts.concat(followedData.posts);
-            itemsProcessed++;
-            if (itemsProcessed === this.usersFollowed.length) {
-              this.postService.getPosts(this.authService.userId)
-                .subscribe(myData => {
-                  const myUser: User = {username: myData.username, profile: myData.profile, id: myData.id };
-                  myData.posts.forEach(post => post.user = JSON.parse(JSON.stringify(myUser)));
-                  this.posts = this.posts.concat(myData.posts);
-                  this.postsLoaded = true;
-                  this.messageService.updateMessage('posts loaded');
-                });
-            }
-          });
-      });
   }
 
 }
