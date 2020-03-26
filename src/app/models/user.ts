@@ -4,6 +4,7 @@ import {Relation} from './relation';
 import {UserFollowed} from './userFollowed';
 import {Post, PostNoUser} from './post';
 import {UserPosts} from './userPosts';
+import {UserFollower} from './userFollower';
 
 export interface User {
   id: number;
@@ -18,6 +19,6 @@ export interface UserFull {
   liked: Like[];
   posts: PostNoUser[];
   relations: Relation[];
-  followers: UserFollowed[];
+  followers: UserFollower[];
   followed: UserFollowed[];
 }

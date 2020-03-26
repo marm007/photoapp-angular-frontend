@@ -6,6 +6,7 @@ import {UserFollowed} from '../models/userFollowed';
 import {AuthService} from '../services/auth/auth.service';
 import {User} from '../models/user';
 import {UserPosts} from '../models/userPosts';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -27,10 +28,18 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   userID: number;
 
+  messageSubscription: Subscription;
+
   constructor(private postService: PostsService,
               private messageService: MessageService,
               private authService: AuthService) {
-    console.log(messageService)
+    console.log(messageService);
+   /* this.messageSubscription = this.messageService.getMessage()
+      .subscribe(myMessage => {
+        if (myMessage === 'post_deleted') {
+          this.postsLoaded.next(true);
+        }
+      });*/
     this.userID = this.authService.userID;
   }
 
@@ -39,6 +48,14 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+  }
+
+  onPostDeleted(post: Post) {
+    const index = this.posts.indexOf(post);
+    if (index > -1) {
+      console.log('CAN DELETE');
+      this.posts.splice(index, 1);
+    }
   }
 
   async getPost(id: number): Promise<UserPosts> {

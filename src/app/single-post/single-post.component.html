@@ -1,12 +1,18 @@
-<div *ngIf="post != null" class="d-none d-lg-block post-section-wrapper" [style]="addPaddingToTop ? 'padding-top:120px;   margin: 0 auto 0 auto;'
+<div *ngIf="post != null" class="d-none d-lg-block post-section-wrapper"
+     [style]="addPaddingToTop ? 'padding-top:120px;   margin: 0 auto 0 auto;'
  : '  margin: 0 28px 0 auto;'">
   <div class="post-section">
     <mat-card class="post">
       <mat-card-header class="post-header">
-        <div mat-card-avatar class="post-header-image clickable"
+        <div mat-card-avatar class="post-header-image clickable" routerLink="/profile/{{this.post.user.id}}"
              [ngStyle]="{'background-image': 'url(' + post.user.profile.photo +')'}"></div>
         <div class="post-header-username">
           <p>{{post.user.username}}</p>
+        </div>
+        <div  class="fa fa-1x post-options">
+          <fa-icon [matMenuTriggerFor]="postMenu"
+                   [icon]="moreIcon" icon="moreIcon">
+          </fa-icon>
         </div>
       </mat-card-header>
       <div class="post-photo-block" (dblclick)="handleClick()">
@@ -53,7 +59,6 @@
                   add_circle_outline
                 </i>
               </button>
-
             </div>
             <div *ngIf="showMoreComments && post.comments[2]">
               <div *ngFor="let comment of post.comments; index as i">
@@ -88,13 +93,18 @@
     </mat-card>
   </div>
 </div>
-<div *ngIf="post != null" class="d-block d-lg-none post-section-mobile">
+<div *ngIf="post != null" class="d-block d-lg-none post-section-mobile" [style]="addPaddingToTop ? 'padding-top:120px;' : ''">
   <mat-card class="post">
     <mat-card-header class="post-header">
-      <div mat-card-avatar class="post-header-image  clickable"
+      <div mat-card-avatar class="post-header-image  clickable" routerLink="/profile/{{this.post.user.id}}"
            [ngStyle]="{'background-image': 'url(' + post.user.profile.photo +')'}"></div>
       <div class="post-header-username">
         <p>{{post.user.username}}</p>
+      </div>
+      <div  class="fa fa-1x post-options">
+        <fa-icon [matMenuTriggerFor]="postMenu"
+                 [icon]="moreIcon" icon="moreIcon">
+        </fa-icon>
       </div>
     </mat-card-header>
     <div class="post-photo-block" (dblclick)="handleClick()">
@@ -175,3 +185,7 @@
     </div>
   </mat-card>
 </div>
+<mat-menu #postMenu="matMenu">
+  <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleDelete()">Usun</button>
+  <button mat-menu-item style="outline: 0;" (click)="handleSee()">Zobacz</button>
+</mat-menu>

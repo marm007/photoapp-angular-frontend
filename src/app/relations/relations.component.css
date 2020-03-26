@@ -43,6 +43,11 @@
 
 .relation-photo {
   background-size: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
 }
 
 .relation-data-wrapper {
@@ -118,6 +123,11 @@
 
 .relation-photo-mobile{
   background-size: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
 }
 
 .relation-username-mobile{

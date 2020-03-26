@@ -38,6 +38,15 @@
   align-items: center;
 }
 
+.post-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  margin-left: auto;
+  cursor: pointer;
+}
+
 .post-photo-block{
   display: inline-block;
   position: relative;

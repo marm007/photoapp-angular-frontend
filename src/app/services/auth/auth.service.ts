@@ -63,8 +63,23 @@ export class AuthService {
     );
   }
 
-  signup(username: string, email: string, password1: string, password2: string) {
-    // TODO: implement signup
+  signup(username: string, email: string, password: string, photo?: File) {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('password', password);
+    if (photo) {
+      formData.append('profile.photo', photo);
+    }
+
+
+    return this.http.post(
+      this.apiRoot.concat('users/'),
+      formData
+    ).pipe(
+      tap(response => console.log(response)),
+      shareReplay()
+    );
   }
 
   logout() {
@@ -130,31 +145,39 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
-      return this.authService.refreshTokenOne().pipe(
-        switchMap((token: any) => {
-          this.isRefreshing = false;
-          this.refreshTokenSubject.next(token.access);
-          return next.handle(this.addToken(request, token.access));
-        }));
-
-    } else {
-      if (this.authService.tokenAccess === null) {
-        this.isRefreshing = false;
+    console.log('TOKEN REFRESH 401 ERROR HANDLER');
+    console.log(this.authService.tokenRefresh);
+    if (this.authService.tokenRefresh) {
+      if (!this.isRefreshing) {
+        this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
-        this.dialog.closeAll();
-        this.router.navigate(['login']);
-        return next.handle(request);
-      }
+        return this.authService.refreshTokenOne().pipe(
+          switchMap((token: any) => {
+            this.isRefreshing = false;
+            this.refreshTokenSubject.next(token.access);
+            return next.handle(this.addToken(request, token.access));
+          }));
 
-      return this.refreshTokenSubject.pipe(
-        filter(token => token != null),
-        take(1),
-        switchMap(jwt => {
-          return next.handle(this.addToken(request, jwt));
-        }));
+      } else {
+        if (this.authService.tokenAccess === null) {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(null);
+          this.dialog.closeAll();
+          this.router.navigate(['login']);
+          return next.handle(request);
+        }
+
+        return this.refreshTokenSubject.pipe(
+          filter(token => token != null),
+          take(1),
+          switchMap(jwt => {
+            return next.handle(this.addToken(request, jwt));
+          }));
+      }
+    } else {
+      this.dialog.closeAll();
+      this.router.navigate(['login']);
+      return next.handle(request);
     }
   }
   intercept(
@@ -165,10 +188,10 @@ export class AuthInterceptor implements HttpInterceptor {
       if (error instanceof HttpErrorResponse && error.status === 401) {
         return this.handle401Error(request, next);
       } else {
-        if ((error.status === 400  && error.url === 'http://localhost:8000/api/token/refresh/') ||
-          error.status === 404) {
-          this.dialog.closeAll();
-          this.router.navigate(['login']);
+        if ((error.status === 400  && error.url === 'http://localhost:8000/api/token/refresh/')) {
+         /* this.dialog.closeAll();
+          this.router.navigate(['login']);*/
+        } else if (error.status === 404) {
         }
         return throwError(error);
       }

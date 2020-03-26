@@ -2,6 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {UserService} from '../services/user/user.service';
 import {User, UserFull} from '../models/user';
+import {MessageService} from '../services/message/message.service';
 
 @Component({
   selector: 'app-homepage',
@@ -35,6 +36,9 @@ export class HomepageComponent {
   getLoggedUserData() {
     this.userService.getLoggedUserData().subscribe(user => {
       this.user = user;
+    }, error => {
+      console.log('ERROR WHILE GETTING LOGGED USER DATA FROM HOMEPAGE');
+      console.log(error);
     });
   }
 }

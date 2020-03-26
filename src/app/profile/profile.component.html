@@ -2,24 +2,26 @@
   <div class="profile-section">
     <header class="d-none d-md-flex profile-header">
       <div mat-card-avatar class="profile-image-wrapper">
-        <img  mat-card-avatar class="profile-image" src="{{profile.profile.photo}}" />
+        <img  mat-card-avatar class="profile-image" src="{{visitedUserProfile.profile.photo}}" />
       </div>
       <section class="profile-data">
         <div class="profile-data-wrapper">
           <div  class="profile-username">
-            {{profile.username}}
+            {{visitedUserProfile.username}}
           </div>
-          <button mat-button class="profile-follow">Obserwuj</button>
+          <button *ngIf="userID !== visitedUserProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
+            {{this.buttonText}}
+          </button>
         </div>
         <div class="profile-data-wrapper">
           <div class="profile-data-statistics">
-            Posty: <b>{{profile.posts.length}}</b>
+            Posty: <b>{{visitedUserProfile.posts.length}}</b>
           </div>
           <div class="profile-data-statistics">
-            Obeswujacych: <b>{{profile.followers.length}}</b>
+            Obeswujacych: <b>{{visitedUserProfile.followers.length}}</b>
           </div>
           <div style="margin-right: 0" class="profile-data-statistics">
-            Obserwoawni: <b>{{profile.followed.length}}</b>
+            Obserwoawni: <b>{{visitedUserProfile.followed.length}}</b>
           </div>
         </div>
         <div>
@@ -30,14 +32,18 @@
     </header>
     <header class="d-flex d-md-none profile-header-mobile">
        <div class="profile-image-wrapper-mobile">
-         <img class="profile-image-mobile" src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1" />
+         <img class="profile-image-mobile"
+              src="{{visitedUserProfile.profile.photo}}"
+         />
        </div>
       <section class="profile-data">
         <div class="profile-data-wrapper" style="margin-bottom: 5px">
         <div class="profile-nick">
-          {{profile.username}}
+          {{visitedUserProfile.username}}
         </div>
-        <button mat-button class="profile-follow">Obserwuj</button>
+          <button *ngIf="userID !== visitedUserProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
+            {{this.buttonText}}
+          </button>
         </div>
         <div>
          <!-- {{profile.first_name}} {{profile.last_name}}-->
@@ -50,7 +56,7 @@
           Posty:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{profile.posts.length}}
+          {{visitedUserProfile.posts.length}}
         </span>
       </li>
       <li class="profile-data-statistics-mobile">
@@ -58,7 +64,7 @@
           Obeswujacych:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{profile.followers.length}}
+          {{visitedUserProfile.followers.length}}
         </span>
       </li>
       <li class="profile-data-statistics-mobile">
@@ -66,7 +72,7 @@
           Obserwoawni:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{profile.followed.length}}
+          {{visitedUserProfile.followed.length}}
         </span>
       </li>
     </ul>

@@ -6,6 +6,7 @@ import {LoginComponent} from '../login/login.component';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user/user.service';
 import {User} from '../models/user';
+import {MessageService} from '../services/message/message.service';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent implements OnInit {
               public dialog: MatDialog,
               public authService: AuthService,
               public router: Router,
-              private userService: UserService) {
+              private userService: UserService,
+              private messageService: MessageService) {
     this.isMobile = deviceService.isMobile();
     this.isTablet = deviceService.isTablet();
     this.isDesktop = deviceService.isDesktop();
@@ -43,6 +45,7 @@ export class HeaderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'logged_in') {
+        this.messageService.updateMessage('logged_in');
         this.isLogged = true;
         this.getLoggedUserData();
       }
@@ -54,6 +57,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.messageService.updateMessage('logged_out');
     this.isLogged = false;
     this.user = null;
     if (this.router.url === '/') {
@@ -66,6 +70,9 @@ export class HeaderComponent implements OnInit {
       this.user = user;
       this.user.profile.photo = this.url + this.user.profile.photo;
 
+    }, error => {
+      console.log('ERROR WHILE GETTING LOGGED USER DATA FROM HEADER');
+      console.log(error);
     });
   }
 }

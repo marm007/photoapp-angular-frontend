@@ -11,6 +11,7 @@ import {MessageService} from '../services/message/message.service';
 import {OptionsComponent} from '../options/options.component';
 import {RelationService} from '../services/relation/relation.service';
 import moment from 'moment';
+import {Router} from '@angular/router';
 
 interface DataRelation {
   relation: Relation;
@@ -47,7 +48,8 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
               private deviceService: DeviceDetectorService,
               @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
               private authService: AuthService,
-              private relationService: RelationService) {
+              private relationService: RelationService,
+              private router: Router) {
     this.isDesktop = deviceService.isDesktop();
     this.mode = dataRelation.mode;
     this.relation = dataRelation.relation;
@@ -102,6 +104,11 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
         this.startTimer();
       }
     });
+  }
+
+  handleWatchProfile() {
+    this.handleClose();
+    this.router.navigate(['/profile/'.concat(String(this.relation.user.id))]);
   }
 
   @HostListener('window:resize', ['$event'])

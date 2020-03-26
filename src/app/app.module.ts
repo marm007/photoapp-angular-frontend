@@ -55,6 +55,9 @@ const appRoutes: Routes = [
     component: AddPostComponent,
     canActivate: [AuthGuard]
   },
+  { path: 'not-found',
+    component: PageNotFoundComponent
+  },
   { path: '',
     component: HomepageComponent,
     canActivate: [AuthGuard]

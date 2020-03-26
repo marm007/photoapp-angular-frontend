@@ -49,4 +49,12 @@ export class PostsService {
         catchError(handleError<Post>('likePost', null))
       );
   }
+
+  deletePost(id: string): Observable<any> {
+    return this.http.delete<any>(this.postsUrl.concat(id).concat('/'), {headers: this.authService.jwtAuthHeaders})
+      .pipe(
+        tap(_ => console.log(_)),
+        catchError(handleError<any>('deletePost', null))
+      );
+  }
 }

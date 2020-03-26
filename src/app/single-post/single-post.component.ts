@@ -1,13 +1,14 @@
-import {Component, HostBinding, HostListener, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output} from '@angular/core';
 import {Post} from '../models/post';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PostsService} from '../services/post/posts.service';
 import {CommentService} from '../services/comment/comment.service';
 import {Comment} from '../models/comment';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../services/auth/auth.service';
 import {Like} from '../models/like';
+import {MessageService} from '../services/message/message.service';
 
 @Component({
   selector: 'app-single-post',
@@ -44,38 +45,70 @@ import {Like} from '../models/like';
 })
 export class SinglePostComponent implements OnInit {
 
-  @Input() post: Post;
-  @Input() userID: number;
+  @Output()
+  postDeleted: EventEmitter<Post> = new EventEmitter<Post>();
+
+  @Input()
+  post: Post;
+  @Input()
+  userID: number;
+
   @HostBinding('@like')
   public likeTrigger = false;
 
-  addCommentContent: string;
-  showDescription = false;
-  showMoreComments = false;
+  moreIcon = faEllipsisH;
+  likeIcon = faHeart;
+
+  isPostOwner: boolean;
   addPaddingToTop: boolean;
 
-  likeIcon = faHeart;
+  showDescription = false;
+  showMoreComments = false;
+
+  addCommentContent: string;
+
 
   apiRoot = 'http://127.0.0.1:8000';
 
   constructor(private activatedRoute: ActivatedRoute,
               private postsService: PostsService,
               private commentService: CommentService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private router: Router) {
   }
 
+  handleDelete() {
+    this.postsService.deletePost(String(this.post.id)).subscribe(res => {
+      console.log('LOG FROM DELETE POST FROM POST');
+      console.log(res);
+      console.log( this.router.url);
+      if (res === null) {
+        if (this.router.url === '/') {
+          this.postDeleted.emit(this.post);
+        }
+        this.router.navigate(['']);
+      }
+    });
+  }
 
+  handleSee() {
+    this.router.navigate(['/post/'.concat(String(this.post.id))]);
+  }
 
   ngOnInit() {
-    if (this.userID === null) {
+
+    if (this.userID === undefined) {
       this.userID = this.authService.userID;
     }
+
     if (this.post == null) {
       this.addPaddingToTop = true;
       this.activatedRoute.params.subscribe(params => {
         this.getPost(params.id);
       });
     } else {
+      console.log(this.post);
+      this.isPostOwner = this.post.user.id === this.authService.userID;
       this.addPaddingToTop = false;
       this.post.image = this.apiRoot + this.post.image;
       this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
@@ -99,9 +132,13 @@ export class SinglePostComponent implements OnInit {
 
   getPost(id: string) {
     this.postsService.getPost(id).subscribe(post => {
-      this.post = post;
-      this.post.image = this.apiRoot + this.post.image;
-      this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+      if (post !== null) {
+        this.post = post;
+        console.log(this.post);
+        this.isPostOwner = this.post.user.id === this.authService.userID;
+        this.post.image = this.apiRoot + this.post.image;
+        this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+      } else { this.router.navigate(['not-found']); }
     });
   }
 
@@ -113,6 +150,8 @@ export class SinglePostComponent implements OnInit {
             this.post = post;
             this.post.image = this.apiRoot + this.post.image;
             this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+          } else {
+
           }
         });
       }
@@ -122,6 +161,8 @@ export class SinglePostComponent implements OnInit {
           this.post = post;
           this.post.image = this.apiRoot + this.post.image;
           this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
+        } else {
+
         }
       });
     }

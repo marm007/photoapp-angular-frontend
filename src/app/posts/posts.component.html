@@ -1,8 +1,11 @@
-<div *ngIf="postsLoaded" class="post-section">
+<div class="post-section-my">
+</div>
+<div *ngIf="postsLoaded" >
 
     <app-single-post *ngFor="let _post of posts"
                      [post]="_post"
-                     [userID]="userID">
+                     [userID]="userID"
+                      (postDeleted)="onPostDeleted($event)">
     </app-single-post>
 
 </div>

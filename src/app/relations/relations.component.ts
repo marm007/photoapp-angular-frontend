@@ -5,13 +5,14 @@ import {MatDialog} from '@angular/material/dialog';
 import {SingleRelationComponent} from '../single-relation/single-relation.component';
 import {RelationService} from '../services/relation/relation.service';
 import {Relation} from '../models/relation';
-import {User} from '../models/user';
+import {User, UserFull} from '../models/user';
 import {UserFollowed} from '../models/userFollowed';
 import {AuthService} from '../services/auth/auth.service';
 import {DialogMode} from '../models/dialogMode';
 import {UserService} from '../services/user/user.service';
 import {UserRelations} from '../models/userRelations';
 import moment from 'moment';
+import {Router} from '@angular/router';
 
 
 interface RelationsByUser {
@@ -30,28 +31,25 @@ export class RelationsComponent implements OnInit, OnDestroy {
   private url = 'http://127.0.0.1:8000';
 
   @Input()
+  user: UserFull;
+
+  @Input()
   usersFollowed: UserFollowed[] = [];
 
   relations: Relation[] = [];
-  relationsByUser: RelationsByUser[];
 
   subscription: Subscription;
 
   message: string = null;
 
   postsLoaded: Subject<boolean> = new Subject();
-  iterableDiffer: any;
-
 
   constructor(private messageService: MessageService,
               public dialog: MatDialog,
               public relationService: RelationService,
               private authService: AuthService,
               private userService: UserService,
-              private iterableDiffers: IterableDiffers) {
-    console.log(messageService)
-
-    /*this.iterableDiffer = iterableDiffers.find([]).create(null);*/
+              private router: Router) {
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'posts loaded') {
@@ -62,6 +60,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.user.profile.photo = this.url + this.user.profile.photo;
     this.getRelations();
   }
 
@@ -82,7 +81,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
     });
 
     Promise.all(requests).then(() => {
-      this.getRelation(this.authService.userID).then(value => {
+      this.getRelation(this.user.id).then(value => {
         this.relations = this.relations.concat(value.relations);
       });
     });
@@ -125,6 +124,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   addRelation() {
     this.userService.getLoggedUserData().subscribe(user => {
+      user.profile.photo = this.url + user.profile.photo;
       const dialogRef = this.dialog.open(SingleRelationComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.ADD, relation: {user}}
@@ -145,6 +145,12 @@ export class RelationsComponent implements OnInit, OnDestroy {
             console.log(err);
           });
       });
+    }, error => {
+      console.log('ERROR WHILE GETTING LOGGED USER DATA FROM RELATIONS');
+      console.log(error);
+      if (error.status === 404) {
+          this.router.navigate(['login']);
+      }
     });
 
   }
@@ -165,13 +171,21 @@ export class RelationsComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      const currentUser = this.authService.userID;
-      const usersRelations = this.relations.filter(r => r.user.id === currentUser);
+      const usersRelations = this.relations.filter(r => r.user.id === this.user.id);
       console.log(usersRelations);
       if (usersRelations.length > 0) {
         const dialogRef = this.dialog.open(SingleRelationComponent, {
           panelClass: 'custom-dialog-container',
           data: {mode: DialogMode.WATCH, relation: usersRelations[0]}
+        });
+        dialogRef.afterClosed().subscribe(value => {
+          if (value === 'deleted') {
+            const relationToDelete = this.relations.find(r => r.id ===  usersRelations[0].id);
+            const index = this.relations.indexOf(relationToDelete);
+            if (index !== -1) {
+              this.relations.splice(index, 1);
+            }
+          }
         });
       } else {
         // TODO user has got no relations
