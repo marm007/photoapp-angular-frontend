@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Post} from '../models/post';
-import {PostsService} from '../services/post/posts.service';
-import {MessageService} from '../services/message/message.service';
-import {UserFollowed} from '../models/userFollowed';
-import {AuthService} from '../services/auth/auth.service';
-import {User} from '../models/user';
-import {UserPosts} from '../models/userPosts';
+import {Post} from '../../models/post';
+import {PostsService} from '../../services/post/posts.service';
+import {MessageService} from '../../services/message/message.service';
+import {UserFollowed} from '../../models/userFollowed';
+import {AuthService} from '../../services/auth/auth.service';
+import {User} from '../../models/user';
+import {UserPosts} from '../../models/userPosts';
 import {Subscription} from 'rxjs';
 
 

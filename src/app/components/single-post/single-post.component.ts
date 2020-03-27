@@ -1,14 +1,14 @@
 import {Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output} from '@angular/core';
-import {Post} from '../models/post';
+import {Post} from '../../models/post';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PostsService} from '../services/post/posts.service';
-import {CommentService} from '../services/comment/comment.service';
-import {Comment} from '../models/comment';
+import {PostsService} from '../../services/post/posts.service';
+import {CommentService} from '../../services/comment/comment.service';
+import {Comment} from '../../models/comment';
 import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
-import {AuthService} from '../services/auth/auth.service';
-import {Like} from '../models/like';
-import {MessageService} from '../services/message/message.service';
+import {AuthService} from '../../services/auth/auth.service';
+import {Like} from '../../models/like';
+import {MessageService} from '../../services/message/message.service';
 
 @Component({
   selector: 'app-single-post',

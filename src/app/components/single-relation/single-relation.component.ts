@@ -2,14 +2,14 @@ import {AfterContentInit, Component, HostListener, Inject, OnDestroy, OnInit} fr
 import {faEllipsisH, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DeviceDetectorService} from 'ngx-device-detector';
-import {ImageSnippet} from '../models/imageSnippet';
-import {Relation} from '../models/relation';
-import {DialogMode} from '../models/dialogMode';
-import {AuthService} from '../services/auth/auth.service';
+import {ImageSnippet} from '../../models/imageSnippet';
+import {Relation} from '../../models/relation';
+import {DialogMode} from '../../models/dialogMode';
+import {AuthService} from '../../services/auth/auth.service';
 import {RegisterComponent} from '../register/register.component';
-import {MessageService} from '../services/message/message.service';
+import {MessageService} from '../../services/message/message.service';
 import {OptionsComponent} from '../options/options.component';
-import {RelationService} from '../services/relation/relation.service';
+import {RelationService} from '../../services/relation/relation.service';
 import moment from 'moment';
 import {Router} from '@angular/router';
 

@@ -3,10 +3,10 @@ import construct = Reflect.construct;
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {ImageSnippet} from '../models/imageSnippet';
+import {ImageSnippet} from '../../models/imageSnippet';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
-import {AuthService} from '../services/auth/auth.service';
-import {MessageService} from '../services/message/message.service';
+import {AuthService} from '../../services/auth/auth.service';
+import {MessageService} from '../../services/message/message.service';
 
 class RegisterData {
   constructor(public nick: string, public email: string, public password: string) {
@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
                 this.router.navigate(['/']);
               } else {
                 this.messageService.updateMessage('logged_in');
-                  this.dialogRef.close();
+                this.dialogRef.close();
               }
             }, error => {
 

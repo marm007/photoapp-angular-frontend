@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
-import {AuthService} from '../services/auth/auth.service';
+import {AuthService} from '../../services/auth/auth.service';
 import {LoginComponent} from '../login/login.component';
 import {Router} from '@angular/router';
-import {UserService} from '../services/user/user.service';
-import {User} from '../models/user';
-import {MessageService} from '../services/message/message.service';
+import {UserService} from '../../services/user/user.service';
+import {User} from '../../models/user';
+import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../services/auth/auth.service';
-import {UserService} from '../services/user/user.service';
+import {AuthService} from '../../services/auth/auth.service';
+import {UserService} from '../../services/user/user.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';

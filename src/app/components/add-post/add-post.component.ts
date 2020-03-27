@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {ImageService} from '../services/image/image.service';
+import {ImageService} from '../../services/image/image.service';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
-import {Post} from '../models/post';
-import {ImageSnippet} from '../models/imageSnippet';
+import {Post} from '../../models/post';
+import {ImageSnippet} from '../../models/imageSnippet';
 
 
 

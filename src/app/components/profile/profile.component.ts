@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from '../services/auth/auth.service';
-import {UserService} from '../services/user/user.service';
+import {AuthService} from '../../services/auth/auth.service';
+import {UserService} from '../../services/user/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserFull} from '../models/user';
-import {Post, PostNoUser} from '../models/post';
-import {MessageService} from '../services/message/message.service';
+import {UserFull} from '../../models/user';
+import {Post, PostNoUser} from '../../models/post';
+import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
 
 @Component({

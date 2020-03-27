@@ -1,16 +1,16 @@
 import {ChangeDetectionStrategy, Component, Input, IterableDiffers, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
-import {MessageService} from '../services/message/message.service';
+import {MessageService} from '../../services/message/message.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SingleRelationComponent} from '../single-relation/single-relation.component';
-import {RelationService} from '../services/relation/relation.service';
-import {Relation} from '../models/relation';
-import {User, UserFull} from '../models/user';
-import {UserFollowed} from '../models/userFollowed';
-import {AuthService} from '../services/auth/auth.service';
-import {DialogMode} from '../models/dialogMode';
-import {UserService} from '../services/user/user.service';
-import {UserRelations} from '../models/userRelations';
+import {RelationService} from '../../services/relation/relation.service';
+import {Relation} from '../../models/relation';
+import {User, UserFull} from '../../models/user';
+import {UserFollowed} from '../../models/userFollowed';
+import {AuthService} from '../../services/auth/auth.service';
+import {DialogMode} from '../../models/dialogMode';
+import {UserService} from '../../services/user/user.service';
+import {UserRelations} from '../../models/userRelations';
 import moment from 'moment';
 import {Router} from '@angular/router';
 
