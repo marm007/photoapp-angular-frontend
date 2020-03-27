@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ImageSnippet} from '../models/imageSnippet';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '../services/auth/auth.service';
+import {MessageService} from '../services/message/message.service';
 
 class RegisterData {
   constructor(public nick: string, public email: string, public password: string) {
@@ -30,7 +31,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private router: Router,
+              private messageService: MessageService) {
     this.isMobile = deviceService.isMobile();
   }
 
@@ -45,6 +48,19 @@ export class RegisterComponent implements OnInit {
       .subscribe(res => {
           console.log('GOOD FROM REGISTER');
           console.log(res);
+          this.authService.login(this.registerData.email, this.registerData.password)
+            .subscribe(auth => {
+              console.log('GOOD FROM AUTH');
+              console.log(auth);
+              if (this.router.url === '/register') {
+                this.router.navigate(['/']);
+              } else {
+                this.messageService.updateMessage('logged_in');
+                  this.dialogRef.close();
+              }
+            }, error => {
+
+            });
 
         },
         errorRes => {

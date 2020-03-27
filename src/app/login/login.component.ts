@@ -4,6 +4,7 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
+import {ForgotComponent} from '../forgot/forgot.component';
 
 class LoginData {
   constructor(public email: string, public password: string) {
@@ -19,21 +20,15 @@ export class LoginComponent implements OnInit {
   model = new LoginData('', '');
 
   isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
 
-  submitted = false;
   error: any;
   dialogRef = null;
-  registerDialog: MatDialog;
 
   constructor(private authService: AuthService,
               private deviceService: DeviceDetectorService,
               private router: Router,
               public dialog: MatDialog) {
     this.isMobile = deviceService.isMobile();
-    this.isTablet = deviceService.isTablet();
-    this.isDesktop = deviceService.isDesktop();
   }
 
 
@@ -41,10 +36,6 @@ export class LoginComponent implements OnInit {
     if (this.dialog.openDialogs) {
       this.dialogRef = this.dialog.getDialogById('login');
     }
-  }
-
-  onSubmit() {
-    this.submitted = true;
   }
 
   login() {
@@ -59,6 +50,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error => {
+        // TODO: write errors to component
         console.log(error);
         this.error = error;
       }
@@ -70,11 +62,22 @@ export class LoginComponent implements OnInit {
       this.dialogRef.close();
       this.dialog.open(RegisterComponent, {
         width: '600px',
-        height: '500px',
         id: 'register'
       });
     } else {
       this.router.navigate(['register']);
+    }
+  }
+
+  handleForgot() {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+      this.dialog.open(ForgotComponent, {
+        width: '600px',
+        id: 'forgot'
+      });
+    } else {
+      this.router.navigate(['forgot']);
     }
   }
 

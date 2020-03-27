@@ -32,8 +32,17 @@ import { SinglePostComponent } from './single-post/single-post.component';
 import { SingleRelationComponent } from './single-relation/single-relation.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { OptionsComponent } from './options/options.component';
+import { ResetComponent } from './reset/reset.component';
 
 const appRoutes: Routes = [
+  {
+    path: 'forgot',
+    component: ForgotComponent
+  },
+  {
+    path: 'reset/:token',
+    component: ResetComponent
+  },
   {
     path: 'profile/:id',
     component: ProfileComponent
@@ -82,6 +91,7 @@ const appRoutes: Routes = [
     SinglePostComponent,
     SingleRelationComponent,
     OptionsComponent,
+    ResetComponent,
   ],
     imports: [
         RouterModule.forRoot(

@@ -32,7 +32,7 @@
         </button>
 
         <mat-menu #menu="matMenu">
-          <button  routerLink="/profile" mat-menu-item style="outline: 0;">Profil</button>
+          <button  routerLink="/profile/{{user.id}}" mat-menu-item style="outline: 0;">Profil</button>
           <button mat-menu-item style="outline: 0;" (click)="logout()">Wyloguj</button>
         </mat-menu>
       </div>

@@ -38,4 +38,12 @@ export class UserService {
     return this.http.delete<any>(this.url.concat('followers/').concat(id.toString()).concat('/'),
       {headers: this.authService.jwtAuthHeaders});
   }
+
+  public forgot(email: string): Observable<any> {
+    return this.http.post<any>(this.url.concat('users/password/forgot/'), {email});
+  }
+  public reset(password: string, token: string): Observable<any> {
+    return this.http.post<any>(this.url.concat('users/password/reset/').concat(token).concat('/'), {password});
+
+  }
 }

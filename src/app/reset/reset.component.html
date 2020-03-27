@@ -1,0 +1,27 @@
+<div class="form-section">
+  <div [className]="isMobile ? 'form-wrapper-mobile' : 'form-wrapper'"
+       class="container" [style]="isMobile ? 'border: none; ': '' ">
+    <div [className]="isMobile ? 'form-container-mobile' : 'form-container'"
+         class="container" [style]="isMobile ? 'border: none; ': '' ">
+      <div class="form-logo-container" fxLayout="row">
+        <img style="width: 55px; height: 55px"
+             src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+        <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
+      </div>
+      <form #resetForm="ngForm" (ngSubmit)="reset()">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password"
+                 required
+                 [(ngModel)]="resetData.password" name="password">
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary" [disabled]="!resetForm.form.valid">
+            Reset
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

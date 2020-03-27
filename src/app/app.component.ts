@@ -25,7 +25,8 @@ export class AppComponent implements OnInit {
   modifyHeader(location) {
       if (location.url !== undefined) {
 
-        const flag = location.url !== '/login' && location.url !== '/register';
+        const flag = location.url !== '/login' && location.url !== '/register'
+          && location.url !== '/forgot' && !location.url.includes('/reset');
         if (this.showHeader !== flag) {
           this.showHeader = flag;
         }
