@@ -13,7 +13,7 @@
   </div>
   <mat-card-header class="s-relation-header" id="s-relation-header">
     <div mat-card-avatar class="s-relation-header-image clickable" (click)="handleWatchProfile()"
-         [ngStyle]="{'background-image': 'url(' + relation.user.profile.photo + ')'}"></div>
+         [ngStyle]="{'background-image': 'url(' + relation.user.meta.photo + ')'}"></div>
     <div class="s-relation-header-username">
       <p>{{relation.user.username}}</p>
     </div>

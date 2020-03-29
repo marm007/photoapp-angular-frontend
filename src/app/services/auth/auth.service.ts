@@ -69,7 +69,7 @@ export class AuthService {
     formData.append('email', email);
     formData.append('password', password);
     if (photo) {
-      formData.append('profile.photo', photo);
+      formData.append('meta.photo', photo);
     }
 
 

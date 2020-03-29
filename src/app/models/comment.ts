@@ -1,5 +1,8 @@
 export interface Comment {
-  photo_id: number;
+  id?: number;
   body: string;
   author_name: string;
+  user?: number;
+  post?: number;
 }
+

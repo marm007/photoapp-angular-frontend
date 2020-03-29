@@ -2,7 +2,7 @@
   <div class="profile-section">
     <header class="d-none d-md-flex profile-header">
       <div mat-card-avatar class="profile-image-wrapper">
-        <img  mat-card-avatar class="profile-image" src="{{visitedUserProfile.profile.photo}}" />
+        <img  mat-card-avatar class="profile-image" src="{{visitedUserProfile.meta.photo}}" />
       </div>
       <section class="profile-data">
         <div class="profile-data-wrapper">
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div>
-        <!-- {{profile.first_name}} {{profile.last_name}}-->
+        <!-- {{meta.first_name}} {{meta.last_name}}-->
         </div>
       </section>
 
@@ -33,7 +33,7 @@
     <header class="d-flex d-md-none profile-header-mobile">
        <div class="profile-image-wrapper-mobile">
          <img class="profile-image-mobile"
-              src="{{visitedUserProfile.profile.photo}}"
+              src="{{visitedUserProfile.meta.photo}}"
          />
        </div>
       <section class="profile-data">
@@ -46,7 +46,7 @@
           </button>
         </div>
         <div>
-         <!-- {{profile.first_name}} {{profile.last_name}}-->
+         <!-- {{meta.first_name}} {{meta.last_name}}-->
         </div>
       </section>
     </header>
@@ -77,16 +77,16 @@
       </li>
     </ul>
     <div class="profile-posts">
-     <!-- <div *ngFor="let post of profile.posts; let i = index">
-        <div *ngIf="i % 3 == 0 && i != 0" class="profile-row" >
-          <div class="profile-column" style="margin-right: 2%">
-            <img src="{{profile.posts[i].url}}" alt="Snow" style="width:100%;">
+     <!-- <div *ngFor="let post of meta.posts; let i = index">
+        <div *ngIf="i % 3 == 0 && i != 0" class="meta-row" >
+          <div class="meta-column" style="margin-right: 2%">
+            <img src="{{meta.posts[i].url}}" alt="Snow" style="width:100%;">
           </div>
-          <div class="profile-column" style="margin-right: 2%">
-            <img src="{{profile.posts[i-1].url}}" alt="Snow" style="width:100%;">
+          <div class="meta-column" style="margin-right: 2%">
+            <img src="{{meta.posts[i-1].url}}" alt="Snow" style="width:100%;">
           </div>
-          <div class="profile-column" style="margin-right: 2%">
-            <img src="{{profile.posts[i].url}}" alt="Snow" style="width:100%;">
+          <div class="meta-column" style="margin-right: 2%">
+            <img src="{{meta.posts[i].url}}" alt="Snow" style="width:100%;">
           </div>
         </div>
 
@@ -98,44 +98,44 @@
           </div>
         </div>
       </div>
-    <!--    <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+    <!--    <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Forest" style="width:100%;">
         </div>
-        <div class="profile-column">
-          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
-        </div>
-      </div>
-      <div class="profile-row">
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
-        </div>
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
-        </div>
-        <div class="profile-column">
-          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        <div class="meta-column">
+          <img src="{{meta.posts[0].url}}" alt="Mountains" style="width:100%">
         </div>
       </div>
-      <div class="profile-row">
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+      <div class="meta-row">
+        <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Snow" style="width:100%;">
         </div>
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+        <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Forest" style="width:100%;">
         </div>
-        <div class="profile-column">
-          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        <div class="meta-column">
+          <img src="{{meta.posts[0].url}}" alt="Mountains" style="width:100%">
         </div>
       </div>
-      <div class="profile-row">
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Snow" style="width:100%;">
+      <div class="meta-row">
+        <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Snow" style="width:100%;">
         </div>
-        <div class="profile-column" style="margin-right: 2%">
-          <img src="{{profile.posts[0].url}}" alt="Forest" style="width:100%;">
+        <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Forest" style="width:100%;">
         </div>
-        <div class="profile-column">
-          <img src="{{profile.posts[0].url}}" alt="Mountains" style="width:100%">
+        <div class="meta-column">
+          <img src="{{meta.posts[0].url}}" alt="Mountains" style="width:100%">
+        </div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Snow" style="width:100%;">
+        </div>
+        <div class="meta-column" style="margin-right: 2%">
+          <img src="{{meta.posts[0].url}}" alt="Forest" style="width:100%;">
+        </div>
+        <div class="meta-column">
+          <img src="{{meta.posts[0].url}}" alt="Mountains" style="width:100%">
         </div>
       </div>-->
     </div>

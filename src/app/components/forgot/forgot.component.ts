@@ -25,7 +25,6 @@ export class ForgotComponent implements OnInit {
   constructor(private authService: AuthService,
               private userService: UserService,
               private deviceService: DeviceDetectorService,
-              private router: Router,
               public dialog: MatDialog) {
     this.isMobile = deviceService.isMobile();
   }

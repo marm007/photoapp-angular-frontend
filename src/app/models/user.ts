@@ -1,24 +1,12 @@
-import {Profile} from './profile';
-import {Like} from './like';
-import {Relation} from './relation';
-import {UserFollowed} from './userFollowed';
-import {Post, PostNoUser} from './post';
-import {UserPosts} from './userPosts';
-import {UserFollower} from './userFollower';
+import {Meta} from './meta';
 
 export interface User {
   id: number;
   username: string;
-  profile: Profile;
-}
-
-export interface UserFull {
-  id: number;
-  username: string;
-  profile: Profile;
-  liked: Like[];
-  posts: PostNoUser[];
-  relations: Relation[];
-  followers: UserFollower[];
-  followed: UserFollowed[];
+  meta: Meta;
+  liked?: number[];
+  posts?: number[];
+  relations?: number[];
+  followers?: number[];
+  followed?: number[];
 }

@@ -5,7 +5,7 @@
     <mat-card class="post">
       <mat-card-header class="post-header">
         <div mat-card-avatar class="post-header-image clickable" routerLink="/profile/{{this.post.user.id}}"
-             [ngStyle]="{'background-image': 'url(' + post.user.profile.photo +')'}"></div>
+             [ngStyle]="{'background-image': 'url(' + post.user.meta.photo +')'}"></div>
         <div class="post-header-username">
           <p>{{post.user.username}}</p>
         </div>
@@ -97,7 +97,7 @@
   <mat-card class="post">
     <mat-card-header class="post-header">
       <div mat-card-avatar class="post-header-image  clickable" routerLink="/profile/{{this.post.user.id}}"
-           [ngStyle]="{'background-image': 'url(' + post.user.profile.photo +')'}"></div>
+           [ngStyle]="{'background-image': 'url(' + post.user.meta.photo +')'}"></div>
       <div class="post-header-username">
         <p>{{post.user.username}}</p>
       </div>

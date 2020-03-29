@@ -7,8 +7,7 @@ import {Comment} from '../../models/comment';
 import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../../services/auth/auth.service';
-import {Like} from '../../models/like';
-import {MessageService} from '../../services/message/message.service';
+import {mediaURL} from '../../restConfig';
 
 @Component({
   selector: 'app-single-post',
@@ -67,9 +66,6 @@ export class SinglePostComponent implements OnInit {
 
   addCommentContent: string;
 
-
-  apiRoot = 'http://127.0.0.1:8000';
-
   constructor(private activatedRoute: ActivatedRoute,
               private postsService: PostsService,
               private commentService: CommentService,
@@ -110,14 +106,12 @@ export class SinglePostComponent implements OnInit {
       console.log(this.post);
       this.isPostOwner = this.post.user.id === this.authService.userID;
       this.addPaddingToTop = false;
-      this.post.image = this.apiRoot + this.post.image;
-      this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
     }
 
   }
 
   get isLiked(): boolean {
-    return this.post.liked.some(like => like.user_id === this.userID);
+    return this.post.liked.some(like => like.user === this.userID);
   }
 
   handleClick(buttonClicked?: boolean) {
@@ -130,14 +124,12 @@ export class SinglePostComponent implements OnInit {
     }
   }
 
-  getPost(id: string) {
+  getPost(id: number) {
     this.postsService.getPost(id).subscribe(post => {
       if (post !== null) {
         this.post = post;
         console.log(this.post);
         this.isPostOwner = this.post.user.id === this.authService.userID;
-        this.post.image = this.apiRoot + this.post.image;
-        this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
       } else { this.router.navigate(['not-found']); }
     });
   }
@@ -148,8 +140,6 @@ export class SinglePostComponent implements OnInit {
         this.postsService.likePost(id).subscribe(post => {
           if (post !== null) {
             this.post = post;
-            this.post.image = this.apiRoot + this.post.image;
-            this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
           } else {
 
           }
@@ -159,8 +149,6 @@ export class SinglePostComponent implements OnInit {
       this.postsService.likePost(id).subscribe(post => {
         if (post !== null) {
           this.post = post;
-          this.post.image = this.apiRoot + this.post.image;
-          this.post.user.profile.photo = this.apiRoot + this.post.user.profile.photo;
         } else {
 
         }
@@ -170,7 +158,7 @@ export class SinglePostComponent implements OnInit {
   }
 
   addComment(commentText: string): void {
-    const comment = {body: commentText, photo_id: this.post.id, author_name: this.post.user.username};
+    const comment = {body: commentText, post: this.post.id, author_name: this.post.user.username};
     this.commentService.addComment(comment).subscribe(c => {
       const commentAdded = {body: c.body, author_name: c.author_name};
       this.post.comments.push(commentAdded as Comment);

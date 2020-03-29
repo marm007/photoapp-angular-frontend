@@ -2,11 +2,9 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Post} from '../../models/post';
 import {PostsService} from '../../services/post/posts.service';
 import {MessageService} from '../../services/message/message.service';
-import {UserFollowed} from '../../models/userFollowed';
 import {AuthService} from '../../services/auth/auth.service';
-import {User} from '../../models/user';
-import {UserPosts} from '../../models/userPosts';
-import {Subscription} from 'rxjs';
+import {UserService} from '../../services/user/user.service';
+import {Follower} from '../../models/follower';
 
 
 @Component({
@@ -15,10 +13,9 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit, OnDestroy {
-  private url = '';
 
   @Input()
-  usersFollowed: UserFollowed[] = null;
+  usersFollowed: Follower[] = [];
 
   posts: Post[] = [];
 
@@ -28,18 +25,11 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   userID: number;
 
-  messageSubscription: Subscription;
 
   constructor(private postService: PostsService,
               private messageService: MessageService,
-              private authService: AuthService) {
-    console.log(messageService);
-   /* this.messageSubscription = this.messageService.getMessage()
-      .subscribe(myMessage => {
-        if (myMessage === 'post_deleted') {
-          this.postsLoaded.next(true);
-        }
-      });*/
+              private authService: AuthService,
+              private userService: UserService) {
     this.userID = this.authService.userID;
   }
 
@@ -58,46 +48,55 @@ export class PostsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getPost(id: number): Promise<UserPosts> {
-    return await new Promise<UserPosts>(resolve =>
-      this.postService.getPosts(id)
-        .subscribe(userPost => {
-          const user: User = {username: userPost.username, profile: userPost.profile, id: userPost.id};
-          userPost.posts.forEach(pos => {
-            pos.user = JSON.parse(JSON.stringify(user));
-            pos.image = this.url + pos.image;
-            pos.user.profile.photo = this.url + pos.user.profile.photo;
-          });
-          resolve(userPost);
+  async getPost(id: number): Promise<Post> {
+    return await new Promise<Post>(resolve =>
+      this.postService.getPost(id)
+        .subscribe(post => {
+          resolve(post);
         }));
   }
 
   getPosts(): void {
     this.posts = [];
     const requests = [];
+    if (this.usersFollowed !== undefined) {
+      this.usersFollowed.forEach((followed) => {
+        requests.push(
+          this.userService.getUser(followed.user_being_followed).subscribe(user => {
+            console.log('USER FOLLOWED')
+            console.log(user)
+            user.posts.forEach((postID) => {
+              this.getPost(postID).then(post => {
+                this.posts = this.posts.concat(post);
+              });
+            });
+          }));
+      });
 
-    this.usersFollowed.forEach((followed, index) => {
       requests.push(
-        this.getPost(followed.followed).then(value => {
-          this.posts = this.posts.concat(value.posts);
+        this.userService.getUser(this.authService.userID)
+          .subscribe(user => {
+            user.posts.forEach((postID) => {
+              this.getPost(postID).then(post => {
+                this.posts = this.posts.concat(post);
+              });
+            });
+          }));
+
+      Promise.all(requests).then(() => {
+        this.posts.sort(((a, b) => {
+          if (a.created > b.created) {
+            return -1;
+          }
+          if (a.created < b.created) {
+            return 1;
+          }
+          return 0;
         }));
-    });
-
-    requests.push(
-      this.getPost(this.authService.userID).then(value => {
-      this.posts = this.posts.concat(value.posts);
-
-    }));
-
-    Promise.all(requests).then(() => {
-      this.posts.sort(((a, b) => {
-        if (a.created > b.created) { return -1; }
-        if (a.created < b.created) { return 1; }
-        return 0;
-      }));
-      this.postsLoaded = true;
-      this.messageService.updateMessage('posts loaded');
-    });
+        this.postsLoaded = true;
+        this.messageService.updateMessage('posts loaded');
+      });
+    }
   }
 
 }

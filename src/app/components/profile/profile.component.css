@@ -79,14 +79,14 @@
 
 
 /*
-.profile-row {
+.meta-row {
   display: flex;
   flex-direction: row;
   margin-top: 28px;
   width: 100%;
 }
 
-.profile-row-image{
+.meta-row-image{
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

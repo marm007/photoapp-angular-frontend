@@ -6,11 +6,8 @@ import {ImageSnippet} from '../../models/imageSnippet';
 import {Relation} from '../../models/relation';
 import {DialogMode} from '../../models/dialogMode';
 import {AuthService} from '../../services/auth/auth.service';
-import {RegisterComponent} from '../register/register.component';
-import {MessageService} from '../../services/message/message.service';
 import {OptionsComponent} from '../options/options.component';
 import {RelationService} from '../../services/relation/relation.service';
-import moment from 'moment';
 import {Router} from '@angular/router';
 
 interface DataRelation {

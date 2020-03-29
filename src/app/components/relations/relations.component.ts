@@ -5,14 +5,15 @@ import {MatDialog} from '@angular/material/dialog';
 import {SingleRelationComponent} from '../single-relation/single-relation.component';
 import {RelationService} from '../../services/relation/relation.service';
 import {Relation} from '../../models/relation';
-import {User, UserFull} from '../../models/user';
-import {UserFollowed} from '../../models/userFollowed';
+import {User} from '../../models/user';
 import {AuthService} from '../../services/auth/auth.service';
 import {DialogMode} from '../../models/dialogMode';
 import {UserService} from '../../services/user/user.service';
-import {UserRelations} from '../../models/userRelations';
 import moment from 'moment';
 import {Router} from '@angular/router';
+import {Post} from '../../models/post';
+import {mediaURL} from '../../restConfig';
+import {Follower} from '../../models/follower';
 
 
 interface RelationsByUser {
@@ -28,13 +29,12 @@ interface RelationsByUser {
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class RelationsComponent implements OnInit, OnDestroy {
-  private url = 'http://127.0.0.1:8000';
 
   @Input()
-  user: UserFull;
+  user: User;
 
   @Input()
-  usersFollowed: UserFollowed[] = [];
+  usersFollowed: Follower[] = [];
 
   relations: Relation[] = [];
 
@@ -60,7 +60,6 @@ export class RelationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.user.profile.photo = this.url + this.user.profile.photo;
     this.getRelations();
   }
 
@@ -75,14 +74,22 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
     this.usersFollowed.forEach((followed, index) => {
       requests.push(
-        this.getRelation(followed.followed).then(value => {
-          this.relations = this.relations.concat(value.relations);
+        this.userService.getUser(followed.user_being_followed).subscribe(user => {
+          user.relations.forEach((relationID) => {
+            this.getRelation(relationID).then(relation => {
+              this.relations = this.relations.concat(relation);
+            });
+          });
         }));
     });
 
     Promise.all(requests).then(() => {
-      this.getRelation(this.user.id).then(value => {
-        this.relations = this.relations.concat(value.relations);
+      this.userService.getUser(this.user.id).subscribe(user => {
+        user.relations.forEach((relationID) => {
+          this.getRelation(relationID).then(relation => {
+            this.relations = this.relations.concat(relation);
+          });
+        });
       });
     });
   }
@@ -103,18 +110,12 @@ export class RelationsComponent implements OnInit, OnDestroy {
     return created;
   }
 
-  async getRelation(id: number): Promise<UserRelations> {
-    return await new Promise<UserRelations>(resolve =>
+  async getRelation(id: number): Promise<Relation> {
+    return await new Promise<Relation>(resolve =>
       this.relationService.getRelation(id)
-        .subscribe(userRelations => {
-          const user: User = {username: userRelations.username, profile: userRelations.profile, id: userRelations.id};
-          userRelations.relations.forEach(rel => {
-            rel.user = JSON.parse(JSON.stringify(user));
-            rel.image = this.url + rel.image;
-            rel.user.profile.photo = this.url + rel.user.profile.photo;
-            rel.created = this.addCorrectTime(rel.created);
-          });
-          resolve(userRelations);
+        .subscribe(relation => {
+          relation.created = this.addCorrectTime(relation.created);
+          resolve(relation);
         }));
   }
 
@@ -123,8 +124,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
   }
 
   addRelation() {
-    this.userService.getLoggedUserData().subscribe(user => {
-      user.profile.photo = this.url + user.profile.photo;
+    this.userService.getUser(this.authService.userID).subscribe(user => {
       const dialogRef = this.dialog.open(SingleRelationComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.ADD, relation: {user}}
@@ -134,11 +134,9 @@ export class RelationsComponent implements OnInit, OnDestroy {
         this.relationService.addRelation(relationData).subscribe(
           (res: any) => {
             console.log(res);
-            res.image = this.url + res.image;
-            res.user.profile.photo = this.url + res.user.profile.photo;
             res.created = this.addCorrectTime(res.created);
             this.relations.push(res);
-            /*const u: User = {username: 'addaa', profile: null, id: 25};
+            /*const u: User = {username: 'addaa', meta: null, id: 25};
             this.relations = [...this.relations, ({id: res.id, image: res.image, user: u})];*/
           },
           (err) => {

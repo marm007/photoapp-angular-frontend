@@ -8,6 +8,7 @@ import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
+import {mediaURL} from '../../restConfig';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,6 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  private url = 'http://127.0.0.1:8000';
 
   isMobile: boolean;
   isTablet: boolean;
@@ -77,10 +77,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getLoggedUserData() {
-    this.userService.getLoggedUserData().subscribe(user => {
-      this.user = user;
-      this.user.profile.photo = this.url + this.user.profile.photo;
-
+    this.userService.getUser(null, false).subscribe(user => {
+      if (user !== null) {
+        this.user = user;
+        this.user.meta.photo = mediaURL + this.user.meta.photo;
+      }
     }, error => {
       console.log('ERROR WHILE GETTING LOGGED USER DATA FROM HEADER');
       console.log(error);

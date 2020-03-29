@@ -2,10 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserFull} from '../../models/user';
-import {Post, PostNoUser} from '../../models/post';
+import {Post} from '../../models/post';
 import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
+import {User} from '../../models/user';
+import {mediaURL} from '../../restConfig';
+import {PostsService} from '../../services/post/posts.service';
+import {Follower} from '../../models/follower';
 
 @Component({
   selector: 'app-profile',
@@ -13,12 +16,11 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  private url = 'http://127.0.0.1:8000';
 
   userID: number; // id of currently logged user
 
-  visitedUserProfile: UserFull; // Profile and data of currently visited user
-  posts: PostNoUser[][];
+  visitedUserProfile: User; // Meta and data of currently visited user
+  posts: Post[][];
   profileLoaded = false;
   loopIteration: number;
   buttonText: string;
@@ -28,7 +30,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private postsService: PostsService) {
     this.userID = authService.userID;
     console.log('CURRENTLY LOGGED IN USER ID FROM PROFILE');
     console.log(this.userID);
@@ -56,52 +59,61 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   handleFollow() {
-    if (this.isFollowing()) {
-      this.userService.unfollow(this.getFollowIndex()).subscribe(res => {
-        console.log('RESPONSE FROM HANDLE UNFOLLOW');
-        console.log(res);
-        this.userService.getUser(this.visitedUserProfile.id).subscribe(user => {
-          console.log('RESPONSE FROM HANDLE UNFOLLOW GET USER');
-          console.log(user);
-          this.serializeGetUser(user);
-          this.isFollowing();
-        });
-
-      });
-    } else {
       this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
         console.log('RESPONSE FROM HANDLE FOLLOW');
         console.log(res);
-        this.userService.getUser(this.visitedUserProfile.id).subscribe(user => {
+        this.userService.getUser(this.visitedUserProfile.id, false).subscribe(user => {
           console.log('RESPONSE FROM HANDLE FOLLOW GET USER');
           console.log(user);
-          this.serializeGetUser(user);
+          this.serializeUserProfile(user);
           this.isFollowing();
-
         });
 
       });
+  }
+
+  async getFollower(id: number): Promise<Follower> {
+    return await new Promise<Follower>(resolve =>
+      this.userService.getFollower(id)
+        .subscribe(follower => {
+          resolve(follower);
+        }));
+  }
+
+  isFollowing(): void {
+    console.log('LOG FROM IS FOLLOWING FROM PROFILE');
+    console.log(this.userID);
+    console.log(this.visitedUserProfile);
+    const followers: Follower[] = [];
+    const requests = [];
+
+    for (const followerID of this.visitedUserProfile.followers) {
+      requests.push(
+        this.getFollower(followerID).then(follower => {
+          followers.push(follower);
+        }));
     }
+
+    Promise.all(requests).then(() => {
+      console.log(followers);
+      console.log(this.userID);
+      console.log(followers);
+
+      const flag = followers.find(follower => {
+        console.log(follower.user);
+        console.log(this.userID);
+        console.log(follower.user === this.userID);
+        return  follower.user === this.userID;
+      }) !== undefined;
+
+      this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
+    });
   }
 
-  isFollowing(): boolean {
-    console.log('LOG FROM IS FOLLOWING FROM PROFILE')
-    console.log(this.userID)
-    console.log(this.visitedUserProfile.followers.filter(follower => follower.follower === this.userID))
-    const flag = this.visitedUserProfile.followers.find(follower => follower.follower === this.userID) !== undefined;
-    this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
-    return flag;
-  }
-
-  getFollowIndex(): number {
-    return this.visitedUserProfile.followers.find(follower => follower.follower === this.userID).id;
-  }
-
-  serializeGetUser(user: UserFull) {
+  serializeUserProfile(user: User) {
     this.visitedUserProfile = user;
     console.log('VISITED USER PROFILE FROM PROFILE');
-
-    this.visitedUserProfile.profile.photo = this.url + this.visitedUserProfile.profile.photo;
+    this.visitedUserProfile.meta.photo = mediaURL + this.visitedUserProfile.meta.photo;
     this.loopIteration = this.visitedUserProfile.posts.length / 3;
     this.posts = [];
     for (let i = 0; i < this.loopIteration; i++) {
@@ -109,20 +121,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
       for (let j = 0; j < 3; j++) {
         if (this.visitedUserProfile.posts[j + i * 3] !== undefined) {
           console.log(this.visitedUserProfile.posts[j + i * 3]);
-          this.posts[i][j] = this.visitedUserProfile.posts[j + i * 3];
-          this.posts[i][j].image = this.url + this.posts[i][j].image;
+          this.postsService.getPost(this.visitedUserProfile.posts[j + i * 3])
+            .subscribe(post => {
+              this.posts[i][j] = post;
+            });
         }
       }
     }
   }
 
   getUser(id: number) {
-    this.userService.getUser(id).subscribe(user => {
+    this.userService.getUser(id, false).subscribe(user => {
       if (user === null) {
         this.router.navigate(['not-found']) ;
         return;
       }
-      this.serializeGetUser(user);
+      this.serializeUserProfile(user);
       this.isFollowing();
       this.profileLoaded = true;
     });
