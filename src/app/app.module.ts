@@ -35,7 +35,6 @@ import { OptionsComponent } from './components/options/options.component';
 import { ResetComponent } from './components/reset/reset.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { SearchComponent } from './search/search.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 const appRoutes: Routes = [
@@ -96,7 +95,6 @@ const appRoutes: Routes = [
     SingleRelationComponent,
     OptionsComponent,
     ResetComponent,
-    SearchComponent,
   ],
   imports: [
     RouterModule.forRoot(
