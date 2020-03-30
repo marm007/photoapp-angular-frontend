@@ -6,11 +6,10 @@ import {catchError, filter, shareReplay, switchMap, take, tap} from 'rxjs/operat
 import * as jwtDecode from 'jwt-decode';
 import moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
+import {apiURL} from '../../restConfig';
 
 @Injectable()
 export class AuthService {
-
-  private apiRoot = 'http://localhost:8000/api/';
 
   constructor(private http: HttpClient) { }
 
@@ -35,28 +34,27 @@ export class AuthService {
     return new HttpHeaders({Authorization: 'Bearer ' + this.tokenAccess});
   }
 
-  get userID(): number {
+  get userID(): number | null {
     if (this.isLoggedIn()) {
       this.refreshToken();
       const payload = jwtDecode(this.tokenAccess) as JWTPayload;
       return payload.user_id;
-    } else {
-      this.logout();
-      return -1;
     }
+
+    return null;
   }
 
   login(email: string, password: string) {
 
     const loginToken = window.btoa(email + ':' + password);
-    const loginHeaders = new HttpHeaders({'Content-Type': 'application/json',
+    const loginHeaders = new HttpHeaders(
+      {'Content-Type': 'application/json',
       Authorization : 'Basic ' + loginToken});
-    const loginHttpOptions = {headers: loginHeaders};
-
+    const url = `${apiURL}/auth/`;
     return this.http.post(
-      this.apiRoot.concat('auth/'),
+      url,
       { email, password },
-      loginHttpOptions
+      {headers: loginHeaders}
     ).pipe(
       tap(response => this.setSession(response)),
       shareReplay(),
@@ -68,13 +66,15 @@ export class AuthService {
     formData.append('username', username);
     formData.append('email', email);
     formData.append('password', password);
+
     if (photo) {
       formData.append('meta.photo', photo);
     }
 
+    const url = `${apiURL}/users/`;
 
     return this.http.post(
-      this.apiRoot.concat('users/'),
+      url,
       formData
     ).pipe(
       tap(response => console.log(response)),
@@ -90,12 +90,12 @@ export class AuthService {
   refreshToken() {
     if (moment().isAfter(this.getExpiration('token_access'))) {
 
-      const headers = new HttpHeaders({'Content-Type': 'application/json',
-        Authorization: 'JWT ' + this.tokenAccess});
+      const url = `${apiURL}/token/refresh/`;
+
       return this.http.post(
-        this.apiRoot.concat('token/refresh/'),
+        url,
         { refresh: this.tokenRefresh },
-        {headers}
+        {headers: this.jwtAuthHeaders}
       ).pipe(
         tap(response => this.setSession(response)),
         shareReplay(),
@@ -103,10 +103,13 @@ export class AuthService {
     }
   }
 
-  refreshTokenOne() {
-    return this.http.post<any>(this.apiRoot.concat('token/refresh/'), {
-      refresh: this.tokenRefresh
-    }).pipe(tap(response => {
+  refreshToken401Error() {
+    const url = `${apiURL}/token/refresh/`;
+
+    return this.http.post<any>(
+      url,
+      {refresh: this.tokenRefresh})
+      .pipe(tap(response => {
       this.setSession(response);
     }));
   }
@@ -145,13 +148,15 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+
     console.log('TOKEN REFRESH 401 ERROR HANDLER');
     console.log(this.authService.tokenRefresh);
+
     if (this.authService.tokenRefresh) {
       if (!this.isRefreshing) {
         this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
-        return this.authService.refreshTokenOne().pipe(
+        return this.authService.refreshToken401Error().pipe(
           switchMap((token: any) => {
             this.isRefreshing = false;
             this.refreshTokenSubject.next(token.access);
@@ -159,14 +164,6 @@ export class AuthInterceptor implements HttpInterceptor {
           }));
 
       } else {
-        if (this.authService.tokenAccess === null) {
-          this.isRefreshing = false;
-          this.refreshTokenSubject.next(null);
-          this.dialog.closeAll();
-          this.router.navigate(['login']);
-          return next.handle(request);
-        }
-
         return this.refreshTokenSubject.pipe(
           filter(token => token != null),
           take(1),
@@ -175,8 +172,13 @@ export class AuthInterceptor implements HttpInterceptor {
           }));
       }
     } else {
-      this.dialog.closeAll();
-      this.router.navigate(['login']);
+      if (!(this.dialog.getDialogById('login') ||
+        this.dialog.getDialogById('register') ||
+        this.dialog.getDialogById('forgot'))) {
+        this.dialog.closeAll();
+        this.router.navigate(['login']);
+      }
+
       return next.handle(request);
     }
   }
@@ -188,11 +190,6 @@ export class AuthInterceptor implements HttpInterceptor {
       if (error instanceof HttpErrorResponse && error.status === 401) {
         return this.handle401Error(request, next);
       } else {
-        if ((error.status === 400  && error.url === 'http://localhost:8000/api/token/refresh/')) {
-         /* this.dialog.closeAll();
-          this.router.navigate(['login']);*/
-        } else if (error.status === 404) {
-        }
         return throwError(error);
       }
     })) as any;

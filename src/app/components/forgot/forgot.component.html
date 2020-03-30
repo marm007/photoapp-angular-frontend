@@ -1,33 +1,44 @@
-  <div class="form-section">
-    <div [className]="dialogRef ? '' : isMobile ? 'form-wrapper-mobile' : 'form-wrapper'">
-      <div [className]="dialogRef ? '' : isMobile ? 'form-container-mobile' :'form-container'"
-           class="container" [style]="isMobile ? 'border: none; ': '' ">
-        <div class="form-logo-container" fxLayout="row">
-          <img style="width: 55px; height: 55px"
-               src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
-          <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
+<div class="form-section">
+  <div [className]="dialogRef ? '' : isMobile ? 'form-wrapper-mobile' : 'form-wrapper'">
+    <div [className]="dialogRef ? '' : isMobile ? 'form-container-mobile' :'form-container'"
+         class="container" [style]="isMobile ? 'border: none; ': '' ">
+      <div class="form-logo-container" fxLayout="row">
+        <img style="width: 55px; height: 55px"
+             src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+        <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
+      </div>
+      <form #forgotForm="ngForm" (ngSubmit)="forgot()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email"
+                 class="form-control"
+                 id="email"
+                 required
+                 pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                 [(ngModel)]="forgotData.email" name="email"
+                 #email="ngModel">
+          <!-- <div *ngIf="email.errors && (email.invalid || email.touched)">
+             <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
+             <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
+           </div>-->
         </div>
-        <form #forgotForm="ngForm" (ngSubmit)="forgot()">
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email"
-                   class="form-control"
-                   id="email"
-                   required
-                   pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                   [(ngModel)]="forgotData.email" name="email"
-                   #email="ngModel">
-            <!-- <div *ngIf="email.errors && (email.invalid || email.touched)">
-               <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
-               <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
-             </div>-->
+        <div>
+          <div *ngIf="forgotData.message"
+                [className]="forgotData.status == 'ok' ? 'alert alert-success' : 'alert alert-danger'">
+            {{forgotData.message}}
           </div>
-          <div>
-            <button type="submit" class="btn btn-primary" [disabled]="!forgotForm.form.valid">
+          <div style="display: flex; flex-direction: row; align-items: center;">
+            <button type="submit" class="btn btn-primary"
+                    [disabled]="forgotData.pending || !forgotForm.form.valid || forgotData.status == 'ok'">
               Send reset link
             </button>
+            <img *ngIf="forgotData.pending"
+                 alt="loading..."
+                 class="pl-2" style="width: 25px; height: 25px"
+                 src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>

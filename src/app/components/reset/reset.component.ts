@@ -5,6 +5,9 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 class ResetData {
+  pending = false;
+  status = 'init';
+  message = null;
   constructor(public password: string, public token: string) {
   }
 }
@@ -19,12 +22,10 @@ export class ResetComponent implements OnInit {
 
   isMobile: boolean;
 
-  error: any;
-
-  constructor(private authService: AuthService,
-              private userService: UserService,
+  constructor(private activatedRoute: ActivatedRoute,
               private deviceService: DeviceDetectorService,
-              private activatedRoute: ActivatedRoute) {
+              private authService: AuthService,
+              private userService: UserService) {
     this.isMobile = deviceService.isMobile();
   }
 
@@ -38,17 +39,23 @@ export class ResetComponent implements OnInit {
   }
 
   reset() {
+    this.resetData.pending = true;
     this.userService.reset(this.resetData.password, this.resetData.token).subscribe(
       res => {
         console.log('GOOD FROM RESET COMB');
         console.log(res);
+        this.resetData.pending = false;
+        this.resetData.status = 'ok';
+        this.resetData.message = res.message;
           // this.router.navigate(['']);
       },
       error => {
         // TODO: write errors to component
         console.log('ERROR FROM RESET COMB');
         console.log(error);
-        this.error = error;
+        this.resetData.pending = false;
+        this.resetData.status = 'fail';
+        this.resetData.message = error.error.message;
       }
     );
   }

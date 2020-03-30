@@ -1,6 +1,9 @@
 <div>
+  <div *ngIf="!componentLoaded" style="display:flex; align-items:center;justify-content:center;">
+    <mat-spinner style="margin-top: 80px"></mat-spinner>
+  </div>
   <div *ngIf="followed" [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
-    <app-posts *ngIf="user" [usersFollowed]="followed"></app-posts>
+    <app-posts *ngIf="user" [usersFollowed]="followed" (componentLoaded)="onComponentLoaded()"></app-posts>
     <app-relations *ngIf="user" [usersFollowed]="followed" [user]="user"></app-relations>
   </div>
 </div>

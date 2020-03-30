@@ -5,57 +5,56 @@ import {Post} from '../../models/post';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
 import handleError from '../errorHandler';
-import {url} from '../../restConfig';
+import {apiURL} from '../../restConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostsService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient,
+              private authService: AuthService) { }
 
-  addPost(image: File, description: string): Observable<Post> {
+  add(image: File, description: string): Observable<Post> {
+    const url = `${apiURL}/posts/`;
     const formData = new FormData();
     formData.append('description', description);
     formData.append('image', image);
-    return this.http.post<Post>(url.concat('posts/'), formData,
-      {headers: this.authService.jwtAuthHeaders});
+    return this.http.post<Post>(url, formData,
+      {headers: this.authService.jwtAuthHeaders}).
+      pipe(
+        tap((newPost: Post) => console.log(`added post id=${newPost.id}`)),
+      catchError(handleError<Post>('addPost'))
+    );
   }
-/*
 
-  getPosts(id: number): Observable<Post> {
-    return this.http.get<Post>(this.url.concat('posts/').concat(String(id)).concat('/'))
-      .pipe(
-        tap(_ => console.log(_)),
-          catchError(handleError<Post>('getPosts', null))
-      );
-  }
-*/
-
-  getPost(id: number): Observable<Post> {
-    return this.http.get<Post>(url.concat('posts/').concat(String(id)).concat('/'),
+  get(id: number): Observable<Post> {
+    const url = `${apiURL}/posts/${id}/`;
+    return this.http.get<Post>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(_)),
-        catchError(handleError<Post>('getPost', null))
+        tap(_ => console.log(`fetched post id=${id}`)),
+        catchError(handleError<Post>(`getPost id=${id}`))
       );
   }
 
-  likePost(id: string): Observable<Post> {
-    return this.http.patch<Post>(url.concat('posts/').concat(id + '/like/'),
+  like(id: string): Observable<Post> {
+    const url = `${apiURL}/posts/${id}/like/`;
+    return this.http.patch<Post>(url,
       null, {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(_)),
-        catchError(handleError<Post>('likePost', null))
+        tap(_ => console.log(`liked post id=${id}`)),
+        catchError(handleError<Post>('likePost'))
       );
   }
 
-  deletePost(id: string): Observable<any> {
-    return this.http.delete<any>(url.concat('posts/').concat(id).concat('/'),
+  delete(id: string): Observable<any> {
+    const url = `${apiURL}/posts/${id}/`;
+    return this.http.delete<any>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(_)),
-        catchError(handleError<any>('deletePost', null))
+        tap(_ => console.log(`deleted post id=${id}`)),
+        catchError(handleError<any>('deletePost'))
       );
   }
 }

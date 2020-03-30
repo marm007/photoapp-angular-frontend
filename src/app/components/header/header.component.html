@@ -5,7 +5,7 @@
         <div class="header-logo-container" fxLayout="row">
           <img style="width: 22px; height: 22px"
                src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
-          <p *ngIf="isDesktop || isTablet" class="d-none d-sm-block" style="margin-left: 10px;">PhotoApp</p>
+          <p *ngIf="!isMobile" class="d-none d-sm-block" style="margin-left: 10px;">PhotoApp</p>
           <p *ngIf="isMobile" style="margin-left: 10px;">PhotoApp</p>
         </div>
       </a>
@@ -14,7 +14,7 @@
       <input placeholder="Szukaj" class="header-search-input">
     </div>
     <div class="header-icons">
-      <div *ngIf="isLogged && user" class="header-icons">
+      <div *ngIf="isLoggedIn && user" class="header-icons">
         <button  routerLink="/add"  class="header-icons-button" mat-button style="margin-right: 15px;">
           <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
             insert_photo
@@ -36,7 +36,7 @@
           <button mat-menu-item style="outline: 0;" (click)="logout()">Wyloguj</button>
         </mat-menu>
       </div>
-      <div *ngIf="!isLogged">
+      <div *ngIf="!isLoggedIn">
         <button mat-button style="outline: 0;"  (click)="openDialog()">Login</button>
       </div>
     </div>

@@ -1,10 +1,12 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Post} from '../../models/post';
 import {PostsService} from '../../services/post/posts.service';
 import {MessageService} from '../../services/message/message.service';
 import {AuthService} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
 import {Follower} from '../../models/follower';
+import {forkJoin, Observable} from 'rxjs';
+import {User} from '../../models/user';
 
 
 @Component({
@@ -13,6 +15,8 @@ import {Follower} from '../../models/follower';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit, OnDestroy {
+  @Output()
+  componentLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input()
   usersFollowed: Follower[] = [];
@@ -43,59 +47,58 @@ export class PostsComponent implements OnInit, OnDestroy {
   onPostDeleted(post: Post) {
     const index = this.posts.indexOf(post);
     if (index > -1) {
-      console.log('CAN DELETE');
       this.posts.splice(index, 1);
     }
   }
 
-  async getPost(id: number): Promise<Post> {
-    return await new Promise<Post>(resolve =>
-      this.postService.getPost(id)
-        .subscribe(post => {
-          resolve(post);
-        }));
+  getPost(id: number): Observable<Post> {
+    return this.postService.get(id);
   }
 
   getPosts(): void {
-    this.posts = [];
     const requests = [];
+    console.log('HER I AM');
     if (this.usersFollowed !== undefined) {
+      console.log('HER I AasdasadsM');
       this.usersFollowed.forEach((followed) => {
         requests.push(
-          this.userService.getUser(followed.user_being_followed).subscribe(user => {
-            console.log('USER FOLLOWED')
-            console.log(user)
-            user.posts.forEach((postID) => {
-              this.getPost(postID).then(post => {
-                this.posts = this.posts.concat(post);
-              });
-            });
-          }));
+          this.userService.get(followed.user_being_followed));
       });
 
-      requests.push(
-        this.userService.getUser(this.authService.userID)
-          .subscribe(user => {
-            user.posts.forEach((postID) => {
-              this.getPost(postID).then(post => {
-                this.posts = this.posts.concat(post);
-              });
-            });
-          }));
+      requests.push(this.userService.get(this.authService.userID));
 
-      Promise.all(requests).then(() => {
-        this.posts.sort(((a, b) => {
-          if (a.created > b.created) {
-            return -1;
+      forkJoin(requests)
+        .subscribe((users: User[]) => {
+          const requestsUser = [];
+          users.forEach(user => {
+            user.posts.forEach((postID) => {
+              requestsUser.push( this.getPost(postID));
+            });
+          });
+
+          if (requestsUser.length === 0) {
+            this.componentLoaded.emit(true);
+            this.postsLoaded = true;
+            this.messageService.updateMessage('posts loaded');
           }
-          if (a.created < b.created) {
-            return 1;
-          }
-          return 0;
-        }));
-        this.postsLoaded = true;
-        this.messageService.updateMessage('posts loaded');
-      });
+
+          forkJoin(requestsUser)
+            .subscribe((posts: Post[]) => {
+              posts.sort(((a, b) => {
+                if (a.created > b.created) {
+                  return -1;
+                }
+                if (a.created < b.created) {
+                  return 1;
+                }
+                return 0;
+              }));
+              this.posts = posts;
+              this.componentLoaded.emit(true);
+              this.postsLoaded = true;
+              this.messageService.updateMessage('posts loaded');
+            });
+        });
     }
   }
 

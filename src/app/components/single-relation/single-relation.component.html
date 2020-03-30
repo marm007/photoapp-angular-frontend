@@ -1,6 +1,6 @@
 <div [hidden]="!showRelation">
   <div class="s-relation-header-options-wrapper" id="s-relation-header-options">
-    <div *ngIf="mode === 1 && isOwner" (click)="handleOptionsClick()"
+    <div *ngIf="modelRelation.mode === 1 && isOwner" (click)="handleOptionsClick()"
          class="s-relation-header-options-more clickable" style="user-select: none">
       <fa-icon  [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
       </fa-icon>
@@ -13,23 +13,23 @@
   </div>
   <mat-card-header class="s-relation-header" id="s-relation-header">
     <div mat-card-avatar class="s-relation-header-image clickable" (click)="handleWatchProfile()"
-         [ngStyle]="{'background-image': 'url(' + relation.user.meta.photo + ')'}"></div>
+         [ngStyle]="{'background-image': 'url(' + modelRelation.relation.user.meta.photo + ')'}"></div>
     <div class="s-relation-header-username">
-      <p>{{relation.user.username}}</p>
+      <p>{{modelRelation.relation.user.username}}</p>
     </div>
   </mat-card-header>
 
-  <mat-progress-bar id="progress-bar" *ngIf="mode === 1" mode="determinate" style="margin-bottom: 10px" value="{{this.timeLeft}}"></mat-progress-bar>
+  <mat-progress-bar id="progress-bar" *ngIf="modelRelation.mode === 1" mode="determinate" style="margin-bottom: 10px" value="{{this.timeLeft}}"></mat-progress-bar>
 
-  <div *ngIf="mode === 1" class="s-relation-image-wrapper">
+  <div *ngIf="modelRelation.mode === 1" class="s-relation-image-wrapper">
     <img class="s-relation-image" [ngStyle]="{
           'height': this.innerHeight +'px',
           'width': this.innerWidth +'px'}"
-         src="{{relation.image}}"
+         src="{{modelRelation.relation.image}}"
          alt=""/>
   </div>
 
-  <div *ngIf="mode !== 1" class="s-relation-image-wrapper">
+  <div *ngIf="modelRelation.mode !== 1" class="s-relation-image-wrapper">
     <div *ngIf="!selectedFile.file" class="s-relation-input-file" [ngStyle]="{
           'height': this.innerHeight +'px', 'width': this.innerWidth +'px'}">
       <input #imageInput

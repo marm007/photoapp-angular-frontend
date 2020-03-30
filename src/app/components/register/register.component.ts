@@ -20,10 +20,11 @@ class RegisterData {
 })
 export class RegisterComponent implements OnInit {
   selectedFile = new ImageSnippet(null, null);
+  registerData = new RegisterData(null, null, null);
+
   times = faTimes;
 
   isMobile: boolean;
-  registerData = new RegisterData(null, null, null);
   dialogRef = null;
 
   registerError = false;

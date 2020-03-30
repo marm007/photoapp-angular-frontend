@@ -44,13 +44,14 @@ import {mediaURL} from '../../restConfig';
 })
 export class SinglePostComponent implements OnInit {
 
-  @Output()
-  postDeleted: EventEmitter<Post> = new EventEmitter<Post>();
-
   @Input()
   post: Post;
+
   @Input()
   userID: number;
+
+  @Output()
+  postDeleted: EventEmitter<Post> = new EventEmitter<Post>();
 
   @HostBinding('@like')
   public likeTrigger = false;
@@ -74,10 +75,7 @@ export class SinglePostComponent implements OnInit {
   }
 
   handleDelete() {
-    this.postsService.deletePost(String(this.post.id)).subscribe(res => {
-      console.log('LOG FROM DELETE POST FROM POST');
-      console.log(res);
-      console.log( this.router.url);
+    this.postsService.delete(String(this.post.id)).subscribe(res => {
       if (res === null) {
         if (this.router.url === '/') {
           this.postDeleted.emit(this.post);
@@ -103,7 +101,6 @@ export class SinglePostComponent implements OnInit {
         this.getPost(params.id);
       });
     } else {
-      console.log(this.post);
       this.isPostOwner = this.post.user.id === this.authService.userID;
       this.addPaddingToTop = false;
     }
@@ -125,7 +122,7 @@ export class SinglePostComponent implements OnInit {
   }
 
   getPost(id: number) {
-    this.postsService.getPost(id).subscribe(post => {
+    this.postsService.get(id).subscribe(post => {
       if (post !== null) {
         this.post = post;
         console.log(this.post);
@@ -137,20 +134,16 @@ export class SinglePostComponent implements OnInit {
   likePost(id: string, buttonClicked?: boolean) {
     if (buttonClicked !== true) {
       if (!this.isLiked) {
-        this.postsService.likePost(id).subscribe(post => {
+        this.postsService.like(id).subscribe(post => {
           if (post !== null) {
             this.post = post;
-          } else {
-
           }
         });
       }
     } else {
-      this.postsService.likePost(id).subscribe(post => {
+      this.postsService.like(id).subscribe(post => {
         if (post !== null) {
           this.post = post;
-        } else {
-
         }
       });
     }
@@ -159,9 +152,9 @@ export class SinglePostComponent implements OnInit {
 
   addComment(commentText: string): void {
     const comment = {body: commentText, post: this.post.id, author_name: this.post.user.username};
-    this.commentService.addComment(comment).subscribe(c => {
-      const commentAdded = {body: c.body, author_name: c.author_name};
-      this.post.comments.push(commentAdded as Comment);
+    this.commentService.addComment(comment).subscribe(newComment => {
+      // const commentAdded = {body: c.body, author_name: c.author_name};
+      this.post.comments.push(newComment);
       this.addCommentContent = '';
     });
   }

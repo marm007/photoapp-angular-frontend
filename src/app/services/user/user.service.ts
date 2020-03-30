@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Relation} from '../../models/relation';
 import {AuthService} from '../auth/auth.service';
-import {catchError} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import handleError from '../errorHandler';
-import {Post} from '../../models/post';
-import {url} from '../../restConfig';
+import {apiURL} from '../../restConfig';
 import {User} from '../../models/user';
 
 @Injectable({
@@ -18,46 +16,47 @@ export class UserService {
   constructor(private http: HttpClient,
               private authService: AuthService) { }
 
-  public getLoggedUserData(): Observable<User> {
-    const id = this.authService.userID;
-    return this.http.get<User>(url.concat('users/').concat(String(id)).concat('/'),
-      {headers: this.authService.jwtAuthHeaders});
 
-  }
-
-  public getUser(id?: number, addJWTHeaders= true): Observable<User> {
+  public get(id?: number, addJWTHeaders= true): Observable<User> {
+    console.log('getting')
     if (id === undefined || id === null) {
       id = this.authService.userID;
     }
+    const url = `${apiURL}/users/${id}/`;
 
-    console.log('IDDDDDDDd')
-    console.log(id)
-    return this.http.get<User>(url.concat('users/').concat(String(id)).concat('/'),
-      addJWTHeaders ? {headers: this.authService.jwtAuthHeaders} : {}).pipe(
-      catchError(handleError<User>('getUser', null))
-    );
-  }
-
-  public getUserNoAuth(id: number): Observable<User> {
-    return this.http.get<User>(url.concat('users/').concat(String(id)).concat('/')).pipe(
-      catchError(handleError<User>('getUserNoAuth', null))
+    return this.http.get<User>(url,
+      addJWTHeaders ? {headers: this.authService.jwtAuthHeaders} : {})
+      .pipe(
+        tap((newUser: User) => console.log(`fetched user id=${id}`)),
+        catchError(handleError<User>('getUser'))
     );
   }
 
   public follow(id: number): Observable<User> {
-    return this.http.post<any>(url.concat('users/').concat(String(id)).concat('/follow/'),
-      {followed: id}, {headers: this.authService.jwtAuthHeaders});
+    const url = `${apiURL}/users/${id}/follow/`;
+
+    return this.http.post<any>(url,
+      {followed: id}, {headers: this.authService.jwtAuthHeaders})
+      .pipe(
+        tap(_ => console.log(`followed user id=${id}`)),
+        catchError(handleError<User>('followUser'))
+      );
   }
 
   public forgot(email: string): Observable<any> {
-    return this.http.post<any>(url.concat('password/forgot/'), {email});
+    const url = `${apiURL}/password/forgot/`;
+
+    return this.http.post<any>(url, {email});
   }
 
   public reset(password: string, token: string): Observable<any> {
-    return this.http.post<any>(url.concat('password/reset/').concat(token).concat('/'), {password});
+    const url = `${apiURL}/password/reset/${token}/`;
+
+    return this.http.post<any>(url, {password});
   }
 
   public getFollower(id: number): Observable<any> {
-    return this.http.get<any>(url.concat('followers/').concat(String(id)).concat('/'));
+    const url = `${apiURL}/followers/${id}/`;
+    return this.http.get<any>(url);
   }
 }

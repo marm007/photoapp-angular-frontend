@@ -5,6 +5,9 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {UserService} from '../../services/user/user.service';
 class ForgotData {
+  pending = false;
+  status = 'init';
+  message = null;
   constructor(public email: string, public password: string) {
   }
 }
@@ -37,12 +40,18 @@ export class ForgotComponent implements OnInit {
   }
 
   forgot() {
+    this.forgotData.pending = true;
     this.userService.forgot(this.forgotData.email).subscribe(
       res => {
+
         console.log('GOOD FROM forgot COMB');
         console.log(res);
+
+        this.forgotData.pending = false;
+        this.forgotData.status = 'ok';
+        this.forgotData.message = res.message;
+
         if (this.dialogRef == null) {
-          this.forgotData = new ForgotData('', '');
           // this.router.navigate(['']);
         } else {
           this.dialogRef.close();
@@ -50,6 +59,11 @@ export class ForgotComponent implements OnInit {
       },
       error => {
         // TODO: write errors to component
+
+        this.forgotData.pending = false;
+        this.forgotData.status = 'fail';
+        this.forgotData.message = error.message;
+
         console.log('BAD FROM forgot COMB');
         console.log(error);
         this.error = error;

@@ -17,30 +17,28 @@ import {mediaURL} from '../../restConfig';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
-
   user: User;
-  isLogged: boolean;
   messageSubscription: Subscription;
+
+  isMobile: boolean;
+  isLoggedIn: boolean;
 
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
+              private router: Router,
               public authService: AuthService,
-              public router: Router,
               private userService: UserService,
               private messageService: MessageService) {
+
     this.isMobile = deviceService.isMobile();
-    this.isTablet = deviceService.isTablet();
-    this.isDesktop = deviceService.isDesktop();
-    this.isLogged = this.authService.isLoggedIn();
-    this.getLoggedUserData();
+
+    this.isLoggedIn = this.authService.isLoggedIn();
+
     this.messageSubscription = messageService.getMessage()
       .subscribe(message => {
         if (message === 'logged_in') {
-          this.isLogged = true;
-          this.getLoggedUserData();
+          this.isLoggedIn = true;
+          this.getUser();
         }
       });
   }
@@ -60,6 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getUser();
   }
 
   ngOnDestroy(): void {
@@ -69,22 +68,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.messageService.updateMessage('logged_out');
-    this.isLogged = false;
+    this.isLoggedIn = this.authService.isLoggedIn();
     this.user = null;
     if (this.router.url === '/') {
       this.router.navigate(['login']);
     }
   }
 
-  getLoggedUserData() {
-    this.userService.getUser(null, false).subscribe(user => {
-      if (user !== null) {
+  getUser() {
+    this.userService.get(null, false).subscribe(user => {
         this.user = user;
         this.user.meta.photo = mediaURL + this.user.meta.photo;
-      }
-    }, error => {
-      console.log('ERROR WHILE GETTING LOGGED USER DATA FROM HEADER');
-      console.log(error);
     });
   }
 }

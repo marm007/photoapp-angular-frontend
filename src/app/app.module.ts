@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {Injector, NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -15,7 +15,7 @@ import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { DeviceDetectorModule } from 'ngx-device-detector';
+import {DeviceDetectorModule, DeviceDetectorService} from 'ngx-device-detector';
 import {MatMenuModule} from '@angular/material/menu';
 import { LoginComponent } from './components/login/login.component';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -33,6 +33,7 @@ import { SingleRelationComponent } from './components/single-relation/single-rel
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { OptionsComponent } from './components/options/options.component';
 import { ResetComponent } from './components/reset/reset.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 const appRoutes: Routes = [
   {
     path: 'forgot',
@@ -92,30 +93,31 @@ const appRoutes: Routes = [
     OptionsComponent,
     ResetComponent,
   ],
-    imports: [
-        RouterModule.forRoot(
-            appRoutes,
-            /*{ enableTracing: true } // <-- debugging purposes only*/
-        ),
-        BrowserModule,
-        TruncateModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MatCardModule,
-        MatButtonModule,
-        FlexLayoutModule.withConfig({
-            useColumnBasisZero: false,
-            printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
-        }),
-        ScrollingModule,
-        MatInputModule,
-        FormsModule,
-        DeviceDetectorModule.forRoot(),
-        MatMenuModule,
-        MatDialogModule,
-        FontAwesomeModule,
-        MatProgressBarModule,
-    ],
+  imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      /*{ enableTracing: true } // <-- debugging purposes only*/
+    ),
+    BrowserModule,
+    TruncateModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatButtonModule,
+    FlexLayoutModule.withConfig({
+      useColumnBasisZero: false,
+      printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
+    }),
+    ScrollingModule,
+    MatInputModule,
+    FormsModule,
+    DeviceDetectorModule.forRoot(),
+    MatMenuModule,
+    MatDialogModule,
+    FontAwesomeModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+  ],
   providers: [ AuthService,
     AuthGuard,
     {
@@ -127,4 +129,6 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent]
 })
 
-export class AppModule { }
+export class AppModule {
+
+}

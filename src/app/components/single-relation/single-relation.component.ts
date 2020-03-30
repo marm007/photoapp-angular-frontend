@@ -21,10 +21,10 @@ interface DataRelation {
   styleUrls: ['./single-relation.component.css']
 })
 export class SingleRelationComponent implements OnInit, AfterContentInit, OnDestroy {
-  mode: DialogMode;
-  relation: Relation;
-  isOwner: boolean;
 
+  modelRelation: DataRelation;
+
+  isOwner: boolean;
   isDesktop: boolean;
 
   innerWidth: any;
@@ -40,18 +40,17 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
 
   selectedFile = new ImageSnippet(null, null);
 
-  constructor(public dialogRef: MatDialogRef<SingleRelationComponent>,
-              public dialog: MatDialog,
-              private deviceService: DeviceDetectorService,
+  constructor(private dialogRef: MatDialogRef<SingleRelationComponent>,
+              private dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
+              private router: Router,
               private authService: AuthService,
               private relationService: RelationService,
-              private router: Router) {
-    this.isDesktop = deviceService.isDesktop();
-    this.mode = dataRelation.mode;
-    this.relation = dataRelation.relation;
+              private deviceService: DeviceDetectorService) {
 
-    this.isOwner = this.relation.user.id === this.authService.userID;
+    this.isDesktop = deviceService.isDesktop();
+    this.modelRelation = dataRelation;
+    this.isOwner = this.modelRelation.relation.user.id === this.authService.userID;
   }
 
   ngOnInit(): void {
@@ -62,7 +61,7 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
     this.showRelation = true;
     this.setSize();
 
-    if (this.mode === DialogMode.WATCH) {
+    if (this.modelRelation.mode === DialogMode.WATCH) {
       this.startTimer();
     }
   }
@@ -95,7 +94,7 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
 
     optionsDialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
-        this.relationService.removeRelation(this.relation.id)
+        this.relationService.delete(this.modelRelation.relation.id)
           .subscribe(res => this.dialogRef.close('deleted'));
       } else {
         this.startTimer();
@@ -105,7 +104,7 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
 
   handleWatchProfile() {
     this.handleClose();
-    this.router.navigate(['/profile/'.concat(String(this.relation.user.id))]);
+    this.router.navigate(['/profile/'.concat(String(this.modelRelation.relation.user.id))]);
   }
 
   @HostListener('window:resize', ['$event'])

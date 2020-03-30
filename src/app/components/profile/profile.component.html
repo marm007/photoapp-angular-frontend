@@ -1,3 +1,6 @@
+<div *ngIf="!profileLoaded" style="display:flex; align-items:center;justify-content:center;">
+  <mat-spinner style="margin-top: 80px"></mat-spinner>
+</div>
 <main *ngIf="profileLoaded">
   <div class="profile-section">
     <header class="d-none d-md-flex profile-header">

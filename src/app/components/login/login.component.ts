@@ -6,7 +6,10 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
 import {ForgotComponent} from '../forgot/forgot.component';
 
-class LoginData {
+class LoginModel {
+  pending = false;
+  status = 'init';
+  message = null;
   constructor(public email: string, public password: string) {
   }
 }
@@ -17,11 +20,10 @@ class LoginData {
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  model = new LoginData('', '');
+  loginModel = new LoginModel('', '');
 
   isMobile: boolean;
 
-  error: any;
   dialogRef = null;
 
   constructor(private authService: AuthService,
@@ -39,12 +41,17 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.login(this.model.email, this.model.password).subscribe(
+    this.loginModel.pending = true;
+    this.authService.login(this.loginModel.email, this.loginModel.password).subscribe(
       auth => {
         console.log(auth);
+
+        this.loginModel.pending = false;
+        this.loginModel.status = 'ok';
+        this.loginModel.message = 'Logged in successfully!';
+
         if (this.dialogRef == null) {
           this.router.navigate(['']);
-          this.model = new LoginData('', '');
         } else {
           this.dialogRef.close('logged_in');
         }
@@ -52,7 +59,10 @@ export class LoginComponent implements OnInit {
       error => {
         // TODO: write errors to component
         console.log(error);
-        this.error = error;
+        console.log( error.error.detail);
+        this.loginModel.pending = false;
+        this.loginModel.status = 'fail';
+        this.loginModel.message = error.error.detail ? error.error.detail : 'Something went wrong.';
       }
     );
   }

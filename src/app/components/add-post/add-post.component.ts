@@ -60,7 +60,7 @@ export class AddPostComponent implements OnInit {
 
   uploadPost() {
     if (this.selectedFile.file.type === 'image/jpeg') {
-    this.postService.addPost(this.selectedFile.file, this.descriptionModel.text).subscribe(
+    this.postService.add(this.selectedFile.file, this.descriptionModel.text).subscribe(
       (res: Post) => {
         this.onSuccess();
         this.router.navigate(['post/'.concat(String(res.id))]);

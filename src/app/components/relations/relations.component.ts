@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, IterableDiffers, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
+import {forkJoin, Observable, Subject, Subscription} from 'rxjs';
 import {MessageService} from '../../services/message/message.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SingleRelationComponent} from '../single-relation/single-relation.component';
@@ -67,31 +67,38 @@ export class RelationsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  getRelation(id: number): Observable<Relation> {
+
+      return this.relationService.get(id);
+        // .subscribe(relation => {
+        //   relation.created = this.addCorrectTime(relation.created);
+        //   resolve(relation);
+        // }));
+  }
 
   getRelations(): void {
     this.relations = [];
     const requests = [];
 
     this.usersFollowed.forEach((followed, index) => {
-      requests.push(
-        this.userService.getUser(followed.user_being_followed).subscribe(user => {
-          user.relations.forEach((relationID) => {
-            this.getRelation(relationID).then(relation => {
-              this.relations = this.relations.concat(relation);
-            });
-          });
-        }));
+      requests.push(this.userService.get(followed.user_being_followed));
     });
 
-    Promise.all(requests).then(() => {
-      this.userService.getUser(this.user.id).subscribe(user => {
-        user.relations.forEach((relationID) => {
-          this.getRelation(relationID).then(relation => {
-            this.relations = this.relations.concat(relation);
+    requests.push(this.userService.get(this.user.id));
+    forkJoin(requests)
+      .subscribe((users: User[]) => {
+        const requestsUser = [];
+        users.forEach(user => {
+          user.relations.forEach((relationID) => {
+            requestsUser.push(this.getRelation(relationID));
           });
         });
+        forkJoin(requestsUser)
+          .subscribe((relations: Relation[]) => {
+            relations.forEach(relation => relation.created = this.addCorrectTime(relation.created));
+            this.relations = relations;
+          });
       });
-    });
   }
 
   addCorrectTime(created: Date | number | string): string {
@@ -104,34 +111,30 @@ export class RelationsComponent implements OnInit, OnDestroy {
       const minutes = currentTime.diff(relTime, 'minutes');
       created = minutes + ' minutes ago';
       if (minutes === 0) {
+        const seconds = currentTime.diff(relTime, 'seconds');
         created = currentTime.diff(relTime, 'seconds') + ' seconds ago';
+        if (seconds === 0) {
+          created = 'just now';
+        }
       }
     }
     return created;
   }
 
-  async getRelation(id: number): Promise<Relation> {
-    return await new Promise<Relation>(resolve =>
-      this.relationService.getRelation(id)
-        .subscribe(relation => {
-          relation.created = this.addCorrectTime(relation.created);
-          resolve(relation);
-        }));
-  }
 
   public trackItem(index: number, item: Relation) {
     return item.id;
   }
 
   addRelation() {
-    this.userService.getUser(this.authService.userID).subscribe(user => {
+    this.userService.get(this.authService.userID).subscribe(user => {
       const dialogRef = this.dialog.open(SingleRelationComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.ADD, relation: {user}}
       });
 
       dialogRef.afterClosed().subscribe(relationData => {
-        this.relationService.addRelation(relationData).subscribe(
+        this.relationService.add(relationData).subscribe(
           (res: any) => {
             console.log(res);
             res.created = this.addCorrectTime(res.created);

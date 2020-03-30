@@ -58,7 +58,8 @@
   object-fit: cover;
   left: 0;
   top: 0;
-  height: 600px;
+  width: 100%;
+  height: auto;
 }
 
 .post-footer{

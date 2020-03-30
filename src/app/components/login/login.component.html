@@ -15,7 +15,7 @@
                  id="email"
                  required
                  pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                 [(ngModel)]="model.email" name="email"
+                 [(ngModel)]="loginModel.email" name="email"
                  #email="ngModel">
           <!-- <div *ngIf="email.errors && (email.invalid || email.touched)">
              <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
@@ -26,13 +26,25 @@
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" class="form-control" id="password"
-                 [(ngModel)]="model.password" name="password">
+                 [(ngModel)]="loginModel.password" name="password">
         </div>
         <div>
-          <button type="submit" class="btn btn-primary" [disabled]="!loginModalForm.form.valid">Login
-          </button>
-          <!--         loginModalForm.reset()-->
+          <div *ngIf="loginModel.message"
+               [className]="loginModel.status == 'ok' ? 'alert alert-success' : 'alert alert-danger'">
+            {{loginModel.message}}
+          </div>
+          <div style="display: flex; flex-direction: row; align-items: center;">
+            <button type="submit" class="btn btn-primary"
+                    [disabled]="loginModel.pending || !loginModalForm.form.valid || loginModel.status == 'ok'">
+              Login
+            </button>
+            <img *ngIf="loginModel.pending"
+                 alt="loading..."
+                 class="pl-2" style="width: 25px; height: 25px"
+                 src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+          </div>
         </div>
+
         <div>
           <button (click)="handleRegister()" style="padding: .800rem 0 .400rem;" type="button" class="btn btn-link">
             Register

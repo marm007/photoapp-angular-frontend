@@ -16,7 +16,7 @@
         </div>
       </mat-card-header>
       <div class="post-photo-block" (dblclick)="handleClick()">
-        <img class="post-photo" mat-card-image src="{{post.image}}" alt="">
+        <img class="post-photo" src="{{post.image}}" alt="">
           <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger"
                    [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
           </fa-icon>
@@ -108,7 +108,7 @@
       </div>
     </mat-card-header>
     <div class="post-photo-block" (dblclick)="handleClick()">
-      <img class="post-photo" mat-card-image src="{{post.image}}" alt="">
+      <img class="post-photo"  src="{{post.image}}" alt="">
       <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger"
                [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
       </fa-icon>

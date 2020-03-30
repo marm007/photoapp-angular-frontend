@@ -4,7 +4,7 @@ import {UserService} from '../../services/user/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Post} from '../../models/post';
 import {MessageService} from '../../services/message/message.service';
-import {Subscription} from 'rxjs';
+import {forkJoin, Observable, Subscription} from 'rxjs';
 import {User} from '../../models/user';
 import {mediaURL} from '../../restConfig';
 import {PostsService} from '../../services/post/posts.service';
@@ -62,66 +62,75 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
         console.log('RESPONSE FROM HANDLE FOLLOW');
         console.log(res);
-        this.userService.getUser(this.visitedUserProfile.id, false).subscribe(user => {
-          console.log('RESPONSE FROM HANDLE FOLLOW GET USER');
-          console.log(user);
-          this.serializeUserProfile(user);
-          this.isFollowing();
-        });
+        this.getUser(this.visitedUserProfile.id);
+      });
+  }
+
+  getFollower(id: number): Observable<Follower> {
+     return  this.userService.getFollower(id);
+  }
+
+  isFollowing(): void {
+
+    console.log('LOG FROM IS FOLLOWING FROM PROFILE');
+    console.log(this.userID);
+    console.log(this.visitedUserProfile);
+
+    const requests = [];
+
+    for (const followerID of this.visitedUserProfile.followers) {
+      requests.push(this.getFollower(followerID));
+      console.log(followerID);
+    }
+
+    console.log('REQUEST');
+    console.log(requests);
+    if (requests.length === 0) {
+      const flag = this.visitedUserProfile.id === this.authService.userID;
+      this.serializeUserProfile(flag);
+      this.profileLoaded = true;
+      this.profileLoaded = true;
+      this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
+    }
+
+    forkJoin(requests)
+      .subscribe((followers: Follower[]) => {
+        if (this.visitedUserProfile.id === this.authService.userID) {
+          this.serializeUserProfile(true);
+          this.profileLoaded = true;
+        } else {
+          const flag = followers.find(follower => follower.user === this.userID) !== undefined;
+          console.log('IS FOLLOWER');
+          console.log(flag);
+          this.serializeUserProfile(flag);
+          this.profileLoaded = true;
+          console.log('LOADED PROFILE');
+          this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
+        }
+
+
 
       });
   }
 
-  async getFollower(id: number): Promise<Follower> {
-    return await new Promise<Follower>(resolve =>
-      this.userService.getFollower(id)
-        .subscribe(follower => {
-          resolve(follower);
-        }));
-  }
+  serializeUserProfile(isFollower: boolean) {
+    console.log('VISITED USER PROFILE FROM PROFILE');
+    this.posts = [];
 
-  isFollowing(): void {
-    console.log('LOG FROM IS FOLLOWING FROM PROFILE');
-    console.log(this.userID);
-    console.log(this.visitedUserProfile);
-    const followers: Follower[] = [];
-    const requests = [];
-
-    for (const followerID of this.visitedUserProfile.followers) {
-      requests.push(
-        this.getFollower(followerID).then(follower => {
-          followers.push(follower);
-        }));
+    if (!isFollower) {
+      return;
     }
 
-    Promise.all(requests).then(() => {
-      console.log(followers);
-      console.log(this.userID);
-      console.log(followers);
-
-      const flag = followers.find(follower => {
-        console.log(follower.user);
-        console.log(this.userID);
-        console.log(follower.user === this.userID);
-        return  follower.user === this.userID;
-      }) !== undefined;
-
-      this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
-    });
-  }
-
-  serializeUserProfile(user: User) {
-    this.visitedUserProfile = user;
-    console.log('VISITED USER PROFILE FROM PROFILE');
-    this.visitedUserProfile.meta.photo = mediaURL + this.visitedUserProfile.meta.photo;
     this.loopIteration = this.visitedUserProfile.posts.length / 3;
-    this.posts = [];
+    console.log('LOOP ');
+    console.log(this.visitedUserProfile.posts.length );
+    console.log(this.loopIteration);
     for (let i = 0; i < this.loopIteration; i++) {
       this.posts[i] = [];
       for (let j = 0; j < 3; j++) {
         if (this.visitedUserProfile.posts[j + i * 3] !== undefined) {
           console.log(this.visitedUserProfile.posts[j + i * 3]);
-          this.postsService.getPost(this.visitedUserProfile.posts[j + i * 3])
+          this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
             .subscribe(post => {
               this.posts[i][j] = post;
             });
@@ -131,14 +140,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getUser(id: number) {
-    this.userService.getUser(id, false).subscribe(user => {
+    this.userService.get(id, false).subscribe(user => {
       if (user === null) {
         this.router.navigate(['not-found']) ;
         return;
       }
-      this.serializeUserProfile(user);
+      this.visitedUserProfile = user;
+      this.visitedUserProfile.meta.photo = mediaURL + this.visitedUserProfile.meta.photo;
       this.isFollowing();
-      this.profileLoaded = true;
     });
   }
 }

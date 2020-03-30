@@ -16,25 +16,23 @@ export class HomepageComponent {
 
   user: User;
 
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
+  componentLoaded = false;
 
   innerWidth: any;
 
-  constructor(private deviceService: DeviceDetectorService,
-              private userService: UserService,
+  constructor(private userService: UserService,
               private authService: AuthService) {
     this.innerWidth = window.innerWidth;
-    this.isMobile = deviceService.isMobile();
-    this.isTablet = deviceService.isTablet();
-    this.isDesktop = deviceService.isDesktop();
     this.getLoggedUserData();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.innerWidth = window.innerWidth;
+  }
+
+  onComponentLoaded() {
+    this.componentLoaded = true;
   }
 
   async getFollower(id: number): Promise<Follower> {
@@ -46,7 +44,7 @@ export class HomepageComponent {
   }
 
   getLoggedUserData() {
-    this.userService.getUser(this.authService.userID).subscribe(user => {
+    this.userService.get(this.authService.userID).subscribe(user => {
       this.user = user;
       const requests = [];
       const followed: Follower[] =  [];
