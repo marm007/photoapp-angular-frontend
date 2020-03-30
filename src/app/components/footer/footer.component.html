@@ -4,12 +4,27 @@
 <div *ngIf="isMobile" class="footer-container">
   <div class="footer-content">
     <div class="footer-search">
-      <input placeholder="Szukaj" class="footer-search-input">
+      <input #autocompleteInput
+             placeholder="Szukaj" class="header-search-input" type="text"
+             matInput  [matAutocomplete]="auto" (input)="onSearchChange($event.target.value)">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let user of userList" [value]="user" style="line-height: 0 !important;">
+          <button routerLink="profile/{{user.id}}" class="footer-search-wrapper" style="outline: 0;">
+            <div fxLayout="row">
+              <div mat-card-avatar class="footer-search-photo"
+                   [ngStyle]="{'background-image': 'url(' + user.meta.photo +')'}"></div>
+              <div fxLayout="column" class="footer-search-data-wrapper">
+                <div class="footer-search-username"><span>{{user.username}}</span></div>
+              </div>
+            </div>
+          </button>
+        </mat-option>
+      </mat-autocomplete>
     </div>
-    <button mat-button class="footer-search-button">
-        <i class="material-icons">
-          search
-        </i>
-    </button>
+<!--    <button mat-button class="footer-search-button">-->
+<!--        <i class="material-icons">-->
+<!--          search-->
+<!--        </i>-->
+<!--    </button>-->
   </div>
 </div>

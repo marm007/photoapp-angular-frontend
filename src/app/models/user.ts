@@ -9,4 +9,6 @@ export interface User {
   relations?: number[];
   followers?: number[];
   followed?: number[];
+  first_name?: string;
+  last_name?: string;
 }

@@ -2,7 +2,12 @@
   <div id="relation-header-box">
     <div id="relation-header-text">Relacje</div>
   </div>
-  <cdk-virtual-scroll-viewport itemSize="52" class="relation-section-scroll">
+  <cdk-virtual-scroll-viewport itemSize="52" class="relation-section-scroll"
+                               infinite-scroll
+                               [scrollWindow]="false"
+                               [infiniteScrollDistance]="2"
+                               [infiniteScrollThrottle]="150"
+                               (scrolled)="listFollowedRelations(this.relations.length, this.relations.length + 5)">
     <button class="relation-wrapper" style="outline: 0;"
             [matMenuTriggerFor]="relationMenu">
       <div fxLayout="row">
@@ -44,7 +49,13 @@
 </div>
 
 <div class="d-block d-lg-none relation-section-mobile" *ngIf="(postsLoaded | async) == true">
-  <div class="relation-section-wrapper-mobile">
+  <div class="relation-section-wrapper-mobile"
+       infinite-scroll
+       [horizontal]="true"
+       [scrollWindow]="false"
+       [infiniteScrollDistance]="5"
+       [infiniteScrollThrottle]="50"
+       (scrolled)="listFollowedRelations(this.relations.length, this.relations.length + 5)">
     <div [matMenuTriggerFor]="relationMenu"
          style="min-width: 100px; display: flex; flex-direction: row" class="relation-mobile">
       <div mat-card-avatar class="relation-photo-mobile"

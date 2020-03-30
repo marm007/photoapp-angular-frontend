@@ -1,6 +1,10 @@
 <div class="post-section-my">
 </div>
-<div *ngIf="postsLoaded" >
+<div *ngIf="postsLoaded"
+      infinite-scroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="150"
+      (scrolled)="listFollowedPosts(this.posts.length, this.posts.length + 5)">
 
     <app-single-post *ngFor="let _post of posts"
                      [post]="_post"

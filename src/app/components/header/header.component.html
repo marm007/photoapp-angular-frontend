@@ -11,7 +11,22 @@
       </a>
     </div>
     <div *ngIf="!isMobile" class="header-search">
-      <input placeholder="Szukaj" class="header-search-input">
+      <input #autocompleteInput
+             placeholder="Szukaj" class="header-search-input" type="text"
+             matInput  [matAutocomplete]="auto" (input)="onSearchChange($event.target.value)">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let user of userList" [value]="user" style="line-height: 0 !important;">
+          <button routerLink="profile/{{user.id}}" class="search-wrapper" style="outline: 0;">
+            <div fxLayout="row">
+              <div mat-card-avatar class="search-photo"
+                   [ngStyle]="{'background-image': 'url(' + user.meta.photo +')'}"></div>
+              <div fxLayout="column" class="search-data-wrapper">
+                <div class="search-username"><span>{{user.username}}</span></div>
+              </div>
+            </div>
+          </button>
+        </mat-option>
+      </mat-autocomplete>
     </div>
     <div class="header-icons">
       <div *ngIf="isLoggedIn && user" class="header-icons">

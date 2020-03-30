@@ -34,6 +34,10 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { OptionsComponent } from './components/options/options.component';
 import { ResetComponent } from './components/reset/reset.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { SearchComponent } from './search/search.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 const appRoutes: Routes = [
   {
     path: 'forgot',
@@ -92,6 +96,7 @@ const appRoutes: Routes = [
     SingleRelationComponent,
     OptionsComponent,
     ResetComponent,
+    SearchComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -117,6 +122,8 @@ const appRoutes: Routes = [
     FontAwesomeModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    InfiniteScrollModule,
+    MatAutocompleteModule
   ],
   providers: [ AuthService,
     AuthGuard,

@@ -1,25 +1,16 @@
-import {ChangeDetectionStrategy, Component, Input, IterableDiffers, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {forkJoin, Observable, Subject, Subscription} from 'rxjs';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Subject, Subscription} from 'rxjs';
 import {MessageService} from '../../services/message/message.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SingleRelationComponent} from '../single-relation/single-relation.component';
 import {RelationService} from '../../services/relation/relation.service';
 import {Relation} from '../../models/relation';
 import {User} from '../../models/user';
-import {AuthService} from '../../services/auth/auth.service';
 import {DialogMode} from '../../models/dialogMode';
 import {UserService} from '../../services/user/user.service';
 import moment from 'moment';
 import {Router} from '@angular/router';
-import {Post} from '../../models/post';
-import {mediaURL} from '../../restConfig';
-import {Follower} from '../../models/follower';
 
-
-interface RelationsByUser {
-  user: User;
-  relations: Relation[];
-}
 
 @Component({
   selector: 'app-relations',
@@ -33,9 +24,6 @@ export class RelationsComponent implements OnInit, OnDestroy {
   @Input()
   user: User;
 
-  @Input()
-  usersFollowed: Follower[] = [];
-
   relations: Relation[] = [];
 
   subscription: Subscription;
@@ -47,9 +35,9 @@ export class RelationsComponent implements OnInit, OnDestroy {
   constructor(private messageService: MessageService,
               public dialog: MatDialog,
               public relationService: RelationService,
-              private authService: AuthService,
               private userService: UserService,
               private router: Router) {
+
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'posts loaded') {
@@ -57,47 +45,26 @@ export class RelationsComponent implements OnInit, OnDestroy {
         }
         this.message = myMessage;
       });
+
   }
 
   ngOnInit(): void {
-    this.getRelations();
+    this.listFollowedRelations();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  getRelation(id: number): Observable<Relation> {
-
-      return this.relationService.get(id);
-        // .subscribe(relation => {
-        //   relation.created = this.addCorrectTime(relation.created);
-        //   resolve(relation);
-        // }));
-  }
-
-  getRelations(): void {
-    this.relations = [];
-    const requests = [];
-
-    this.usersFollowed.forEach((followed, index) => {
-      requests.push(this.userService.get(followed.user_being_followed));
-    });
-
-    requests.push(this.userService.get(this.user.id));
-    forkJoin(requests)
-      .subscribe((users: User[]) => {
-        const requestsUser = [];
-        users.forEach(user => {
-          user.relations.forEach((relationID) => {
-            requestsUser.push(this.getRelation(relationID));
-          });
-        });
-        forkJoin(requestsUser)
-          .subscribe((relations: Relation[]) => {
-            relations.forEach(relation => relation.created = this.addCorrectTime(relation.created));
-            this.relations = relations;
-          });
+  listFollowedRelations(start?: number, limit?: number): void {
+    this.userService.listFollowedRelations(start, limit)
+      .subscribe((relations: Relation[]) => {
+        if (relations.length > 0) {
+          console.log('relations');
+          console.log(relations);
+          relations.forEach(relation => relation.created = this.addCorrectTime(relation.created));
+          this.relations = this.relations.concat(relations);
+        }
       });
   }
 
@@ -121,13 +88,8 @@ export class RelationsComponent implements OnInit, OnDestroy {
     return created;
   }
 
-
-  public trackItem(index: number, item: Relation) {
-    return item.id;
-  }
-
   addRelation() {
-    this.userService.get(this.authService.userID).subscribe(user => {
+    this.userService.get(this.user.id).subscribe(user => {
       const dialogRef = this.dialog.open(SingleRelationComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.ADD, relation: {user}}

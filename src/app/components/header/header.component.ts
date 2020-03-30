@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth/auth.service';
@@ -17,11 +17,15 @@ import {mediaURL} from '../../restConfig';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  @ViewChild('autocompleteInput') autocompleteInput: ElementRef;
+
   user: User;
   messageSubscription: Subscription;
 
   isMobile: boolean;
   isLoggedIn: boolean;
+
+  userList: User[];
 
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
@@ -81,4 +85,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.user.meta.photo = mediaURL + this.user.meta.photo;
     });
   }
+
+  onSearchChange(searchValue: string): void {
+    if (searchValue) {
+      this.userService.filter('username__contains', searchValue)
+        .subscribe(users => {
+          this.userList = users;
+        });
+    } else { this.userList = []; }
+  }
+
+  displayFn(user: User) {
+    const u = user ? user.username : user;
+    return ''; // u
+  }
+
+  // handleUserClick(id) {
+  //   this.autocompleteInput.nativeElement.value = '';
+  //   this.router.navigate([`profile/${id}`]);
+  // }
 }
