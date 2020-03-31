@@ -6,7 +6,7 @@ import {Post} from '../../models/post';
 import {MessageService} from '../../services/message/message.service';
 import {forkJoin, Observable, Subscription} from 'rxjs';
 import {User} from '../../models/user';
-import {ImageType, mediaURL, prepareImage} from '../../restConfig';
+import {ImageType, prepareImage} from '../../restConfig';
 import {PostsService} from '../../services/post/posts.service';
 import {Follower} from '../../models/follower';
 
@@ -33,12 +33,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private messageService: MessageService,
               private postsService: PostsService) {
     this.userID = authService.userID;
-    console.log('CURRENTLY LOGGED IN USER ID FROM PROFILE');
-    console.log(this.userID);
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'logged_out') {
-          console.log(myMessage);
           this.userID = authService.userID;
           this.isFollowing();
         } else if (myMessage === 'logged_in') {
@@ -60,8 +57,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   handleFollow() {
       this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
-        console.log('RESPONSE FROM HANDLE FOLLOW');
-        console.log(res);
         this.getUser(this.visitedUserProfile.id);
       });
   }
@@ -72,25 +67,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   isFollowing(): void {
 
-    console.log('LOG FROM IS FOLLOWING FROM PROFILE');
-    console.log(this.userID);
-    console.log(this.visitedUserProfile);
-
     const requests = [];
 
     for (const followerID of this.visitedUserProfile.followers) {
       requests.push(this.getFollower(followerID));
-      console.log(followerID);
     }
 
-    console.log('REQUEST');
-    console.log(requests);
     if (requests.length === 0) {
       const flag = this.visitedUserProfile.id === this.authService.userID;
       this.serializeUserProfile(flag);
       this.profileLoaded = true;
       this.profileLoaded = true;
-      this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
     }
 
     forkJoin(requests)
@@ -100,21 +87,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.profileLoaded = true;
         } else {
           const flag = followers.find(follower => follower.user === this.userID) !== undefined;
-          console.log('IS FOLLOWER');
-          console.log(flag);
           this.serializeUserProfile(flag);
           this.profileLoaded = true;
-          console.log('LOADED PROFILE');
           this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
         }
-
-
-
       });
   }
 
   serializeUserProfile(isFollower: boolean) {
-    console.log('VISITED USER PROFILE FROM PROFILE');
     this.posts = [];
 
     if (!isFollower) {
@@ -126,7 +106,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.posts[i] = [];
       for (let j = 0; j < 3; j++) {
         if (this.visitedUserProfile.posts[j + i * 3] !== undefined) {
-          console.log(this.visitedUserProfile.posts[j + i * 3]);
           this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
             .subscribe(post => {
               post.image = prepareImage(post.image, ImageType.PROFILE);

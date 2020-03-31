@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import construct = Reflect.construct;
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -9,6 +8,8 @@ import {AuthService} from '../../services/auth/auth.service';
 import {MessageService} from '../../services/message/message.service';
 
 class RegisterData {
+  pending = false;
+  status = 'init';
   constructor(public nick: string, public email: string, public password: string) {
   }
 }
@@ -44,15 +45,22 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  private onSuccess() {
+    this.registerData.pending = false;
+    this.registerData.status = 'ok';
+  }
+
+  private onError() {
+    this.registerData.pending = false;
+    this.registerData.status = 'fail';
+  }
+
   register() {
     this.authService.signup(this.registerData.nick, this.registerData.email, this.registerData.password, this.selectedFile.file)
       .subscribe(res => {
-          console.log('GOOD FROM REGISTER');
-          console.log(res);
           this.authService.login(this.registerData.email, this.registerData.password)
             .subscribe(auth => {
-              console.log('GOOD FROM AUTH');
-              console.log(auth);
+              this.onSuccess();
               if (this.router.url === '/register') {
                 this.router.navigate(['/']);
               } else {
@@ -60,13 +68,13 @@ export class RegisterComponent implements OnInit {
                 this.dialogRef.close();
               }
             }, error => {
-
+                this.onError();
             });
 
         },
         errorRes => {
+          this.onError();
           const error = errorRes.error;
-          console.log(error);
           this.registerError = true;
           if (error.email) {
             this.registerErrorMessage = error.email;
@@ -80,11 +88,6 @@ export class RegisterComponent implements OnInit {
 
     reader.addEventListener('load', (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
-      /* this.selectedFile.pending = true;
-       this.selectedFile.status = 'fail';*/
-      /*this.selectedFile.pending = true;
-      this.alert = {type: 'alert-danger', message: 'Cos jest nie tak'};*/
-
     });
 
     reader.readAsDataURL(file);

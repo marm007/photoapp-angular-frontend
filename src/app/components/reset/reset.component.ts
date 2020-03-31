@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute} from '@angular/router';
 class ResetData {
   pending = false;
   status = 'init';
@@ -32,8 +31,6 @@ export class ResetComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      console.log('params FROM RESET COMB');
-      console.log(params);
       this.resetData.token = params.token;
     });
   }
@@ -42,17 +39,11 @@ export class ResetComponent implements OnInit {
     this.resetData.pending = true;
     this.userService.reset(this.resetData.password, this.resetData.token).subscribe(
       res => {
-        console.log('GOOD FROM RESET COMB');
-        console.log(res);
         this.resetData.pending = false;
         this.resetData.status = 'ok';
         this.resetData.message = res.message;
-          // this.router.navigate(['']);
       },
       error => {
-        // TODO: write errors to component
-        console.log('ERROR FROM RESET COMB');
-        console.log(error);
         this.resetData.pending = false;
         this.resetData.status = 'fail';
         this.resetData.message = error.error.message;

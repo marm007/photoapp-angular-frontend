@@ -3,7 +3,6 @@ import {Post} from '../../models/post';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PostsService} from '../../services/post/posts.service';
 import {CommentService} from '../../services/comment/comment.service';
-import {Comment} from '../../models/comment';
 import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../../services/auth/auth.service';
@@ -127,7 +126,6 @@ export class SinglePostComponent implements OnInit {
         post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
         post.image = prepareImage(post.image);
         this.post = post;
-        console.log(this.post);
         this.isPostOwner = this.post.user.id === this.authService.userID;
       } else { this.router.navigate(['not-found']); }
     });
@@ -159,7 +157,6 @@ export class SinglePostComponent implements OnInit {
   addComment(commentText: string): void {
     const comment = {body: commentText, post: this.post.id, author_name: this.post.user.username};
     this.commentService.addComment(comment).subscribe(newComment => {
-      // const commentAdded = {body: c.body, author_name: c.author_name};
       this.post.comments.push(newComment);
       this.addCommentContent = '';
     });

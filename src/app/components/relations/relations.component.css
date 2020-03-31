@@ -83,7 +83,7 @@
   height: 82px;
   overflow-y: hidden;
   outline: 0;
-  border: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+  border: 1px solid rgba(219, 219, 219, 1);
   border-radius: 3px;
   margin-bottom: 24px;
   display: block;

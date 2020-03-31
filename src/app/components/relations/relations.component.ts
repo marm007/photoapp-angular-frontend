@@ -10,7 +10,7 @@ import {DialogMode} from '../../models/dialogMode';
 import {UserService} from '../../services/user/user.service';
 import moment from 'moment';
 import {Router} from '@angular/router';
-import {ImageType, mediaURL, prepareImage} from '../../restConfig';
+import {ImageType, prepareImage} from '../../restConfig';
 
 
 @Component({
@@ -99,23 +99,20 @@ export class RelationsComponent implements OnInit, OnDestroy {
       });
 
       dialogRef.afterClosed().subscribe(relationData => {
+        if (relationData == null) {
+          return;
+        }
         this.relationService.add(relationData).subscribe(
           (res: any) => {
-            console.log(res);
             res.user.meta.avatar = prepareImage(res.user.meta.avatar, ImageType.THUMBNAIL);
             res.image = prepareImage(res.image);
             res.created = this.addCorrectTime(res.created);
             this.relations.push(res);
-            /*const u: User = {username: 'addaa', meta: null, id: 25};
-            this.relations = [...this.relations, ({id: res.id, image: res.image, user: u})];*/
           },
           (err) => {
-            console.log(err);
           });
       });
     }, error => {
-      console.log('ERROR WHILE GETTING LOGGED USER DATA FROM RELATIONS');
-      console.log(error);
       if (error.status === 404) {
           this.router.navigate(['login']);
       }
@@ -140,7 +137,6 @@ export class RelationsComponent implements OnInit, OnDestroy {
       });
     } else {
       const usersRelations = this.relations.filter(r => r.user.id === this.user.id);
-      console.log(usersRelations);
       if (usersRelations.length > 0) {
         const dialogRef = this.dialog.open(SingleRelationComponent, {
           panelClass: 'custom-dialog-container',

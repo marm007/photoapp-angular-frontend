@@ -3,7 +3,6 @@ import {Post} from '../../models/post';
 import {PostsService} from '../../services/post/posts.service';
 import {MessageService} from '../../services/message/message.service';
 import {UserService} from '../../services/user/user.service';
-import {Follower} from '../../models/follower';
 import {ImageType, prepareImage} from '../../restConfig';
 
 

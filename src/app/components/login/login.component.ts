@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {Router} from '@angular/router';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {RegisterComponent} from '../register/register.component';
 import {ForgotComponent} from '../forgot/forgot.component';
 
@@ -44,8 +44,6 @@ export class LoginComponent implements OnInit {
     this.loginModel.pending = true;
     this.authService.login(this.loginModel.email, this.loginModel.password).subscribe(
       auth => {
-        console.log(auth);
-
         this.loginModel.pending = false;
         this.loginModel.status = 'ok';
         this.loginModel.message = 'Logged in successfully!';
@@ -57,9 +55,6 @@ export class LoginComponent implements OnInit {
         }
       },
       error => {
-        // TODO: write errors to component
-        console.log(error);
-        console.log( error.error.detail);
         this.loginModel.pending = false;
         this.loginModel.status = 'fail';
         this.loginModel.message = error.error.detail ? error.error.detail : 'Something went wrong.';

@@ -8,7 +8,7 @@ import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
-import {ImageType, mediaURL, prepareImage} from '../../restConfig';
+import {ImageType, prepareImage} from '../../restConfig';
 
 @Component({
   selector: 'app-header',
@@ -102,9 +102,4 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const u = user ? user.username : user;
     return ''; // u
   }
-
-  // handleUserClick(id) {
-  //   this.autocompleteInput.nativeElement.value = '';
-  //   this.router.navigate([`profile/${id}`]);
-  // }
 }

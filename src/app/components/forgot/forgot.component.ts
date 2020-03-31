@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
-import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {UserService} from '../../services/user/user.service';
 class ForgotData {
@@ -22,7 +21,6 @@ export class ForgotComponent implements OnInit {
 
   isMobile: boolean;
 
-  error: any;
   dialogRef = null;
 
   constructor(private authService: AuthService,
@@ -44,29 +42,19 @@ export class ForgotComponent implements OnInit {
     this.userService.forgot(this.forgotData.email).subscribe(
       res => {
 
-        console.log('GOOD FROM forgot COMB');
-        console.log(res);
-
         this.forgotData.pending = false;
         this.forgotData.status = 'ok';
         this.forgotData.message = res.message;
 
         if (this.dialogRef == null) {
-          // this.router.navigate(['']);
         } else {
           this.dialogRef.close();
         }
       },
       error => {
-        // TODO: write errors to component
-
         this.forgotData.pending = false;
         this.forgotData.status = 'fail';
         this.forgotData.message = error.message;
-
-        console.log('BAD FROM forgot COMB');
-        console.log(error);
-        this.error = error;
       }
     );
   }

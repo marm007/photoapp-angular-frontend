@@ -1,10 +1,10 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {DeviceDetectorService} from 'ngx-device-detector';
+import {Component, HostListener} from '@angular/core';
 import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {Follower} from '../../models/follower';
 import {AuthService} from '../../services/auth/auth.service';
 import {ImageType, prepareImage} from '../../restConfig';
+import {forkJoin, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
@@ -36,12 +36,8 @@ export class HomepageComponent {
     this.componentLoaded = true;
   }
 
-  async getFollower(id: number): Promise<Follower> {
-    return await new Promise<Follower>(resolve =>
-      this.userService.getFollower(id)
-        .subscribe(follower => {
-          resolve(follower);
-        }));
+  getFollower(id: number): Observable<Follower> {
+      return this.userService.getFollower(id);
   }
 
   getLoggedUserData() {
@@ -49,22 +45,15 @@ export class HomepageComponent {
       user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
       this.user = user;
       const requests = [];
-      const followed: Follower[] =  [];
       for (const followedID of this.user.followed) {
         requests.push(
-          this.getFollower(followedID).then(follower => {
-            followed.push(follower);
-          }));
+          this.getFollower(followedID));
       }
 
-      Promise.all(requests).then(() => {
-        this.followed = followed;
-        console.log(this.followed)
-      });
-
-      }, error => {
-      console.log('ERROR WHILE GETTING LOGGED USER DATA FROM HOMEPAGE');
-      console.log(error);
+      forkJoin(requests)
+        .subscribe((followed: Follower[]) => {
+          this.followed = followed;
+        });
     });
   }
 }

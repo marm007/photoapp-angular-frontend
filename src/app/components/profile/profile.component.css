@@ -4,7 +4,6 @@
   flex-grow: 1;
   max-width: 975px;
   display: flex;
-  /*flex-grow: 1;*/
   margin: 60px auto 30px;
   flex-direction: column;
 }
@@ -72,27 +71,10 @@
 }
 
 .profile-posts{
-  border-top: 1px solid rgba(var(--b38,219,219,219),1);
+  border-top: 1px solid rgba(219,219,219,1);
   display: flex;
   flex-direction: column;
 }
-
-
-/*
-.meta-row {
-  display: flex;
-  flex-direction: row;
-  margin-top: 28px;
-  width: 100%;
-}
-
-.meta-row-image{
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  object-fit: cover;
-}*/
 
 .profile-column {
   float: left;
@@ -103,7 +85,6 @@
   margin-top: 25px;
 }
 
-/* Clearfix (clear floats) */
 .profile-row::after {
   content: "";
   clear: both;
@@ -140,7 +121,7 @@
 
 .profile-data-statistics-mobile-wrapper {
   justify-content: space-around;
-  border-top: 1px solid rgba(var(--b38,219,219,219),1);
+  border-top: 1px solid rgba(219,219,219,1);
   padding: 12px 0;
   display: flex;
   flex-direction: row;
@@ -155,11 +136,11 @@
 
 .profile-data-statistics-name-mobile {
   text-align: center;
-  color: rgba(var(--f52,153,153,153),1);
+  color: rgba(153,153,153,1);
 }
 
 .profile-data-statistics-value-mobile {
   display: block;
-  color: rgba(var(--i1d,38,38,38),1);
+  color: rgba(38,38,38,1);
   font-weight: 600;
 }

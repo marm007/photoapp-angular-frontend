@@ -17,10 +17,6 @@
                  pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                  [(ngModel)]="forgotData.email" name="email"
                  #email="ngModel">
-          <!-- <div *ngIf="email.errors && (email.invalid || email.touched)">
-             <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
-             <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
-           </div>-->
         </div>
         <div>
           <div *ngIf="forgotData.message"

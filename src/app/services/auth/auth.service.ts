@@ -125,8 +125,6 @@ export class AuthService {
     if (this.tokenAccess == null) {
       return false;
     }
-    // TODO delete this log
-    console.log('IS_LOGGED_IN');
     return moment().isBefore(this.getExpiration('token_access')) ||
       moment().isBefore(this.getExpiration('token_refresh'));
   }
@@ -138,8 +136,7 @@ export class AuthService {
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  // Refresh Token Subject tracks the current token, or is null if no token is currently
-  // available (e.g. refresh pending).
+
   constructor(public authService: AuthService,
               public router: Router,
               public dialog: MatDialog) {
@@ -148,9 +145,6 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-
-    console.log('TOKEN REFRESH 401 ERROR HANDLER');
-    console.log(this.authService.tokenRefresh);
 
     if (this.authService.tokenRefresh) {
       if (!this.isRefreshing) {
@@ -212,7 +206,6 @@ export class AuthGuard implements CanActivate {
   canActivate() {
     if (this.authService.isLoggedIn()) {
       this.authService.refreshToken();
-      console.log('CAN_ACTIVATE');
       return true;
     } else {
       this.authService.logout();

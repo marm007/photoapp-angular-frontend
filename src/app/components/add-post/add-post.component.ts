@@ -34,7 +34,6 @@ export class AddPostComponent implements OnInit {
   private onError() {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'fail';
-    /*this.selectedFile = new ImageSnippet(null, null);;*/
   }
 
   public resetImage() {
@@ -48,25 +47,20 @@ export class AddPostComponent implements OnInit {
 
     reader.addEventListener('load', (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
-     /* this.selectedFile.pending = true;
-      this.selectedFile.status = 'fail';*/
-      /*this.selectedFile.pending = true;
-      this.alert = {type: 'alert-danger', message: 'Cos jest nie tak'};*/
-
     });
 
     reader.readAsDataURL(file);
   }
 
   uploadPost() {
+    this.selectedFile.pending = true;
     if (this.selectedFile.file.type === 'image/jpeg') {
-    this.postService.add(this.selectedFile.file, this.descriptionModel.text).subscribe(
+      this.postService.add(this.selectedFile.file, this.descriptionModel.text).subscribe(
       (res: Post) => {
         this.onSuccess();
         this.router.navigate(['post/'.concat(String(res.id))]);
       },
       (err) => {
-        console.log(err);
         this.onError();
         this.errorMessage = err.error.detail;
       });
