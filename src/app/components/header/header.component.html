@@ -19,7 +19,7 @@
           <button routerLink="profile/{{user.id}}" class="search-wrapper" style="outline: 0;">
             <div fxLayout="row">
               <div mat-card-avatar class="search-photo"
-                   [ngStyle]="{'background-image': 'url(' + user.meta.photo +')'}"></div>
+                   [ngStyle]="{'background-image': 'url(' + user.meta.avatar +')'}"></div>
               <div fxLayout="column" class="search-data-wrapper">
                 <div class="search-username"><span>{{user.username}}</span></div>
               </div>
@@ -43,7 +43,7 @@
         <button class="header-icons-button" mat-button [matMenuTriggerFor]="menu">
           <img class="header-user"
                style="width: 22px; height: 22px"
-               src="{{user.meta.photo}}"/>
+               src="{{user.meta.avatar}}"/>
         </button>
 
         <mat-menu #menu="matMenu">

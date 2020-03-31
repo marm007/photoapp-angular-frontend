@@ -68,7 +68,7 @@ export class AuthService {
     formData.append('password', password);
 
     if (photo) {
-      formData.append('meta.photo', photo);
+      formData.append('meta.avatar', photo);
     }
 
     const url = `${apiURL}/users/`;

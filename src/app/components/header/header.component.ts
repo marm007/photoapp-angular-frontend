@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getUser() {
     this.userService.get(null, false).subscribe(user => {
         this.user = user;
-        this.user.meta.photo = mediaURL + this.user.meta.photo;
+        this.user.meta.avatar = mediaURL + this.user.meta.avatar;
     });
   }
 

@@ -12,7 +12,7 @@
             [matMenuTriggerFor]="relationMenu">
       <div fxLayout="row">
         <div mat-card-avatar class="relation-photo"
-             [ngStyle]="{'background-image': 'url('+ user.meta.photo +')'}">
+             [ngStyle]="{'background-image': 'url('+ user.meta.avatar +')'}">
         </div>
         <div fxLayout="column" class="relation-data-wrapper">
           <div class="relation-username">
@@ -59,7 +59,7 @@
     <div [matMenuTriggerFor]="relationMenu"
          style="min-width: 100px; display: flex; flex-direction: row" class="relation-mobile">
       <div mat-card-avatar class="relation-photo-mobile"
-           [ngStyle]="{'background-image': 'url('+ user.meta.photo +')'}">
+           [ngStyle]="{'background-image': 'url('+ user.meta.avatar +')'}">
       </div>
       <div style="min-width: 100px" class="relation-username-mobile">
         Twoje relacje

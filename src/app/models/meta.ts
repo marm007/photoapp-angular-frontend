@@ -1,4 +1,4 @@
 export interface Meta {
-  photo: string;
+  avatar: string;
   is_private: boolean;
 }

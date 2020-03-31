@@ -146,7 +146,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         return;
       }
       this.visitedUserProfile = user;
-      this.visitedUserProfile.meta.photo = mediaURL + this.visitedUserProfile.meta.photo;
+      this.visitedUserProfile.meta.avatar = mediaURL + this.visitedUserProfile.meta.avatar;
       this.isFollowing();
     });
   }
