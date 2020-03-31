@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { DeviceDetectorService } from 'ngx-device-detector';
+import {DeviceDetectorService} from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth/auth.service';
 import {LoginComponent} from '../login/login.component';
@@ -8,7 +8,7 @@ import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
-import {mediaURL} from '../../restConfig';
+import {ImageType, mediaURL, prepareImage} from '../../restConfig';
 
 @Component({
   selector: 'app-header',
@@ -81,9 +81,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getUser() {
     this.userService.get(null, false).subscribe(user => {
-        this.user = user;
-        this.user.meta.avatar = mediaURL + this.user.meta.avatar.slice(0, 13)
-        + 'c_scale,w_50/' + this.user.meta.avatar.slice(13,  this.user.meta.avatar.length);    });
+      user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+      this.user = user;
+      });
   }
 
   onSearchChange(searchValue: string): void {
@@ -91,8 +91,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userService.filter('username__contains', searchValue)
         .subscribe(users => {
           users.forEach(user => {
-            user.meta.avatar = mediaURL +  user.meta.avatar.slice(0, 13)
-              + 'c_scale,w_50/' + user.meta.avatar.slice(13,  user.meta.avatar.length);    });
+            user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+          });
           this.userList = users;
         });
     } else { this.userList = []; }

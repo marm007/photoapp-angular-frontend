@@ -10,7 +10,7 @@ import {DialogMode} from '../../models/dialogMode';
 import {UserService} from '../../services/user/user.service';
 import moment from 'moment';
 import {Router} from '@angular/router';
-import {mediaURL} from '../../restConfig';
+import {ImageType, mediaURL, prepareImage} from '../../restConfig';
 
 
 @Component({
@@ -61,13 +61,10 @@ export class RelationsComponent implements OnInit, OnDestroy {
     this.userService.listFollowedRelations(start, limit)
       .subscribe((relations: Relation[]) => {
         if (relations.length > 0) {
-          console.log('relations');
-          console.log(relations);
           relations.forEach(relation => {
-             relation.user.meta.avatar = mediaURL + relation.user.meta.avatar.slice(0, 13)
-               + 'c_scale,w_50/' + relation.user.meta.avatar.slice(13,  relation.user.meta.avatar.length);
-             relation.image = mediaURL + relation.image.slice(0, 13) + 'c_scale,h_150/' + relation.image.slice(13,  relation.image.length);
-             relation.created = this.addCorrectTime(relation.created);
+            relation.user.meta.avatar = prepareImage(relation.user.meta.avatar, ImageType.THUMBNAIL);
+            relation.image = prepareImage(relation.image);
+            relation.created = this.addCorrectTime(relation.created);
           });
           this.relations = this.relations.concat(relations);
         }
@@ -105,9 +102,8 @@ export class RelationsComponent implements OnInit, OnDestroy {
         this.relationService.add(relationData).subscribe(
           (res: any) => {
             console.log(res);
-            res.user.meta.avatar = mediaURL + res.user.meta.avatar.slice(0, 13)
-              + 'c_scale,w_50/' + res.user.meta.avatar.slice(13,  res.user.meta.avatar.length);
-            res.image = mediaURL + res.image.slice(0, 13) + 'c_scale,h_150/' + res.image.slice(13,  res.image.length);
+            res.user.meta.avatar = prepareImage(res.user.meta.avatar, ImageType.THUMBNAIL);
+            res.image = prepareImage(res.image);
             res.created = this.addCorrectTime(res.created);
             this.relations.push(res);
             /*const u: User = {username: 'addaa', meta: null, id: 25};

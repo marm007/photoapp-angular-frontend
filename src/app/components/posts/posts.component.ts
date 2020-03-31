@@ -4,6 +4,7 @@ import {PostsService} from '../../services/post/posts.service';
 import {MessageService} from '../../services/message/message.service';
 import {UserService} from '../../services/user/user.service';
 import {Follower} from '../../models/follower';
+import {ImageType, prepareImage} from '../../restConfig';
 
 
 @Component({
@@ -52,6 +53,11 @@ export class PostsComponent implements OnInit, OnDestroy {
           this.postsLoaded = true;
           this.messageService.updateMessage('posts loaded');
         }
+        posts.forEach(post => {
+          post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+          post.image = prepareImage(post.image);
+
+        });
         this.posts = this.posts.concat(posts);
 
       });

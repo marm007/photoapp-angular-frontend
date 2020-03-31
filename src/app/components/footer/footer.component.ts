@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import {User} from '../../models/user';
 import {UserService} from '../../services/user/user.service';
+import {ImageType, prepareImage} from '../../restConfig';
 
 @Component({
   selector: 'app-footer',
@@ -27,6 +28,10 @@ export class FooterComponent implements OnInit {
     if (searchValue) {
       this.userService.filter('username__contains', searchValue)
         .subscribe(users => {
+          users.forEach(user => {
+            user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+
+          });
           this.userList = users;
         });
     } else { this.userList = []; }

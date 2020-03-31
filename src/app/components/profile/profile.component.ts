@@ -6,7 +6,7 @@ import {Post} from '../../models/post';
 import {MessageService} from '../../services/message/message.service';
 import {forkJoin, Observable, Subscription} from 'rxjs';
 import {User} from '../../models/user';
-import {mediaURL} from '../../restConfig';
+import {ImageType, mediaURL, prepareImage} from '../../restConfig';
 import {PostsService} from '../../services/post/posts.service';
 import {Follower} from '../../models/follower';
 
@@ -129,7 +129,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           console.log(this.visitedUserProfile.posts[j + i * 3]);
           this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
             .subscribe(post => {
-              post.image = mediaURL + post.image.slice(0, 13) + 'c_scale,h_150/' + post.image.slice(13,  post.image.length);
+              post.image = prepareImage(post.image, ImageType.PROFILE);
               this.posts[i][j] = post;
             });
         }
@@ -143,9 +143,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.router.navigate(['not-found']) ;
         return;
       }
+      user.meta.avatar = prepareImage(user.meta.avatar, ImageType.MEDIUM);
       this.visitedUserProfile = user;
-      this.visitedUserProfile.meta.avatar = mediaURL + this.visitedUserProfile.meta.avatar.slice(0, 13)
-        + 'c_scale,w_150/' + this.visitedUserProfile.meta.avatar.slice(13,  this.visitedUserProfile.meta.avatar.length);
       this.isFollowing();
     });
   }

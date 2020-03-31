@@ -7,7 +7,7 @@ import {Comment} from '../../models/comment';
 import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../../services/auth/auth.service';
-import {mediaURL} from '../../restConfig';
+import {ImageType, mediaURL, prepareImage} from '../../restConfig';
 
 @Component({
   selector: 'app-single-post',
@@ -124,9 +124,8 @@ export class SinglePostComponent implements OnInit {
   getPost(id: number) {
     this.postsService.get(id).subscribe(post => {
       if (post !== null) {
-        post.user.meta.avatar = mediaURL + post.user.meta.avatar.slice(0, 13)
-          + 'c_scale,w_50/' + post.user.meta.avatar.slice(13,  post.user.meta.avatar.length);
-        post.image = mediaURL + post.image;
+        post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+        post.image = prepareImage(post.image);
         this.post = post;
         console.log(this.post);
         this.isPostOwner = this.post.user.id === this.authService.userID;
@@ -139,9 +138,8 @@ export class SinglePostComponent implements OnInit {
       if (!this.isLiked) {
         this.postsService.like(id).subscribe(post => {
           if (post !== null) {
-            post.user.meta.avatar = mediaURL + post.user.meta.avatar.slice(0, 13)
-              + 'c_scale,w_50/' + post.user.meta.avatar.slice(13,  post.user.meta.avatar.length);
-            post.image = mediaURL + post.image;
+            post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+            post.image = prepareImage(post.image);
             this.post = post;
           }
         });
@@ -149,7 +147,8 @@ export class SinglePostComponent implements OnInit {
     } else {
       this.postsService.like(id).subscribe(post => {
         if (post !== null) {
-          post.image = mediaURL + post.image;
+          post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+          post.image = prepareImage(post.image);
           this.post = post;
         }
       });

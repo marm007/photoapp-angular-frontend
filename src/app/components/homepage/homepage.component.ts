@@ -4,6 +4,7 @@ import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {Follower} from '../../models/follower';
 import {AuthService} from '../../services/auth/auth.service';
+import {ImageType, prepareImage} from '../../restConfig';
 
 @Component({
   selector: 'app-homepage',
@@ -45,6 +46,7 @@ export class HomepageComponent {
 
   getLoggedUserData() {
     this.userService.get(this.authService.userID).subscribe(user => {
+      user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
       this.user = user;
       const requests = [];
       const followed: Follower[] =  [];
