@@ -132,6 +132,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           console.log(this.visitedUserProfile.posts[j + i * 3]);
           this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
             .subscribe(post => {
+
               this.posts[i][j] = post;
             });
         }
