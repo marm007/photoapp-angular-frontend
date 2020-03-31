@@ -82,8 +82,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getUser() {
     this.userService.get(null, false).subscribe(user => {
         this.user = user;
-        this.user.meta.avatar = mediaURL + this.user.meta.avatar.slice(0, 14)
-        + 'c_scale,w_50' + this.user.meta.avatar.slice(14,  this.user.meta.avatar.length);    });
+        this.user.meta.avatar = mediaURL + this.user.meta.avatar.slice(0, 13)
+        + 'c_scale,w_50/' + this.user.meta.avatar.slice(13,  this.user.meta.avatar.length);    });
   }
 
   onSearchChange(searchValue: string): void {
@@ -91,8 +91,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userService.filter('username__contains', searchValue)
         .subscribe(users => {
           users.forEach(user => {
-            user.meta.avatar = mediaURL +  user.meta.avatar.slice(0, 14)
-              + 'c_scale,w_50' + user.meta.avatar.slice(14,  user.meta.avatar.length);    });
+            user.meta.avatar = mediaURL +  user.meta.avatar.slice(0, 13)
+              + 'c_scale,w_50/' + user.meta.avatar.slice(13,  user.meta.avatar.length);    });
           this.userList = users;
         });
     } else { this.userList = []; }

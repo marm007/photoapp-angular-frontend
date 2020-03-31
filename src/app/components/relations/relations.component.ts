@@ -64,9 +64,9 @@ export class RelationsComponent implements OnInit, OnDestroy {
           console.log('relations');
           console.log(relations);
           relations.forEach(relation => {
-             relation.user.meta.avatar = mediaURL + relation.user.meta.avatar.slice(0, 14)
-               + 'c_scale,w_50' + relation.user.meta.avatar.slice(14,  relation.user.meta.avatar.length);
-             relation.image = mediaURL + relation.image.slice(0, 14) + 'c_scale,h_150' + relation.image.slice(14,  relation.image.length);
+             relation.user.meta.avatar = mediaURL + relation.user.meta.avatar.slice(0, 13)
+               + 'c_scale,w_50/' + relation.user.meta.avatar.slice(13,  relation.user.meta.avatar.length);
+             relation.image = mediaURL + relation.image.slice(0, 13) + 'c_scale,h_150/' + relation.image.slice(13,  relation.image.length);
              relation.created = this.addCorrectTime(relation.created);
           });
           this.relations = this.relations.concat(relations);
@@ -105,9 +105,9 @@ export class RelationsComponent implements OnInit, OnDestroy {
         this.relationService.add(relationData).subscribe(
           (res: any) => {
             console.log(res);
-            res.user.meta.avatar = mediaURL + res.user.meta.avatar.slice(0, 14)
-              + 'c_scale,w_50' + res.user.meta.avatar.slice(14,  res.user.meta.avatar.length);
-            res.image = mediaURL + res.image.slice(0, 14) + 'c_scale,h_150' + res.image.slice(14,  res.image.length);
+            res.user.meta.avatar = mediaURL + res.user.meta.avatar.slice(0, 13)
+              + 'c_scale,w_50/' + res.user.meta.avatar.slice(13,  res.user.meta.avatar.length);
+            res.image = mediaURL + res.image.slice(0, 13) + 'c_scale,h_150/' + res.image.slice(13,  res.image.length);
             res.created = this.addCorrectTime(res.created);
             this.relations.push(res);
             /*const u: User = {username: 'addaa', meta: null, id: 25};
