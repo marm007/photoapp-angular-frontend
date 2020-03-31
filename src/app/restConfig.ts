@@ -3,11 +3,11 @@ export const mediaURL = 'https://res.cloudinary.com/marm007/';
 // ng build --prod --output-path docs --base-href /frontend/
 
 export enum ImageType {
-  THUMBNAIL = 'c_scale,w50/',
-  SMALL = 'c_scale,w150/',
-  MEDIUM = 'c_scale,w250/',
-  LARGE = 'c_scale,w500/',
-  PROFILE = 'c_scale,h200/',
+  THUMBNAIL = 'c_scale,w_50/',
+  SMALL = 'c_scale,w_150/',
+  MEDIUM = 'c_scale,w_250/',
+  LARGE = 'c_scale,w_500/',
+  PROFILE = 'c_scale,h_200/',
   ORIGINAL = '',
 }
 
