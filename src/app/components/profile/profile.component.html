@@ -83,7 +83,7 @@
       <div class="profile-row" *ngFor="let row_posts of posts">
         <div *ngFor="let post of row_posts; index as i">
           <div *ngIf="post" class="profile-column" [style]="i !== 2 ? 'margin-right: 2%': ''">
-            <img src="{{post.image}}" alt="Snow" style="width:100%;">
+            <img src="{{post.image}}" alt="" style="width:100%;">
           </div>
         </div>
       </div>
