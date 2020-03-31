@@ -122,9 +122,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     this.loopIteration = this.visitedUserProfile.posts.length / 3;
-    console.log('LOOP ');
-    console.log(this.visitedUserProfile.posts.length );
-    console.log(this.loopIteration);
     for (let i = 0; i < this.loopIteration; i++) {
       this.posts[i] = [];
       for (let j = 0; j < 3; j++) {
@@ -132,7 +129,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           console.log(this.visitedUserProfile.posts[j + i * 3]);
           this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
             .subscribe(post => {
-
+              post.image = mediaURL + post.image.slice(0, 14) + 'c_scale,h_150' + post.image.slice(14,  post.image.length)
               this.posts[i][j] = post;
             });
         }
@@ -147,7 +144,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         return;
       }
       this.visitedUserProfile = user;
-      this.visitedUserProfile.meta.avatar = mediaURL + this.visitedUserProfile.meta.avatar;
+      this.visitedUserProfile.meta.avatar = mediaURL + this.visitedUserProfile.meta.avatar.slice(0, 14)
+        + 'c_scale,w_150' + this.visitedUserProfile.meta.avatar.slice(14,  this.visitedUserProfile.meta.avatar.length)
       this.isFollowing();
     });
   }

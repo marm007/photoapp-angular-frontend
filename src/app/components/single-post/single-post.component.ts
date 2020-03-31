@@ -124,6 +124,9 @@ export class SinglePostComponent implements OnInit {
   getPost(id: number) {
     this.postsService.get(id).subscribe(post => {
       if (post !== null) {
+        post.user.meta.avatar = mediaURL + post.user.meta.avatar.slice(0, 14)
+          + 'c_scale,w_50' + post.user.meta.avatar.slice(14,  post.user.meta.avatar.length);
+        post.image = mediaURL + post.image;
         this.post = post;
         console.log(this.post);
         this.isPostOwner = this.post.user.id === this.authService.userID;
@@ -136,6 +139,9 @@ export class SinglePostComponent implements OnInit {
       if (!this.isLiked) {
         this.postsService.like(id).subscribe(post => {
           if (post !== null) {
+            post.user.meta.avatar = mediaURL + post.user.meta.avatar.slice(0, 14)
+              + 'c_scale,w_50' + post.user.meta.avatar.slice(14,  post.user.meta.avatar.length);
+            post.image = mediaURL + post.image;
             this.post = post;
           }
         });
@@ -143,6 +149,7 @@ export class SinglePostComponent implements OnInit {
     } else {
       this.postsService.like(id).subscribe(post => {
         if (post !== null) {
+          post.image = mediaURL + post.image;
           this.post = post;
         }
       });
