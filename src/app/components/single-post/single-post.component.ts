@@ -6,7 +6,8 @@ import {CommentService} from '../../services/comment/comment.service';
 import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../../services/auth/auth.service';
-import {ImageType, mediaURL, prepareImage} from '../../restConfig';
+import {ImageType, prepareImage} from '../../restConfig';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-single-post',
@@ -73,6 +74,16 @@ export class SinglePostComponent implements OnInit {
               private router: Router) {
   }
 
+  handleImageLoaded(post: Post) {
+    if (post.imageLoaded) {
+      return;
+    }
+
+    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
+    post.image = prepareImage(post.image, ImageType.LARGE);
+    post.imageLoaded = true;
+  }
+
   handleDelete() {
     this.postsService.delete(String(this.post.id)).subscribe(res => {
       if (res === null) {
@@ -123,7 +134,7 @@ export class SinglePostComponent implements OnInit {
   getPost(id: number) {
     this.postsService.get(id).subscribe(post => {
       if (post !== null) {
-        post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+        post.user.meta.avatar = prepareImage(post.user.meta.avatar);
         post.image = prepareImage(post.image);
         this.post = post;
         this.isPostOwner = this.post.user.id === this.authService.userID;
@@ -136,7 +147,7 @@ export class SinglePostComponent implements OnInit {
       if (!this.isLiked) {
         this.postsService.like(id).subscribe(post => {
           if (post !== null) {
-            post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+            post.user.meta.avatar = prepareImage(post.user.meta.avatar);
             post.image = prepareImage(post.image);
             this.post = post;
           }
@@ -145,7 +156,7 @@ export class SinglePostComponent implements OnInit {
     } else {
       this.postsService.like(id).subscribe(post => {
         if (post !== null) {
-          post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
           this.post = post;
         }

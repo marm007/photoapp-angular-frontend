@@ -1,16 +1,26 @@
-export const apiURL = 'https://marm007-photo-app.herokuapp.com/api';
-export const mediaURL = 'https://res.cloudinary.com/marm007/';
+import { environment} from '../environments/environment';
+
 // ng build --prod --output-path docs --base-href /frontend/
 
 export enum ImageType {
-  THUMBNAIL = 'c_scale,w_50/',
-  SMALL = 'c_scale,w_150/',
-  MEDIUM = 'c_scale,w_250/',
-  LARGE = 'c_scale,w_500/',
-  PROFILE = 'c_scale,h_200/',
-  ORIGINAL = '',
+  THUMBNAIL = 't_media_lib_thumb/',
+  SMALL = 't_media_lib_thumb/',
+  MEDIUM = 't_media_lib_thumb/',
+  LARGE = 'c_scale,w_600/',
+  PROFILE = 't_media_lib_thumb/',
+  ORIGINAL = 't_media_lib_thumb/',
 }
 
-export function prepareImage(path: string, imageType: ImageType = ImageType.ORIGINAL): string {
-  return  mediaURL + path.slice(0, 13) + imageType + path.slice(13,  path.length);
+// }
+// export enum ImageType {
+//   THUMBNAIL = 'c_scale,w_100/',
+//   SMALL = 'c_scale,w_200/',
+//   MEDIUM = 'c_scale,w_300/',
+//   LARGE = 'c_scale,w_600/',
+//   PROFILE = 'c_scale,h_200/',
+//   ORIGINAL = 'c_scale,w_600/',
+// }
+
+export function prepareImage(path: string, imageType: ImageType = ImageType.THUMBNAIL): string {
+  return  environment.mediaURL + path.slice(0, 13) + imageType + path.slice(13,  path.length);
 }

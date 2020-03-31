@@ -56,6 +56,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.registerData.pending = true;
     this.authService.signup(this.registerData.nick, this.registerData.email, this.registerData.password, this.selectedFile.file)
       .subscribe(res => {
           this.authService.login(this.registerData.email, this.registerData.password)

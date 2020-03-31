@@ -42,14 +42,15 @@
         </div>
       </div>
 
-      <div class="mb-1">
+      <div class="mb-1" style="display: flex; flex-direction: row; align-items: center;">
         <button (click)="uploadPost()"
                 class="btn btn-primary" mat-button
                 [disabled]="!addPostForm.form.valid || (addPostForm.form.valid && !selectedFile.file)">
           Add
         </button>
-        <img *ngIf="selectedFile.pending" alt="loading..." class="pl-2"
-             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+          <div *ngIf="selectedFile.pending" style="display:flex; align-items:center;justify-content:center;"  class="pl-2" >
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
       </div>
       <div *ngIf="selectedFile.status == 'fail'" class="alert alert-danger" style="margin-top: 15px">{{errorMessage}}</div>
     </div>
@@ -57,7 +58,7 @@
   </form>
 </div>
 
-<div *ngIf="selectedFile.pending" class="img-loading-overlay">
-    <div class="img-spinning-circle"></div>
-</div>
+<!--<div *ngIf="selectedFile.pending" class="img-loading-overlay">-->
+<!--    <div class="img-spinning-circle"></div>-->
+<!--</div>-->
 

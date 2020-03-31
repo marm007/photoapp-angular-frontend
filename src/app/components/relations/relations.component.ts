@@ -62,7 +62,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
       .subscribe((relations: Relation[]) => {
         if (relations.length > 0) {
           relations.forEach(relation => {
-            relation.user.meta.avatar = prepareImage(relation.user.meta.avatar, ImageType.THUMBNAIL);
+            relation.user.meta.avatar = prepareImage(relation.user.meta.avatar);
             relation.image = prepareImage(relation.image);
             relation.created = this.addCorrectTime(relation.created);
           });
@@ -93,6 +93,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   addRelation() {
     this.userService.get(this.user.id).subscribe(user => {
+      user.meta.avatar = prepareImage(user.meta.avatar);
       const dialogRef = this.dialog.open(SingleRelationComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.ADD, relation: {user}}
@@ -104,7 +105,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
         }
         this.relationService.add(relationData).subscribe(
           (res: any) => {
-            res.user.meta.avatar = prepareImage(res.user.meta.avatar, ImageType.THUMBNAIL);
+            res.user.meta.avatar = prepareImage(res.user.meta.avatar);
             res.image = prepareImage(res.image);
             res.created = this.addCorrectTime(res.created);
             this.relations.push(res);

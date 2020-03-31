@@ -3,9 +3,9 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {Observable} from 'rxjs';
 import {Relation} from '../../models/relation';
-import {apiURL} from '../../restConfig';
 import {catchError, tap} from 'rxjs/operators';
 import handleError from '../errorHandler';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class RelationService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   public add(image: File): Observable<Relation> {
-    const url = `${apiURL}/relations/`;
+    const url = `${environment.apiURL}/relations/`;
     const formData = new FormData();
     formData.append('image', image);
     return this.http.post<Relation>(url,
@@ -28,7 +28,7 @@ export class RelationService {
 
 
   public get(id: number): Observable<Relation> {
-    const url = `${apiURL}/relations/${id}/`;
+    const url = `${environment.apiURL}/relations/${id}/`;
     return this.http.get<Relation>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
@@ -38,7 +38,7 @@ export class RelationService {
   }
 
   public delete(id: number): Observable<Relation> {
-    const url = `${apiURL}/relations/${id}/`;
+    const url = `${environment.apiURL}/relations/${id}/`;
     return this.http.delete<Relation>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(

@@ -1,17 +1,18 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {Follower} from '../../models/follower';
 import {AuthService} from '../../services/auth/auth.service';
 import {ImageType, prepareImage} from '../../restConfig';
 import {forkJoin, Observable} from 'rxjs';
+import {faEllipsisH, faFilter} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit{
 
   followed: Follower[];
 
@@ -21,9 +22,16 @@ export class HomepageComponent {
 
   innerWidth: any;
 
+  isCollapsed = true;
+
+  filterIcon = faFilter;
+
   constructor(private userService: UserService,
               private authService: AuthService) {
     this.innerWidth = window.innerWidth;
+  }
+
+  ngOnInit() {
     this.getLoggedUserData();
   }
 
@@ -42,14 +50,16 @@ export class HomepageComponent {
 
   getLoggedUserData() {
     this.userService.get(this.authService.userID).subscribe(user => {
-      user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+      user.meta.avatar = prepareImage(user.meta.avatar);
       this.user = user;
       const requests = [];
       for (const followedID of this.user.followed) {
         requests.push(
           this.getFollower(followedID));
       }
-
+      if (requests.length === 0) {
+        this.followed = [];
+      }
       forkJoin(requests)
         .subscribe((followed: Follower[]) => {
           this.followed = followed;

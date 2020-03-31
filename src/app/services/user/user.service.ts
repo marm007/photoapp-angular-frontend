@@ -4,10 +4,10 @@ import {Observable} from 'rxjs';
 import {AuthService} from '../auth/auth.service';
 import {catchError, tap} from 'rxjs/operators';
 import handleError from '../errorHandler';
-import {apiURL} from '../../restConfig';
 import {User} from '../../models/user';
 import {Post} from '../../models/post';
 import {Relation} from '../../models/relation';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class UserService {
               private authService: AuthService) { }
 
    public filter(queryParams?: string, value?: string): Observable<User[]> {
-     const url = `${apiURL}/users/filter/`;
+     const url = `${environment.apiURL}/users/filter/`;
      const params = {[queryParams]: value};
      return this.http.get<User[]>(url, {params})
       .pipe(
@@ -33,7 +33,7 @@ export class UserService {
     if (id === undefined || id === null) {
       id = this.authService.userID;
     }
-    const url = `${apiURL}/users/${id}/`;
+    const url = `${environment.apiURL}/users/${id}/`;
 
     return this.http.get<User>(url,
       addJWTHeaders ? {headers: this.authService.jwtAuthHeaders} : {})
@@ -44,7 +44,7 @@ export class UserService {
   }
 
   public listFollowedPosts(start?: number, limit?: number): Observable<Post[]> {
-    const url = `${apiURL}/users/me/posts/`;
+    const url = `${environment.apiURL}/users/me/posts/`;
     let params = {};
 
     if (start && limit) {
@@ -59,7 +59,7 @@ export class UserService {
   }
 
   public listFollowedRelations(start?: number, limit?: number): Observable<Relation[]> {
-    const url = `${apiURL}/users/me/relations/`;
+    const url = `${environment.apiURL}/users/me/relations/`;
 
     let params = {};
 
@@ -75,7 +75,7 @@ export class UserService {
   }
 
   public follow(id: number): Observable<User> {
-    const url = `${apiURL}/users/${id}/follow/`;
+    const url = `${environment.apiURL}/users/${id}/follow/`;
 
     return this.http.post<any>(url,
       {followed: id}, {headers: this.authService.jwtAuthHeaders})
@@ -86,19 +86,19 @@ export class UserService {
   }
 
   public forgot(email: string): Observable<any> {
-    const url = `${apiURL}/password/forgot/`;
+    const url = `${environment.apiURL}/password/forgot/`;
 
     return this.http.post<any>(url, {email});
   }
 
   public reset(password: string, token: string): Observable<any> {
-    const url = `${apiURL}/password/reset/${token}/`;
+    const url = `${environment.apiURL}/password/reset/${token}/`;
 
     return this.http.post<any>(url, {password});
   }
 
   public getFollower(id: number): Observable<any> {
-    const url = `${apiURL}/followers/${id}/`;
+    const url = `${environment.apiURL}/followers/${id}/`;
     return this.http.get<any>(url);
   }
 }

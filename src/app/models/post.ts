@@ -5,6 +5,7 @@ import {Like} from './like';
 export interface Post {
   id: number;
   image: string;
+  imageLoaded: boolean;
   likes: number;
   description: string;
   user: User;

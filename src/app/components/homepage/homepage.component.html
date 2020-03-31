@@ -2,8 +2,46 @@
   <div *ngIf="!componentLoaded" style="display:flex; align-items:center;justify-content:center;">
     <mat-spinner style="margin-top: 80px"></mat-spinner>
   </div>
-  <div *ngIf="followed" [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
-    <app-posts *ngIf="user"  (componentLoaded)="onComponentLoaded()"></app-posts>
-    <app-relations *ngIf="user"  [user]="user"></app-relations>
+  <div >
+    <div class="filter-wrapper" *ngIf="componentLoaded && innerWidth >= 992">
+      <p>
+        <button mat-button style="outline: 0" (click)="isCollapsed = !isCollapsed"
+                [attr.aria-expanded]="!isCollapsed" aria-controls="filterCollapse">
+          <fa-icon [icon]="filterIcon" icon="filterIcon" class="fa fa-1x">
+          </fa-icon>
+        </button>
+      </p>
+      <div class="divider"></div>
+      <div id="filterCollapse" [ngbCollapse]="isCollapsed">
+        <div >
+          <div>
+            You can collapse this card by clicking Toggle
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="followed" [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
+      <app-posts *ngIf="user" (componentLoaded)="onComponentLoaded()"></app-posts>
+      <div class="filter-wrapper-mobile" *ngIf="componentLoaded && innerWidth < 992">
+        <p>
+          <button mat-button style="outline: 0" (click)="isCollapsed = !isCollapsed"
+                  [attr.aria-expanded]="!isCollapsed" aria-controls="filterCollapseMobile">
+            <fa-icon [icon]="filterIcon" icon="filterIcon" class="fa fa-1x">
+            </fa-icon>
+          </button>
+        </p>
+        <div class="divider"></div>
+        <div id="filterCollapseMobile" [ngbCollapse]="isCollapsed">
+          <div >
+            <div>
+              You can collapse this card by clicking Toggle
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <app-relations *ngIf="user" [user]="user"></app-relations>
+    </div>
   </div>
+
 </div>

@@ -53,7 +53,7 @@ export class PostsComponent implements OnInit, OnDestroy {
           this.messageService.updateMessage('posts loaded');
         }
         posts.forEach(post => {
-          post.user.meta.avatar = prepareImage(post.user.meta.avatar, ImageType.THUMBNAIL);
+          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
 
         });

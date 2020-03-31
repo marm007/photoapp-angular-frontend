@@ -9,6 +9,9 @@ import {AuthService} from '../../services/auth/auth.service';
 import {OptionsComponent} from '../options/options.component';
 import {RelationService} from '../../services/relation/relation.service';
 import {Router} from '@angular/router';
+import {Post} from '../../models/post';
+import {environment} from '../../../environments/environment';
+import {ImageType, prepareImage} from '../../restConfig';
 
 interface DataRelation {
   relation: Relation;
@@ -75,6 +78,17 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
     });
 
     reader.readAsDataURL(file);
+  }
+
+  handleImageLoaded() {
+    if (this.modelRelation.relation.imageLoaded) {
+      return;
+    }
+
+    this.modelRelation.relation.image = this.modelRelation.relation.image.
+    replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
+    this.modelRelation.relation.image = prepareImage(this.modelRelation.relation.image, ImageType.LARGE);
+    this.modelRelation.relation.imageLoaded = true;
   }
 
   handleClose() {

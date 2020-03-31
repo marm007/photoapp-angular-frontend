@@ -9,6 +9,7 @@ import {User} from '../../models/user';
 import {ImageType, prepareImage} from '../../restConfig';
 import {PostsService} from '../../services/post/posts.service';
 import {Follower} from '../../models/follower';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   visitedUserProfile: User; // Meta and data of currently visited user
   posts: Post[][];
   profileLoaded = false;
+  postsLoaded = false;
   loopIteration: number;
   buttonText: string;
   subscription: Subscription;
@@ -55,6 +57,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  handleImageLoaded(post: Post) {
+    if (post.imageLoaded) {
+      return;
+    }
+    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
+    post.image = prepareImage(post.image, ImageType.LARGE);
+    post.imageLoaded = true;
+  }
+
   handleFollow() {
       this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
         this.getUser(this.visitedUserProfile.id);
@@ -76,25 +87,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (requests.length === 0) {
       const flag = this.visitedUserProfile.id === this.authService.userID;
       this.serializeUserProfile(flag);
-      this.profileLoaded = true;
-      this.profileLoaded = true;
+      this.postsLoaded = true;
+      this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
     }
 
     forkJoin(requests)
       .subscribe((followers: Follower[]) => {
         if (this.visitedUserProfile.id === this.authService.userID) {
           this.serializeUserProfile(true);
-          this.profileLoaded = true;
         } else {
           const flag = followers.find(follower => follower.user === this.userID) !== undefined;
+          this.postsLoaded = true;
           this.serializeUserProfile(flag);
-          this.profileLoaded = true;
           this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
         }
       });
   }
 
   serializeUserProfile(isFollower: boolean) {
+    console.log('VISITED USER PROFILE FROM PROFILE');
     this.posts = [];
 
     if (!isFollower) {
@@ -108,7 +119,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (this.visitedUserProfile.posts[j + i * 3] !== undefined) {
           this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
             .subscribe(post => {
-              post.image = prepareImage(post.image, ImageType.PROFILE);
+              post.image = prepareImage(post.image);
               this.posts[i][j] = post;
             });
         }
@@ -122,8 +133,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.router.navigate(['not-found']) ;
         return;
       }
-      user.meta.avatar = prepareImage(user.meta.avatar, ImageType.MEDIUM);
+      user.meta.avatar = prepareImage(user.meta.avatar);
       this.visitedUserProfile = user;
+      this.profileLoaded = true;
       this.isFollowing();
     });
   }

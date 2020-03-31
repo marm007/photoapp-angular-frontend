@@ -29,7 +29,7 @@ export class FooterComponent implements OnInit {
       this.userService.filter('username__contains', searchValue)
         .subscribe(users => {
           users.forEach(user => {
-            user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+            user.meta.avatar = prepareImage(user.meta.avatar);
 
           });
           this.userList = users;

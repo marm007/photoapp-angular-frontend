@@ -5,7 +5,7 @@ import {Post} from '../../models/post';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
 import handleError from '../errorHandler';
-import {apiURL} from '../../restConfig';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class PostsService {
               private authService: AuthService) { }
 
   add(image: File, description: string): Observable<Post> {
-    const url = `${apiURL}/posts/`;
+    const url = `${environment.apiURL}/posts/`;
     const formData = new FormData();
     formData.append('description', description);
     formData.append('image', image);
@@ -29,7 +29,7 @@ export class PostsService {
   }
 
   get(id: number): Observable<Post> {
-    const url = `${apiURL}/posts/${id}/`;
+    const url = `${environment.apiURL}/posts/${id}/`;
     return this.http.get<Post>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
@@ -39,7 +39,7 @@ export class PostsService {
   }
 
   like(id: string): Observable<Post> {
-    const url = `${apiURL}/posts/${id}/like/`;
+    const url = `${environment.apiURL}/posts/${id}/like/`;
     return this.http.patch<Post>(url,
       null, {headers: this.authService.jwtAuthHeaders})
       .pipe(
@@ -49,7 +49,7 @@ export class PostsService {
   }
 
   delete(id: string): Observable<any> {
-    const url = `${apiURL}/posts/${id}/`;
+    const url = `${environment.apiURL}/posts/${id}/`;
     return this.http.delete<any>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(

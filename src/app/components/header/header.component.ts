@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getUser() {
     this.userService.get(null, false).subscribe(user => {
-      user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+      user.meta.avatar = prepareImage(user.meta.avatar);
       this.user = user;
       });
   }
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userService.filter('username__contains', searchValue)
         .subscribe(users => {
           users.forEach(user => {
-            user.meta.avatar = prepareImage(user.meta.avatar, ImageType.THUMBNAIL);
+            user.meta.avatar = prepareImage(user.meta.avatar);
           });
           this.userList = users;
         });

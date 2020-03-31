@@ -36,6 +36,8 @@ import { ResetComponent } from './components/reset/reset.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
   {
@@ -121,7 +123,9 @@ const appRoutes: Routes = [
     MatProgressBarModule,
     MatProgressSpinnerModule,
     InfiniteScrollModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatExpansionModule,
+    NgbCollapseModule
   ],
   providers: [ AuthService,
     AuthGuard,

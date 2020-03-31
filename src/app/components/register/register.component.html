@@ -4,96 +4,93 @@
          class="container" [style]="isMobile ? 'border: none; ': '' ">
       <div class="form-logo-container" fxLayout="row">
         <img style="width: 55px; height: 55px"
-           src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
-      <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
-    </div>
-    <form #registerForm="ngForm">
-      <div class="register-fields-wrapper">
-        <div class="register-input-fields">
-          <div class="form-group">
-            <label for="nick">Nick</label>
-            <input type="text"
-                   class="form-control"
-                   id="nick"
-                   required
-                   [(ngModel)]="registerData.nick" name="nick"
-                   #nick="ngModel">
-            <div *ngIf="nick.errors && (nick.dirty)">
-              <small class="text-danger" *ngIf="nick.errors.required">Nick is required</small>
+             src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+        <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
+      </div>
+      <form #registerForm="ngForm">
+        <div class="register-fields-wrapper">
+          <div class="register-input-fields">
+            <div class="form-group">
+              <label for="nick">Nick</label>
+              <input type="text"
+                     class="form-control"
+                     id="nick"
+                     required
+                     [(ngModel)]="registerData.nick" name="nick"
+                     #nick="ngModel">
+              <div *ngIf="nick.errors && (nick.dirty)">
+                <small class="text-danger" *ngIf="nick.errors.required">Nick is required</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email"
+                     class="form-control"
+                     id="email"
+                     required
+                     pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                     [(ngModel)]="registerData.email" name="email"
+                     #email="ngModel">
+              <div *ngIf="email.errors && (email.dirty)">
+                <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
+                <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
+              </div>
+              <div *ngIf="registerError">
+                <small class="text-danger">{{registerErrorMessage}}</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password"
+                     class="form-control" id="password"
+                     required
+                     [(ngModel)]="registerData.password"
+                     name="password"
+                     #password="ngModel">
+              <div *ngIf="password.errors && (password.dirty)">
+                <small class="text-danger" *ngIf="password.errors.required">Password is required</small>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email"
-                   class="form-control"
-                   id="email"
+          <div class="register-input-image-wrapper">
+            <input #imageInput
+                   id="photo"
+                   accept="image/*"
+                   type="file"
                    required
-                   pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                   [(ngModel)]="registerData.email" name="email"
-                   #email="ngModel">
-            <div *ngIf="email.errors && (email.dirty)">
-              <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
-              <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
-            </div>
-            <div *ngIf="registerError">
-              <small class="text-danger">{{registerErrorMessage}}</small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password"
-                   class="form-control" id="password"
-                   required
-                   [(ngModel)]="registerData.password"
-                   name="password"
-                   #password="ngModel">
-            <div *ngIf="password.errors && (password.dirty)">
-              <small class="text-danger" *ngIf="password.errors.required">Password is required</small>
-            </div>
-          </div>
-        </div>
-        <div class="register-input-image-wrapper">
-          <input #imageInput
-                 id="photo"
-                 accept="image/*"
-                 type="file"
-                 required
-                 class="register-input-file"
-                 (change)="processFile(imageInput)"
-          />
-          <label for="photo" style="margin-bottom: 0">
-            <span>User photo </span>
-          </label>
-
-          <div style="position: relative">
-            <div *ngIf="selectedFile.file" style="left:0; top: 0; position: absolute; width: 100%; height: 100%"
-                 class="register-item-opacity">
-            </div>
-            <fa-icon [icon]="times" *ngIf="selectedFile.file"
-                     class="register-item-middle fa-3x"
-                     style="color: #ffffff" icon="times" (click)="resetImage()">
-            </fa-icon>
-            <img *ngIf="selectedFile.file"
-                 class="register-input-image"
-                 src="{{selectedFile.src}}"
-                 style="outline:0; border-color: transparent" alt=""
+                   class="register-input-file"
+                   (change)="processFile(imageInput)"
             />
+            <label for="photo" style="margin-bottom: 0">
+              <span>User photo </span>
+            </label>
+
+            <div style="position: relative">
+              <div *ngIf="selectedFile.file" style="left:0; top: 0; position: absolute; width: 100%; height: 100%"
+                   class="register-item-opacity">
+              </div>
+              <fa-icon [icon]="times" *ngIf="selectedFile.file"
+                       class="register-item-middle fa-3x"
+                       style="color: #ffffff" icon="times" (click)="resetImage()">
+              </fa-icon>
+              <img *ngIf="selectedFile.file"
+                   class="register-input-image"
+                   src="{{selectedFile.src}}"
+                   style="outline:0; border-color: transparent" alt=""
+              />
+            </div>
+
           </div>
-
         </div>
-      </div>
-
-
-      <div>
-        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.form.valid || !selectedFile.file"
-                (click)="register();">Register
-        </button>
-      </div>
-    </form>
+        <div style="display: flex; flex-direction: row; align-items: center;">
+          <button type="submit" class="btn btn-primary"
+                  [disabled]="!registerForm.form.valid || !selectedFile.file || registerData.status == 'ok'"
+                  (click)="register();">Register
+          </button>
+          <div *ngIf="registerData.pending" style="display:flex; align-items:center;justify-content:center;"  class="pl-2" >
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-
-<div *ngIf="registerData.pending" class="img-loading-overlay">
-  <div class="img-spinning-circle"></div>
-</div>
-

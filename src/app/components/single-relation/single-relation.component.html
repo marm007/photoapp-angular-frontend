@@ -25,7 +25,8 @@
     <img class="s-relation-image" [ngStyle]="{
           'height': this.innerHeight +'px',
           'width': this.innerWidth +'px'}"
-         src="{{modelRelation.relation.image}}"
+         [src]="modelRelation.relation.image"
+         (load)="handleImageLoaded()"
          alt=""/>
   </div>
 

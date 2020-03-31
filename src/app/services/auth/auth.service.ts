@@ -6,7 +6,7 @@ import {catchError, filter, shareReplay, switchMap, take, tap} from 'rxjs/operat
 import * as jwtDecode from 'jwt-decode';
 import moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
-import {apiURL} from '../../restConfig';
+import { environment} from '../../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -50,7 +50,7 @@ export class AuthService {
     const loginHeaders = new HttpHeaders(
       {'Content-Type': 'application/json',
       Authorization : 'Basic ' + loginToken});
-    const url = `${apiURL}/auth/`;
+    const url = `${environment.apiURL}/auth/`;
     return this.http.post(
       url,
       { email, password },
@@ -71,7 +71,7 @@ export class AuthService {
       formData.append('meta.avatar', photo);
     }
 
-    const url = `${apiURL}/users/`;
+    const url = `${environment.apiURL}/users/`;
 
     return this.http.post(
       url,
@@ -90,7 +90,7 @@ export class AuthService {
   refreshToken() {
     if (moment().isAfter(this.getExpiration('token_access'))) {
 
-      const url = `${apiURL}/token/refresh/`;
+      const url = `${environment.apiURL}/token/refresh/`;
 
       return this.http.post(
         url,
@@ -104,7 +104,7 @@ export class AuthService {
   }
 
   refreshToken401Error() {
-    const url = `${apiURL}/token/refresh/`;
+    const url = `${environment.apiURL}/token/refresh/`;
 
     return this.http.post<any>(
       url,
