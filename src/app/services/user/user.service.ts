@@ -5,7 +5,7 @@ import {AuthService} from '../auth/auth.service';
 import {catchError, tap} from 'rxjs/operators';
 import handleError from '../errorHandler';
 import {User} from '../../models/user';
-import {Post} from '../../models/post';
+import {Post, PostFilterSortModel} from '../../models/post';
 import {Relation} from '../../models/relation';
 import {environment} from '../../../environments/environment';
 
@@ -29,7 +29,6 @@ export class UserService {
    }
 
   public get(id?: number, addJWTHeaders= true): Observable<User> {
-    console.log('getting');
     if (id === undefined || id === null) {
       id = this.authService.userID;
     }
@@ -43,12 +42,53 @@ export class UserService {
     );
   }
 
-  public listFollowedPosts(start?: number, limit?: number): Observable<Post[]> {
+  public listPosts(offset?: number): Observable<Post[]> {
     const url = `${environment.apiURL}/users/me/posts/`;
     let params = {};
 
-    if (start && limit) {
-      params = {start, limit};
+    if (offset) {
+      params = {limit: 12, offset};
+    } else {
+      params = {limit: 12};
+    }
+
+    return this.http.get<Post[]>(url, {params, headers: this.authService.jwtAuthHeaders})
+      .pipe(
+        tap(_ => console.log(`listed my posts ${_}`)),
+        catchError(handleError<Post[]>('listPosts'))
+    );
+  }
+
+  public listProfilePosts(id: number, offset?: number): Observable<Post[]> {
+    const url = `${environment.apiURL}/users/${id}/posts/`;
+    let params = {};
+
+    if (offset) {
+      params = {limit: 12, offset};
+    } else {
+      params = {limit: 12};
+    }
+
+    return this.http.get<Post[]>(url, {params, headers: this.authService.jwtAuthHeaders})
+      .pipe(
+        tap(_ => console.log(`listed my posts ${_}`)),
+        catchError(handleError<Post[]>('listPosts'))
+    );
+  }
+
+  public listFollowedPosts(offset?: number, queryParams?: PostFilterSortModel): Observable<Post[]> {
+    const url = `${environment.apiURL}/users/me/followed/posts/`;
+    let params = {};
+
+    if (offset) {
+      params = {...params, offset};
+    }
+
+
+    for ( const key in queryParams ) {
+      if (queryParams.hasOwnProperty(key)) {
+        params[key] = queryParams[key];
+      }
     }
 
     return this.http.get<Post[]>(url, {params, headers: this.authService.jwtAuthHeaders})
@@ -58,13 +98,19 @@ export class UserService {
     );
   }
 
-  public listFollowedRelations(start?: number, limit?: number): Observable<Relation[]> {
-    const url = `${environment.apiURL}/users/me/relations/`;
+  public listFollowedRelations(offset?: number, queryParams?: PostFilterSortModel): Observable<Relation[]> {
+    const url = `${environment.apiURL}/users/me/followed/relations/`;
 
     let params = {};
 
-    if (start && limit) {
-      params = {start, limit};
+    if (offset) {
+      params = {offset};
+    }
+
+    for ( const key in queryParams ) {
+      if (queryParams.hasOwnProperty(key)) {
+        params[key] = queryParams[key];
+      }
     }
 
     return this.http.get<Relation[]>(url, {params, headers: this.authService.jwtAuthHeaders})

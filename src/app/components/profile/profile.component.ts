@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   userID: number; // id of currently logged user
 
   visitedUserProfile: User; // Meta and data of currently visited user
-  posts: Post[][];
+  posts: Array<Array<Post>> = [];
   profileLoaded = false;
   postsLoaded = false;
   loopIteration: number;
@@ -32,9 +32,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private messageService: MessageService,
-              private postsService: PostsService) {
+              private messageService: MessageService) {
     this.userID = authService.userID;
+    this.posts = [];
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'logged_out') {
@@ -49,12 +49,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
+      this.posts = [];
       this.getUser(params.id);
     });
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  listProfilePosts(offset?: number): void {
+    this.userService.listProfilePosts(this.visitedUserProfile.id, offset)
+      .subscribe((posts: Post[]) => {
+        posts.forEach(post => {
+          // post.user.meta.avatar = prepareImage(post.user.meta.avatar);
+          post.image = prepareImage(post.image);
+
+        });
+        this.serializeUserProfile(posts);
+      });
   }
 
   handleImageLoaded(post: Post) {
@@ -86,7 +99,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     if (requests.length === 0) {
       const flag = this.visitedUserProfile.id === this.authService.userID;
-      this.serializeUserProfile(flag);
+      if (flag) {
+        this.listProfilePosts();
+      }
       this.postsLoaded = true;
       this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
     }
@@ -94,36 +109,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
     forkJoin(requests)
       .subscribe((followers: Follower[]) => {
         if (this.visitedUserProfile.id === this.authService.userID) {
-          this.serializeUserProfile(true);
+          this.listProfilePosts();
         } else {
           const flag = followers.find(follower => follower.user === this.userID) !== undefined;
           this.postsLoaded = true;
-          this.serializeUserProfile(flag);
+          if (flag) {
+            this.listProfilePosts();
+          }
           this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
         }
       });
   }
 
-  serializeUserProfile(isFollower: boolean) {
-    console.log('VISITED USER PROFILE FROM PROFILE');
-    this.posts = [];
-
-    if (!isFollower) {
-      return;
-    }
-
-    this.loopIteration = this.visitedUserProfile.posts.length / 3;
+  serializeUserProfile(posts: Post[]) {
+    this.loopIteration = posts.length / 3;
     for (let i = 0; i < this.loopIteration; i++) {
-      this.posts[i] = [];
+      const postsArray = Array<Post>();
+
       for (let j = 0; j < 3; j++) {
-        if (this.visitedUserProfile.posts[j + i * 3] !== undefined) {
-          this.postsService.get(this.visitedUserProfile.posts[j + i * 3])
-            .subscribe(post => {
-              post.image = prepareImage(post.image);
-              this.posts[i][j] = post;
-            });
+        if (posts[j + i * 3] !== undefined) {
+          postsArray[j] = posts[j + i * 3];
         }
       }
+      this.posts.push(postsArray);
     }
   }
 

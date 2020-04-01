@@ -1,0 +1,14 @@
+.divider {
+  height: 1px;
+  width:50%;
+  display:block;
+  overflow: hidden;
+  background-color: #e5e5e5;
+  margin: 9px 25%;
+}
+
+.filter-search {
+  color: #606060;
+  cursor: pointer;
+  line-height: 35px;
+}

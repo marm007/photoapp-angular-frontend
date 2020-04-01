@@ -7,7 +7,7 @@
                                [scrollWindow]="false"
                                [infiniteScrollDistance]="2"
                                [infiniteScrollThrottle]="150"
-                               (scrolled)="listFollowedRelations(this.relations.length, this.relations.length + 5)">
+                               (scrolled)="listFollowedRelations(this.relations.length)">
     <button class="relation-wrapper" style="outline: 0;"
             [matMenuTriggerFor]="relationMenu">
       <div fxLayout="row">
@@ -55,7 +55,7 @@
        [scrollWindow]="false"
        [infiniteScrollDistance]="5"
        [infiniteScrollThrottle]="50"
-       (scrolled)="listFollowedRelations(this.relations.length, this.relations.length + 5)">
+       (scrolled)="listFollowedRelations(this.relations.length)">
     <div [matMenuTriggerFor]="relationMenu"
          style="min-width: 100px; display: flex; flex-direction: row" class="relation-mobile">
       <div mat-card-avatar class="relation-photo-mobile"

@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {CanActivate, Router} from '@angular/router';
+import {ActivatedRoute, CanActivate, Router} from '@angular/router';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import * as jwtDecode from 'jwt-decode';
 import moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import { environment} from '../../../environments/environment';
+import {UserService} from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -71,6 +72,7 @@ export class AuthService {
       formData.append('meta.avatar', photo);
     }
 
+    console.log(formData);
     const url = `${environment.apiURL}/users/`;
 
     return this.http.post(
@@ -214,6 +216,7 @@ export class AuthGuard implements CanActivate {
     }
   }
 }
+
 
 interface JWTPayload {
   user_id: number;

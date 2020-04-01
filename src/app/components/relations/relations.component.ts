@@ -11,6 +11,8 @@ import {UserService} from '../../services/user/user.service';
 import moment from 'moment';
 import {Router} from '@angular/router';
 import {ImageType, prepareImage} from '../../restConfig';
+import {Filter, Sort} from '../filter/filter.component';
+import {PostFilterSortModel} from '../../models/post';
 
 
 @Component({
@@ -28,10 +30,13 @@ export class RelationsComponent implements OnInit, OnDestroy {
   relations: Relation[] = [];
 
   subscription: Subscription;
+  messageFilterSubscription: Subscription;
 
   message: string = null;
 
   postsLoaded: Subject<boolean> = new Subject();
+
+  sortFilterMessage: PostFilterSortModel = {};
 
   constructor(private messageService: MessageService,
               public dialog: MatDialog,
@@ -39,10 +44,33 @@ export class RelationsComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private router: Router) {
 
+    this.messageFilterSubscription = this.messageService.getSortFilterMessage()
+      .subscribe((message: Sort | Filter) => {
+        if (!message.isPost) {
+          if ('dir' in message) {
+            // sortowanie
+            this.relations = [];
+            this.sortFilterMessage.ordering = message.dir === 1 ? message.id : '-'.concat(message.id);
+            this.listFollowedRelations(null, this.sortFilterMessage);
+          } else {
+            this.relations = [];
+            this.sortFilterMessage.created_after = message.created_after;
+            this.sortFilterMessage.created_before = message.created_before;
+            this.listFollowedRelations(null, this.sortFilterMessage);
+          }
+        }
+      });
+
+
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'posts loaded') {
           this.postsLoaded.next(true);
+        }
+        if (myMessage === 'reset_filter_false') {
+          this.sortFilterMessage = {};
+          this.relations = [];
+          this.listFollowedRelations(null,  this.sortFilterMessage);
         }
         this.message = myMessage;
       });
@@ -57,8 +85,8 @@ export class RelationsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  listFollowedRelations(start?: number, limit?: number): void {
-    this.userService.listFollowedRelations(start, limit)
+  listFollowedRelations(offset?: number, queryParams?: PostFilterSortModel): void {
+    this.userService.listFollowedRelations(offset, queryParams)
       .subscribe((relations: Relation[]) => {
         if (relations.length > 0) {
           relations.forEach(relation => {

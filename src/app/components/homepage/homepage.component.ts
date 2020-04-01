@@ -22,10 +22,6 @@ export class HomepageComponent implements OnInit{
 
   innerWidth: any;
 
-  isCollapsed = true;
-
-  filterIcon = faFilter;
-
   constructor(private userService: UserService,
               private authService: AuthService) {
     this.innerWidth = window.innerWidth;

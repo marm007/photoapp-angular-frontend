@@ -188,5 +188,6 @@
 </div>
 <mat-menu #postMenu="matMenu">
   <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleDelete()">Usun</button>
+  <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleEdit()">Edytuj</button>
   <button mat-menu-item style="outline: 0;" (click)="handleSee()">Zobacz</button>
 </mat-menu>

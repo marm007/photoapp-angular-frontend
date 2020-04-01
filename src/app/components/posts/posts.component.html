@@ -4,7 +4,7 @@
       infinite-scroll
       [infiniteScrollDistance]="2"
       [infiniteScrollThrottle]="150"
-      (scrolled)="listFollowedPosts(this.posts.length, this.posts.length + 5)">
+      (scrolled)="onScrolled()">
 
     <app-single-post *ngFor="let _post of posts"
                      [post]="_post"

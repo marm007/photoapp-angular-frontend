@@ -38,6 +38,11 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import { FilterComponent } from './components/filter/filter.component';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import {MatListModule} from '@angular/material/list';
+import {MatTabsModule} from '@angular/material/tabs';
+import { EditPostComponent } from './components/edit-post/edit-post.component';
 
 const appRoutes: Routes = [
   {
@@ -47,6 +52,11 @@ const appRoutes: Routes = [
   {
     path: 'reset/:token',
     component: ResetComponent
+  },
+  {
+    path: 'edit/:id',
+    component: EditPostComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'profile/:id',
@@ -97,6 +107,8 @@ const appRoutes: Routes = [
     SingleRelationComponent,
     OptionsComponent,
     ResetComponent,
+    FilterComponent,
+    EditPostComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -125,7 +137,10 @@ const appRoutes: Routes = [
     InfiniteScrollModule,
     MatAutocompleteModule,
     MatExpansionModule,
-    NgbCollapseModule
+    NgbCollapseModule,
+    MatBottomSheetModule,
+    MatListModule,
+    MatTabsModule
   ],
   providers: [ AuthService,
     AuthGuard,

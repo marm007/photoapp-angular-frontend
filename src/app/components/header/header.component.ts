@@ -3,12 +3,16 @@ import {DeviceDetectorService} from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth/auth.service';
 import {LoginComponent} from '../login/login.component';
-import {Router} from '@angular/router';
 import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
-import {ImageType, prepareImage} from '../../restConfig';
+import {prepareImage} from '../../restConfig';
+import {faFilter} from '@fortawesome/free-solid-svg-icons';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {FilterComponent, SortFilter} from '../filter/filter.component';
+import { Router, Event } from '@angular/router';
+import { NavigationStart, NavigationError, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -27,9 +31,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   userList: User[];
 
+  isMainPage = false;
+
+  filterIcon = faFilter;
+
+  currentSortFilter: SortFilter;
+
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
               private router: Router,
+              private bottomSheet: MatBottomSheet,
               public authService: AuthService,
               private userService: UserService,
               private messageService: MessageService) {
@@ -38,9 +49,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.isLoggedIn = this.authService.isLoggedIn();
 
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+        this.isMainPage = event.url === '/';
+      }
+
+      if (event instanceof NavigationError) {
+        console.error(event.error);
+      }
+
+      if (event instanceof NavigationEnd) {
+      }
+    });
+
     this.messageSubscription = messageService.getMessage()
       .subscribe(message => {
         if (message === 'logged_in') {
+          console.log('message');
+          console.log(message);
           this.isLoggedIn = true;
           this.getUser();
         }
@@ -62,6 +88,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.router.url);
+    this.isMainPage = this.router.url === '/';
     this.getUser();
   }
 
@@ -74,9 +102,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.messageService.updateMessage('logged_out');
     this.isLoggedIn = this.authService.isLoggedIn();
     this.user = null;
+    console.log(this.router.url);
     if (this.router.url === '/') {
       this.router.navigate(['login']);
     }
+  }
+
+  handleSearchClick(userID: number) {
+    this.userList = [];
+    this.autocompleteInput.nativeElement.value = '';
+    this.router.navigate([`profile/${userID}`]);
+  }
+
+  handleFilterClick() {
+    const bottomSheetRef = this.bottomSheet.open(FilterComponent, {
+      data: this.currentSortFilter ? this.currentSortFilter : {}
+    });
+
+    bottomSheetRef.afterDismissed().subscribe(value => {
+      this.currentSortFilter = value;
+      console.log(value);
+     /* if (value === 'posts_filter_likes') {
+        this.messageService.updateMessage('posts_filter_likes');
+      }*/
+    });
   }
 
   getUser() {

@@ -88,6 +88,11 @@
   cursor: pointer;
 }
 
+.header-icons-filter {
+  color: rgba(219, 219, 219, 1);
+  cursor: pointer;
+}
+
 .header-icons-button {
   width: 22px;
   height: 22px;

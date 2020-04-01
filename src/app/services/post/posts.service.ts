@@ -21,11 +21,7 @@ export class PostsService {
     formData.append('description', description);
     formData.append('image', image);
     return this.http.post<Post>(url, formData,
-      {headers: this.authService.jwtAuthHeaders}).
-      pipe(
-        tap((newPost: Post) => console.log(`added post id=${newPost.id}`)),
-      catchError(handleError<Post>('addPost'))
-    );
+      {headers: this.authService.jwtAuthHeaders});
   }
 
   get(id: number): Observable<Post> {

@@ -11,12 +11,12 @@
       </a>
     </div>
     <div *ngIf="!isMobile" class="header-search">
-      <input #autocompleteInput
-             placeholder="Szukaj" class="header-search-input" type="text"
+      <input #autocompleteInput (focus)="$event.target.value=''"
+             placeholder="Szukaj" class="header-search-input" type="search"
              matInput  [matAutocomplete]="auto" (input)="onSearchChange($event.target.value)">
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let user of userList" [value]="user" style="line-height: 0 !important;">
-          <button routerLink="profile/{{user.id}}" class="search-wrapper" style="outline: 0;">
+          <button (click)="handleSearchClick(user.id)" class="search-wrapper" style="outline: 0;">
             <div fxLayout="row">
               <div mat-card-avatar class="search-photo"
                    [ngStyle]="{'background-image': 'url(' + user.meta.avatar +')'}"></div>
@@ -30,6 +30,10 @@
     </div>
     <div class="header-icons">
       <div *ngIf="isLoggedIn && user" class="header-icons">
+        <button *ngIf="isMainPage" class="header-icons-button" mat-button style="margin-right: 15px;" (click)="handleFilterClick()">
+          <fa-icon [icon]="filterIcon" icon="filterIcon" class="fa fa-1x header-icons-filter">
+          </fa-icon>
+        </button>
         <button  routerLink="/add"  class="header-icons-button" mat-button style="margin-right: 15px;">
           <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
             insert_photo

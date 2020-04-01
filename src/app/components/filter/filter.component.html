@@ -1,0 +1,78 @@
+<mat-nav-list>
+  <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onSelectedChanged()">
+    <mat-tab label="Posts" >
+      <div style="display: flex; flex-direction: row; text-align: center;">
+        <div class="mt-4" style="flex: 1;">
+          <p style="font-weight: 500">UPLOAD DATE</p>
+
+          <div class="mt-3 mb-3 divider"></div>
+          <p *ngFor="let filter of filters"
+             [style]="currentFilter.isPost && currentFilter.id === filter.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+             class="filter-search"
+             (click)="handleFilterClick(filter, true)">
+            {{filter.title}}
+          </p>
+        </div>
+
+        <div class="mt-4" style="flex: 1; margin-left: 5px; margin-right: 5px">
+          <p style="font-weight: 500">SORT BY</p>
+
+          <div class="mt-3 mb-3 divider"></div>
+          <div style="display: flex; flex-direction: row; align-items: center; justify-content: center" *ngFor="let sort of sortsPosts">
+            <p
+              [style]="currentSort.isPost && sort.id === currentSort.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+              (click)="handleSortClick(sort, true)" class="filter-search">
+              {{sort.title}}
+            </p>
+            <div *ngIf="currentSort.isPost && currentSort === sort && sort.dir === 1" class="ml-3">
+              <fa-icon [icon]="sortUp" icon="sortUp" class="fa fa-1x">
+              </fa-icon>
+            </div>
+            <div *ngIf="currentSort.isPost && currentSort === sort && sort.dir === -1"  class="ml-3">
+                <fa-icon [icon]="sortDown" icon="sortDown" class="fa fa-1x">
+                </fa-icon>
+              </div>
+          </div>
+        </div>
+
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Relations">
+      <div style="display: flex; flex-direction: row; text-align: center;">
+      <div class="mt-4" style="flex: 1;">
+        <p style="font-weight: 500">UPLOAD DATE</p>
+
+        <div class="mt-3 mb-3 divider"></div>
+        <p *ngFor="let filter of filters"
+           [style]="!currentFilter.isPost && currentFilter.id === filter.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+           class="filter-search"
+           (click)="handleFilterClick(filter, false)">
+          {{filter.title}}
+        </p>
+      </div>
+
+      <div class="mt-4" style="flex: 1; margin-left: 5px; margin-right: 5px">
+        <p style="font-weight: 500">SORT BY</p>
+
+        <div class="mt-3 mb-3 divider"></div>
+        <div style="display: flex; flex-direction: row; align-items: center; justify-content: center" *ngFor="let sort of sortsRelations">
+          <p
+            [style]="!currentSort.isPost && sort === currentSort ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+            (click)="handleSortClick(sort, false)" class="filter-search">
+            {{sort.title}}
+          </p>
+          <div *ngIf="!currentSort.isPost && currentSort.id === sort.id && sort.dir === 1" class="ml-3">
+            <fa-icon [icon]="sortUp" icon="sortUp" class="fa fa-1x">
+            </fa-icon>
+          </div>
+          <div *ngIf="!currentSort.isPost && currentSort === sort && sort.dir === -1"  class="ml-3">
+            <fa-icon [icon]="sortDown" icon="sortDown" class="fa fa-1x">
+            </fa-icon>
+          </div>
+        </div>
+      </div>
+
+    </div></mat-tab>
+  </mat-tab-group>
+</mat-nav-list>

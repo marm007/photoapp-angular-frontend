@@ -95,6 +95,10 @@ export class SinglePostComponent implements OnInit {
     });
   }
 
+  handleEdit() {
+      this.router.navigate([`edit/${this.post.id}`]);
+  }
+
   handleSee() {
     this.router.navigate(['/post/'.concat(String(this.post.id))]);
   }

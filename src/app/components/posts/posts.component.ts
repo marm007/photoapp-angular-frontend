@@ -1,10 +1,16 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Post} from '../../models/post';
+import {Post, PostFilterSortModel} from '../../models/post';
 import {PostsService} from '../../services/post/posts.service';
 import {MessageService} from '../../services/message/message.service';
 import {UserService} from '../../services/user/user.service';
-import {ImageType, prepareImage} from '../../restConfig';
+import {prepareImage} from '../../restConfig';
+import {Subscription} from 'rxjs';
+import {Filter, Sort} from '../filter/filter.component';
 
+export interface FilterSortMessage {
+  ordering: string;
+  sorting: {created_after: string, created_before: string};
+}
 
 @Component({
   selector: 'app-posts',
@@ -24,10 +30,39 @@ export class PostsComponent implements OnInit, OnDestroy {
   @Input()
   userID: number;
 
+  messageSubscription: Subscription;
+  messageFilterSubscription: Subscription;
+
+  sortFilterMessage: PostFilterSortModel = {};
 
   constructor(private postService: PostsService,
               private messageService: MessageService,
               private userService: UserService) {
+    this.messageFilterSubscription = this.messageService.getSortFilterMessage()
+      .subscribe((message: Sort | Filter) => {
+        if (message.isPost) {
+          if ('dir' in message) {
+            // sortowanie
+            this.posts = [];
+            this.sortFilterMessage.ordering = message.dir === 1 ? message.id : '-'.concat(message.id);
+            this.listFollowedPosts(null, this.sortFilterMessage);
+          } else {
+            this.posts = [];
+            this.sortFilterMessage.created_after = message.created_after;
+            this.sortFilterMessage.created_before = message.created_before;
+            this.listFollowedPosts(null, this.sortFilterMessage);
+          }
+        }
+      });
+
+    this.messageSubscription = this.messageService.getMessage()
+      .subscribe(message => {
+        if (message === 'reset_filter_true') {
+          this.sortFilterMessage = {};
+          this.posts = [];
+          this.listFollowedPosts(null,  this.sortFilterMessage);
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -35,6 +70,8 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.messageSubscription.unsubscribe();
+    this.messageFilterSubscription.unsubscribe();
   }
 
   onPostDeleted(post: Post) {
@@ -44,10 +81,10 @@ export class PostsComponent implements OnInit, OnDestroy {
     }
   }
 
-  listFollowedPosts(start?: number, limit?: number): void {
-    this.userService.listFollowedPosts(start, limit)
+  listFollowedPosts(offset?: number, filters?: PostFilterSortModel): void {
+    this.userService.listFollowedPosts(offset, filters)
       .subscribe((posts: Post[]) => {
-        if (!(start && limit)) {
+        if (!offset) {
           this.componentLoaded.emit(true);
           this.postsLoaded = true;
           this.messageService.updateMessage('posts loaded');
@@ -60,6 +97,10 @@ export class PostsComponent implements OnInit, OnDestroy {
         this.posts = this.posts.concat(posts);
 
       });
+  }
+
+  onScrolled() {
+    this.listFollowedPosts(this.posts.length, this.sortFilterMessage);
   }
 
 }
