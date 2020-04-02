@@ -4,7 +4,7 @@ import {Like} from './like';
 import {MomentCreationData} from 'moment';
 
 export interface Post {
-  id: number;
+  id: string;
   image: string;
   imageLoaded: boolean;
   likes: number;

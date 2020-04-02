@@ -27,7 +27,7 @@ export class RelationService {
   }
 
 
-  public get(id: number): Observable<Relation> {
+  public get(id: string): Observable<Relation> {
     const url = `${environment.apiURL}/relations/${id}/`;
     return this.http.get<Relation>(url,
       {headers: this.authService.jwtAuthHeaders})
@@ -37,7 +37,7 @@ export class RelationService {
       );
   }
 
-  public delete(id: number): Observable<Relation> {
+  public delete(id: string): Observable<Relation> {
     const url = `${environment.apiURL}/relations/${id}/`;
     return this.http.delete<Relation>(url,
       {headers: this.authService.jwtAuthHeaders})

@@ -48,7 +48,7 @@ export class SinglePostComponent implements OnInit {
   post: Post;
 
   @Input()
-  userID: number;
+  userID: string;
 
   @Output()
   postDeleted: EventEmitter<Post> = new EventEmitter<Post>();
@@ -120,7 +120,7 @@ export class SinglePostComponent implements OnInit {
     }
 
   }
-
+//
   get isLiked(): boolean {
     return this.post.liked.some(like => like.user === this.userID);
   }

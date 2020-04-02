@@ -40,7 +40,7 @@ export class HomepageComponent implements OnInit{
     this.componentLoaded = true;
   }
 
-  getFollower(id: number): Observable<Follower> {
+  getFollower(id: string): Observable<Follower> {
       return this.userService.getFollower(id);
   }
 
@@ -49,6 +49,7 @@ export class HomepageComponent implements OnInit{
       user.meta.avatar = prepareImage(user.meta.avatar);
       this.user = user;
       const requests = [];
+      console.log(this.user)
       for (const followedID of this.user.followed) {
         requests.push(
           this.getFollower(followedID));

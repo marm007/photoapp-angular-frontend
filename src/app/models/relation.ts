@@ -1,7 +1,7 @@
 import {User} from './user';
 
 export interface Relation {
-  id: number;
+  id: string;
   user: User;
   image: string;
   imageLoaded: boolean;

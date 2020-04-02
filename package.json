@@ -29,6 +29,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@ng-bootstrap/ng-bootstrap": "^6.0.2",
+    "@types/uuid": "^7.0.2",
     "@yellowspot/ng-truncate": "^1.5.1",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",

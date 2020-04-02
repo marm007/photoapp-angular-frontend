@@ -18,7 +18,7 @@ import {environment} from '../../../environments/environment';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  userID: number; // id of currently logged user
+  userID: string; // id of currently logged user
 
   visitedUserProfile: User; // Meta and data of currently visited user
   posts: Array<Array<Post>> = [];
@@ -85,7 +85,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
   }
 
-  getFollower(id: number): Observable<Follower> {
+  getFollower(id: string): Observable<Follower> {
      return  this.userService.getFollower(id);
   }
 
@@ -135,7 +135,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  getUser(id: number) {
+  getUser(id: string) {
     this.userService.get(id, false).subscribe(user => {
       if (user === null) {
         this.router.navigate(['not-found']) ;

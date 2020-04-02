@@ -28,7 +28,7 @@ export class UserService {
       );
    }
 
-  public get(id?: number, addJWTHeaders= true): Observable<User> {
+  public get(id?: string, addJWTHeaders= true): Observable<User> {
     if (id === undefined || id === null) {
       id = this.authService.userID;
     }
@@ -59,7 +59,7 @@ export class UserService {
     );
   }
 
-  public listProfilePosts(id: number, offset?: number): Observable<Post[]> {
+  public listProfilePosts(id: string, offset?: number): Observable<Post[]> {
     const url = `${environment.apiURL}/users/${id}/posts/`;
     let params = {};
 
@@ -120,7 +120,7 @@ export class UserService {
     );
   }
 
-  public follow(id: number): Observable<User> {
+  public follow(id: string): Observable<User> {
     const url = `${environment.apiURL}/users/${id}/follow/`;
 
     return this.http.post<any>(url,
@@ -143,7 +143,7 @@ export class UserService {
     return this.http.post<any>(url, {password});
   }
 
-  public getFollower(id: number): Observable<any> {
+  public getFollower(id: string): Observable<any> {
     const url = `${environment.apiURL}/followers/${id}/`;
     return this.http.get<any>(url);
   }

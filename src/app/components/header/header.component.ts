@@ -11,8 +11,7 @@ import {prepareImage} from '../../restConfig';
 import {faFilter} from '@fortawesome/free-solid-svg-icons';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {FilterComponent, SortFilter} from '../filter/filter.component';
-import { Router, Event } from '@angular/router';
-import { NavigationStart, NavigationError, NavigationEnd } from '@angular/router';
+import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -103,7 +102,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.user = null;
     console.log(this.router.url);
-    if (this.router.url === '/') {
+    if (!this.router.url.includes('profile')) {
       this.router.navigate(['login']);
     }
   }
@@ -121,18 +120,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     bottomSheetRef.afterDismissed().subscribe(value => {
       this.currentSortFilter = value;
-      console.log(value);
-     /* if (value === 'posts_filter_likes') {
-        this.messageService.updateMessage('posts_filter_likes');
-      }*/
     });
   }
 
   getUser() {
     this.userService.get(null, false).subscribe(user => {
-      user.meta.avatar = prepareImage(user.meta.avatar);
-      this.user = user;
-      });
+      if (user !== undefined && user !== null) {
+        user.meta.avatar = prepareImage(user.meta.avatar);
+        this.user = user;
+      }
+    });
   }
 
   onSearchChange(searchValue: string): void {
@@ -144,7 +141,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           });
           this.userList = users;
         });
-    } else { this.userList = []; }
+    } else {
+      this.userList = [];
+    }
   }
 
   displayFn(user: User) {

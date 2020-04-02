@@ -39,7 +39,7 @@ export class EditPostComponent implements OnInit {
         .subscribe(user => {
           this.canEdit = user.posts.indexOf(params.id) > -1;
           if (!this.canEdit) {
-            this.router.navigate(['not-found']);
+            this.router.navigate(['/']);
           }
         });
     });

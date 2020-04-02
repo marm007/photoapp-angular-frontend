@@ -1,16 +1,16 @@
 <div style="margin-top: 65px">
   <form #addPostForm="ngForm">
     <div class="mb-4 col-12 col-md-8 col-lg-5 ml-auto mr-auto form-group ">
-      <div class="embed-responsive embed-responsive-16by9 z-depth-1-half input-file">
-        <input #imageInput
-               id="photo"
+      <div class="embed-responsive embed-responsive-16by9 z-depth-1-half add-post-input-file">
+        <input #addPostInput
+               id="photo-post"
                accept="image/*"
                type="file"
                required
-               class="inputfile"
-               (change)="processFile(imageInput)"
+               class="add-post-inputfile"
+               (change)="processFile(addPostInput)"
         />
-        <label for="photo" style="margin-bottom: 0">
+        <label for="photo-post" style="margin-bottom: 0">
           <span>Add photo </span>
         </label>
         <img *ngIf="selectedFile.file" class="embed-responsive-item" src="{{selectedFile.src}}"
@@ -58,7 +58,7 @@
   </form>
 </div>
 
-<!--<div *ngIf="selectedFile.pending" class="img-loading-overlay">-->
-<!--    <div class="img-spinning-circle"></div>-->
+<!--<div *ngIf="selectedFile.pending" class="add-post-img-loading-overlay">-->
+<!--    <div class="add-post-img-spinning-circle"></div>-->
 <!--</div>-->
 

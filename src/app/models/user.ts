@@ -1,14 +1,14 @@
 import {Meta} from './meta';
 
 export interface User {
-  id: number;
+  id: string;
   username: string;
   meta: Meta;
-  liked?: number[];
-  posts?: number[];
-  relations?: number[];
-  followers?: number[];
-  followed?: number[];
+  liked?: string[];
+  posts?: string[];
+  relations?: string[];
+  followers?: string[];
+  followed?: string[];
   first_name?: string;
   last_name?: string;
 }

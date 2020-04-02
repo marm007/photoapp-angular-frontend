@@ -1,4 +1,4 @@
 export interface Like {
-  id: number;
-  user: number;
+  id: string;
+  user: string;
 }

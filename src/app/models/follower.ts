@@ -1,5 +1,5 @@
 export interface Follower {
-  id: number;
-  user?: number;
-  user_being_followed?: number;
+  id: string;
+  user?: string;
+  user_being_followed?: string;
 }

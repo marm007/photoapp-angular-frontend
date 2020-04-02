@@ -35,7 +35,7 @@ export class AuthService {
     return new HttpHeaders({Authorization: 'Bearer ' + this.tokenAccess});
   }
 
-  get userID(): number | null {
+  get userID(): string | null {
     if (this.isLoggedIn()) {
       this.refreshToken();
       const payload = jwtDecode(this.tokenAccess) as JWTPayload;
@@ -219,7 +219,7 @@ export class AuthGuard implements CanActivate {
 
 
 interface JWTPayload {
-  user_id: number;
+  user_id: string;
   username: string;
   email: string;
   exp: number;

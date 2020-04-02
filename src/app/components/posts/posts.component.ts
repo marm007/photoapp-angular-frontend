@@ -28,7 +28,7 @@ export class PostsComponent implements OnInit, OnDestroy {
   message: string;
 
   @Input()
-  userID: number;
+  userID: string;
 
   messageSubscription: Subscription;
   messageFilterSubscription: Subscription;
