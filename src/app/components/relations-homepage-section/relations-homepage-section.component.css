@@ -118,16 +118,15 @@
 }
 
 .relation-mobile:hover div{
- /* margin-left: 4px;*/
+  /* margin-left: 4px;*/
 }
 
 .relation-photo-mobile{
-  background-size: cover;
   height: 40px;
   width: 40px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .relation-username-mobile{

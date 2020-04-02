@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {Filter, Sort} from '../../components/filter/filter.component';
+import {Filter, Sort, SortFilterMessage} from '../../components/filter/filter.component';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ import {Filter, Sort} from '../../components/filter/filter.component';
 export class MessageService {
 
   private myMessage = new Subject<string>();
-  private sortFilterMessage = new Subject<Sort | Filter>();
+  private sortFilterMessage = new Subject<SortFilterMessage>();
 
   constructor() { }
 
@@ -20,11 +20,11 @@ export class MessageService {
   this.myMessage.next(message);
   }
 
-  getSortFilterMessage(): Observable<Sort | Filter> {
+  getSortFilterMessage(): Observable<SortFilterMessage> {
     return this.sortFilterMessage.asObservable();
   }
 
-  updateSortFilterMessage(message: Sort | Filter) {
+  updateSortFilterMessage(message: SortFilterMessage) {
   this.sortFilterMessage.next(message);
   }
 }

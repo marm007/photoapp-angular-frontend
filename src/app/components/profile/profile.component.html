@@ -83,8 +83,26 @@
          (scrolled)="listProfilePosts(this.posts.length * 3)">
       <div class="profile-row" *ngFor="let row_posts of posts">
         <div *ngFor="let post of row_posts; index as i">
-          <div *ngIf="post" class="profile-column" [style]="i !== 2 ? 'margin-right: 2%': ''" style="display: flex; align-items: center; jus">
-            <img [src]="post.image" (load)="handleImageLoaded(post)" alt="" style="max-height:200px; width: 100%; object-fit: cover">
+          <div *ngIf="post" class="profile-column" [style]="i !== 2 ? 'margin-right: 2%': ''"
+               style="display: flex; align-items: center;" routerLink="/post/{{post.id}}">
+            <div style="display: block; position: relative">
+
+            <img class="profile-image-hover" [src]="post.image" (load)="handleImageLoaded(post)" alt="" style="max-height:200px; width: 100%; object-fit: cover" />
+            <div class="profile-middle">
+              <div style="display: flex; flex-direction: row">
+                <fa-icon style="margin-right: 10px" [icon]="faComment" icon="faComment" class=" fa fa-1x">
+                </fa-icon>
+                <p>{{post.comments.length}}</p>
+                <div style="margin-left: 10px; margin-right: 10px"></div>
+                <fa-icon style="margin-right: 10px" [icon]="faLike" icon="faLike" class=" fa fa-1x">
+                </fa-icon>
+                <p>{{post.likes}}</p>
+              </div>
+
+            </div>
+
+            </div>
+
           </div>
         </div>
       </div>

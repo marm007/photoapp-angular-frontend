@@ -20,10 +20,10 @@ interface DataRelation {
 
 @Component({
   selector: 'app-single-relation',
-  templateUrl: './single-relation.component.html',
-  styleUrls: ['./single-relation.component.css']
+  templateUrl: './relation-detail-component.html',
+  styleUrls: ['./relation-detail-component.css']
 })
-export class SingleRelationComponent implements OnInit, AfterContentInit, OnDestroy {
+export class RelationDetailComponent implements OnInit, AfterContentInit, OnDestroy {
 
   modelRelation: DataRelation;
 
@@ -43,7 +43,7 @@ export class SingleRelationComponent implements OnInit, AfterContentInit, OnDest
 
   selectedFile = new ImageSnippet(null, null);
 
-  constructor(private dialogRef: MatDialogRef<SingleRelationComponent>,
+  constructor(private dialogRef: MatDialogRef<RelationDetailComponent>,
               private dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
               private router: Router,

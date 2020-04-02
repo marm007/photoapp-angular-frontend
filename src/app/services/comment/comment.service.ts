@@ -24,4 +24,13 @@ export class CommentService {
         catchError(handleError<Comment>('addComment'))
       );
   }
+
+  public delete(id: string): Observable<Comment> {
+    const url = `${environment.apiURL}/comments/${id}/`;
+    return this.http.delete<any>(url, {headers: this.authService.jwtAuthHeaders})
+      .pipe(
+        tap(_ => console.log(`${_} removed comment id=${id}`)),
+        catchError(handleError<Comment>('removedComment'))
+      );
+  }
 }

@@ -3,7 +3,7 @@
     <mat-spinner style="margin-top: 80px"></mat-spinner>
   </div>
   <div *ngIf="followed" [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
-    <app-posts *ngIf="user"  (componentLoaded)="onComponentLoaded()"></app-posts>
-    <app-relations *ngIf="user"  [user]="user"></app-relations>
+    <app-posts-homepage-section *ngIf="user"  (componentLoaded)="onComponentLoaded()"></app-posts-homepage-section>
+    <app-relations-homepage-section *ngIf="user"  [user]="user"></app-relations-homepage-section>
   </div>
 </div>

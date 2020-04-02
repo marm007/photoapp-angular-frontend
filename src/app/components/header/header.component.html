@@ -1,16 +1,15 @@
 <div class="header-container">
   <div class="header-content">
-    <div class="header-logo">
+    <div class="header-logo" [style]="isMobile ? 'flex: 0 0 0' : ''">
       <a routerLink="/" style="cursor: pointer; color: rgba(0,0,0,.9);; text-decoration: none;">
         <div class="header-logo-container" fxLayout="row">
           <img style="width: 22px; height: 22px"
                src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
-          <p *ngIf="!isMobile" class="d-none d-sm-block" style="margin-left: 10px;">PhotoApp</p>
-          <p *ngIf="isMobile" style="margin-left: 10px;">PhotoApp</p>
+          <p class="d-none d-sm-block" style="margin-left: 10px;">PhotoApp</p>
         </div>
       </a>
     </div>
-    <div *ngIf="!isMobile" class="header-search">
+    <div class="header-search">
       <input #autocompleteInput (focus)="$event.target.value=''"
              placeholder="Szukaj" class="header-search-input" type="search"
              matInput  [matAutocomplete]="auto" (input)="onSearchChange($event.target.value)">
@@ -31,13 +30,12 @@
     <div class="header-icons">
       <div *ngIf="isLoggedIn && user" class="header-icons">
         <button *ngIf="isMainPage" class="header-icons-button" mat-button style="margin-right: 15px;" (click)="handleFilterClick()">
-          <fa-icon [icon]="filterIcon" icon="filterIcon" class="fa fa-1x header-icons-filter">
+          <fa-icon style="line-height: 0" [icon]="filterIcon" icon="filterIcon" class="fa fa-1x header-icons-filter">
           </fa-icon>
         </button>
         <button  routerLink="/add"  class="header-icons-button" mat-button style="margin-right: 15px;">
-          <i style="width: 22px; height: 22px" class="material-icons header-add-photo">
-            insert_photo
-          </i>
+          <fa-icon  style="line-height: 0" [icon]="faPhoto" icon="faPhoto" class="material-icons header-add-photo">
+          </fa-icon>
         </button>
     <!--    <a style="width: 22px; height: 22px">
           <img class="header-user"

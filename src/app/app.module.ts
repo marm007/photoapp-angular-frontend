@@ -7,14 +7,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { PostsComponent } from './components/posts/posts.component';
-import { RelationsComponent } from './components/relations/relations.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import {DeviceDetectorModule, DeviceDetectorService} from 'ngx-device-detector';
 import {MatMenuModule} from '@angular/material/menu';
 import { LoginComponent } from './components/login/login.component';
@@ -28,8 +25,8 @@ import { AddPostComponent } from './components/add-post/add-post.component';
 import {AuthGuard, AuthInterceptor, AuthService} from './services/auth/auth.service';
 import { ForgotComponent } from './components/forgot/forgot.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SinglePostComponent } from './components/single-post/single-post.component';
-import { SingleRelationComponent } from './components/single-relation/single-relation.component';
+import { PostDetailComponent } from './components/post-detail/post-detail-component';
+import { RelationDetailComponent } from './components/relation-detail/relation-detail-component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { OptionsComponent } from './components/options/options.component';
 import { ResetComponent } from './components/reset/reset.component';
@@ -43,8 +40,19 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatListModule} from '@angular/material/list';
 import {MatTabsModule} from '@angular/material/tabs';
 import { EditPostComponent } from './components/edit-post/edit-post.component';
+import { RelationsModalContainerComponent } from './components/relations-modal-container/relations-modal-container.component';
+import { RelationsHomepageSectionComponent } from './components/relations-homepage-section/relations-homepage-section.component';
+import { PostsHomepageSectionComponent } from './components/posts-homepage-section/posts-homepage-section.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
 
 const appRoutes: Routes = [
+  {
+    path: 'relations/:id',
+    component: RelationsModalContainerComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'forgot',
     component: ForgotComponent
@@ -64,7 +72,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'post/:id',
-    component: SinglePostComponent
+    component: PostDetailComponent
   },
   {
     path: 'login',
@@ -92,10 +100,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    PostsComponent,
-    RelationsComponent,
     HeaderComponent,
-    FooterComponent,
     LoginComponent,
     RegisterComponent,
     PageNotFoundComponent,
@@ -103,45 +108,51 @@ const appRoutes: Routes = [
     HomepageComponent,
     AddPostComponent,
     ForgotComponent,
-    SinglePostComponent,
-    SingleRelationComponent,
+    PostDetailComponent,
+    RelationDetailComponent,
     OptionsComponent,
     ResetComponent,
     FilterComponent,
     EditPostComponent,
+    RelationsModalContainerComponent,
+    RelationsHomepageSectionComponent,
+    PostsHomepageSectionComponent,
   ],
-  imports: [
-    RouterModule.forRoot(
-      appRoutes,
-      /*{ enableTracing: true } // <-- debugging purposes only*/
-    ),
-    BrowserModule,
-    TruncateModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatCardModule,
-    MatButtonModule,
-    FlexLayoutModule.withConfig({
-      useColumnBasisZero: false,
-      printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
-    }),
-    ScrollingModule,
-    MatInputModule,
-    FormsModule,
-    DeviceDetectorModule.forRoot(),
-    MatMenuModule,
-    MatDialogModule,
-    FontAwesomeModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    InfiniteScrollModule,
-    MatAutocompleteModule,
-    MatExpansionModule,
-    NgbCollapseModule,
-    MatBottomSheetModule,
-    MatListModule,
-    MatTabsModule
-  ],
+    imports: [
+        RouterModule.forRoot(
+            appRoutes,
+            /*{ enableTracing: true } // <-- debugging purposes only*/
+        ),
+        BrowserModule,
+        TruncateModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatButtonModule,
+        FlexLayoutModule.withConfig({
+            useColumnBasisZero: false,
+            printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
+        }),
+        ScrollingModule,
+        MatInputModule,
+        FormsModule,
+        DeviceDetectorModule.forRoot(),
+        MatMenuModule,
+        MatDialogModule,
+        FontAwesomeModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        InfiniteScrollModule,
+        MatAutocompleteModule,
+        MatExpansionModule,
+        NgbCollapseModule,
+        MatBottomSheetModule,
+        MatListModule,
+        MatTabsModule,
+        MatSnackBarModule,
+        MatSelectModule,
+        MatSliderModule
+    ],
   providers: [ AuthService,
     AuthGuard,
     {

@@ -3,11 +3,12 @@ import {Post} from '../../models/post';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PostsService} from '../../services/post/posts.service';
 import {CommentService} from '../../services/comment/comment.service';
-import {faEllipsisH, faHeart} from '@fortawesome/free-solid-svg-icons';
+import {faEllipsisH, faHeart, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../../services/auth/auth.service';
 import {ImageType, prepareImage} from '../../restConfig';
 import {environment} from '../../../environments/environment';
+import {DeviceDetectorService} from 'ngx-device-detector';
 
 @Component({
   selector: 'app-single-post',
@@ -39,10 +40,12 @@ import {environment} from '../../../environments/environment';
       ])
     ]),
   ],
-  templateUrl: './single-post.component.html',
-  styleUrls: ['./single-post.component.css']
+  templateUrl: './post-detail-component.html',
+  styleUrls: ['./post-detail-component.css']
 })
-export class SinglePostComponent implements OnInit {
+export class PostDetailComponent implements OnInit {
+
+  MAX_DESCRIPTION_WORDS = 10;
 
   @Input()
   post: Post;
@@ -58,20 +61,27 @@ export class SinglePostComponent implements OnInit {
 
   moreIcon = faEllipsisH;
   likeIcon = faHeart;
+  faCircle = faPlusCircle;
 
   isPostOwner: boolean;
   addPaddingToTop: boolean;
 
+  showMoreDescription = false;
   showDescription = false;
   showMoreComments = false;
 
   addCommentContent: string;
 
+  isDesktop: boolean;
+
   constructor(private activatedRoute: ActivatedRoute,
               private postsService: PostsService,
               private commentService: CommentService,
               private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private deviceDetectorService: DeviceDetectorService) {
+    this.isDesktop = deviceDetectorService.isDesktop();
+    console.log(this.isDesktop);
   }
 
   handleImageLoaded(post: Post) {
@@ -117,6 +127,7 @@ export class SinglePostComponent implements OnInit {
     } else {
       this.isPostOwner = this.post.user.id === this.authService.userID;
       this.addPaddingToTop = false;
+      this.showMoreDescription = this.post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
     }
 
   }
@@ -138,6 +149,7 @@ export class SinglePostComponent implements OnInit {
   getPost(id: number) {
     this.postsService.get(id).subscribe(post => {
       if (post !== null) {
+        this.showMoreDescription = post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
         post.user.meta.avatar = prepareImage(post.user.meta.avatar);
         post.image = prepareImage(post.image);
         this.post = post;
@@ -174,6 +186,17 @@ export class SinglePostComponent implements OnInit {
     this.commentService.addComment(comment).subscribe(newComment => {
       this.post.comments.push(newComment);
       this.addCommentContent = '';
+    });
+  }
+
+  handleCommentDelete(id: string) {
+    this.commentService.delete(id).subscribe(res => {
+      const comment = this.post.comments.find(c => c.id === id);
+      const index = this.post.comments.indexOf(comment);
+      console.log(index);
+      this.post.comments.splice(index, 1);
+    }, error => {
+
     });
   }
 }

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {timeout} from 'rxjs/operators';
 class ResetData {
   pending = false;
   status = 'init';
@@ -22,6 +23,7 @@ export class ResetComponent implements OnInit {
   isMobile: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
+              private router: Router,
               private deviceService: DeviceDetectorService,
               private authService: AuthService,
               private userService: UserService) {
@@ -41,7 +43,10 @@ export class ResetComponent implements OnInit {
       res => {
         this.resetData.pending = false;
         this.resetData.status = 'ok';
-        this.resetData.message = res.message;
+        this.resetData.message = res.message.concat(' You will be redirected to log in.');
+        setTimeout( () => {
+          this.router.navigate(['login']);
+        }, 1500);
       },
       error => {
         this.resetData.pending = false;

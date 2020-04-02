@@ -25,15 +25,18 @@
 }
 
 .header-logo {
-  flex: 1 9999 0%;
+  flex: 0 0 auto;
   min-width: 40px;
 }
 
 .header-search {
   height: 22px;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 125px;
   width: 215px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-search-input {
@@ -49,7 +52,7 @@
 @media (max-width: 768px) {
   .header-search {
     height: 22px;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 125px;
     width: 150px;
   }
@@ -70,7 +73,7 @@
   align-content: center;
   align-items: center;
   display: flex;
-  flex: 1 0 0%;
+  flex: 0 0 auto;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-end;

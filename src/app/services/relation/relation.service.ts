@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {Observable} from 'rxjs';
 import {Relation} from '../../models/relation';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError, retry, tap} from 'rxjs/operators';
 import handleError from '../errorHandler';
 import {environment} from '../../../environments/environment';
 
@@ -21,8 +21,8 @@ export class RelationService {
     return this.http.post<Relation>(url,
       formData, {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap((newRelation: Relation) => console.log(`added relation id=${newRelation.id}`)),
-        catchError(handleError<Relation>('addRelation'))
+        retry(2),
+        tap((newRelation: Relation) => console.log(`added relation id=${newRelation.id}`))
       );
   }
 

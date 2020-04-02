@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
       if (location.url !== undefined) {
 
         const flag = location.url !== '/login' && location.url !== '/register'
-          && location.url !== '/forgot' && !location.url.includes('/reset');
+          && location.url !== '/forgot' && !location.url.includes('/reset') && !location.url.includes('/relations');
         if (this.showHeader !== flag) {
           this.showHeader = flag;
         }

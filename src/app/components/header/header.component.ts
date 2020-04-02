@@ -8,7 +8,7 @@ import {User} from '../../models/user';
 import {MessageService} from '../../services/message/message.service';
 import {Subscription} from 'rxjs';
 import {prepareImage} from '../../restConfig';
-import {faFilter} from '@fortawesome/free-solid-svg-icons';
+import {faFilter, faImage} from '@fortawesome/free-solid-svg-icons';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {FilterComponent, SortFilter} from '../filter/filter.component';
 import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isMainPage = false;
 
   filterIcon = faFilter;
+  faPhoto = faImage;
 
   currentSortFilter: SortFilter;
 
@@ -107,7 +108,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleSearchClick(userID: number) {
+  handleSearchClick(userID: string) {
     this.userList = [];
     this.autocompleteInput.nativeElement.value = '';
     this.router.navigate([`profile/${userID}`]);
@@ -119,6 +120,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     bottomSheetRef.afterDismissed().subscribe(value => {
+      focus();
       this.currentSortFilter = value;
     });
   }

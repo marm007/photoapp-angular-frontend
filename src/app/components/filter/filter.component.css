@@ -12,3 +12,17 @@
   cursor: pointer;
   line-height: 35px;
 }
+
+.filter-search-label {
+  color: #606060;
+  cursor: pointer;
+}
+
+.edit-inputfile {
+  width: 70%;
+}
+
+mat-slider {
+  width: 60%;
+  min-width: 0;
+}

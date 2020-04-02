@@ -6,6 +6,9 @@ import {ImageSnippet} from '../../models/imageSnippet';
 import {PostsService} from '../../services/post/posts.service';
 import {UserService} from '../../services/user/user.service';
 import {AuthService} from '../../services/auth/auth.service';
+import {environment} from '../../../environments/environment';
+import {ImageType, prepareImage} from '../../restConfig';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 
@@ -25,11 +28,14 @@ export class EditPostComponent implements OnInit {
 
   canEdit = false;
 
+  postToEdit: Post;
+
   constructor(private postService: PostsService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private userService: UserService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private snackBar: MatSnackBar) {
 
   }
 
@@ -37,9 +43,21 @@ export class EditPostComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.userService.get(this.authService.userID)
         .subscribe(user => {
+          console.log(user);
+          console.log(params.id);
+
           this.canEdit = user.posts.indexOf(params.id) > -1;
           if (!this.canEdit) {
             this.router.navigate(['/']);
+          } else {
+            this.postService.get(params.id)
+              .subscribe(postToEdit => {
+                console.log(postToEdit);
+                postToEdit.image = prepareImage(postToEdit.image, ImageType.LARGE);
+                this.postToEdit = postToEdit;
+                this.selectedFile = new ImageSnippet(postToEdit.image);
+                this.descriptionModel.text = postToEdit.description;
+              });
           }
         });
     });
@@ -89,6 +107,46 @@ export class EditPostComponent implements OnInit {
     }
   }
 
-  editPost() {}
+  editPost() {
+    this.selectedFile.pending = true;
+    let image = null;
+    let description = null;
+
+    if (this.postToEdit.image !== this.selectedFile.src) {
+      if (  this.selectedFile.file.type === 'image/jpeg') {
+        image = this.selectedFile.file;
+      } else {
+        this.onError();
+        this.errorMessage = 'Bad file tye';
+      }
+    }
+
+    if (this.descriptionModel.text !==  this.postToEdit.description ) {
+      description = this.descriptionModel.text;
+    }
+
+    if (!image && !description) {
+      this.snackBar.open('Nie dokonano zadnych zmian!', null, {
+        duration: 1500,
+      });
+      this.router.navigate(['post/'.concat(this.postToEdit.id)]);
+      return;
+    }
+
+    this.postService.update(this.postToEdit.id, description, image).subscribe(
+      (res: Post) => {
+        this.snackBar.open('Zmiany zostaly zapisane!', null, {
+          duration: 1500,
+        });
+        this.onSuccess();
+        this.router.navigate(['post/'.concat(String(res.id))]);
+      },
+      (err) => {
+        this.onError();
+        this.errorMessage = err.error.detail ? err.error.detail : 'Something went wrong. Try again.';
+      });
+
+
+  }
 
 }

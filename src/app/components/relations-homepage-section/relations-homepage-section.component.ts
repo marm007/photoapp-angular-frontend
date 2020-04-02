@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewEncaps
 import {Subject, Subscription} from 'rxjs';
 import {MessageService} from '../../services/message/message.service';
 import {MatDialog} from '@angular/material/dialog';
-import {SingleRelationComponent} from '../single-relation/single-relation.component';
+import {RelationDetailComponent} from '../relation-detail/relation-detail-component';
 import {RelationService} from '../../services/relation/relation.service';
 import {Relation} from '../../models/relation';
 import {User} from '../../models/user';
@@ -10,19 +10,17 @@ import {DialogMode} from '../../models/dialogMode';
 import {UserService} from '../../services/user/user.service';
 import moment from 'moment';
 import {Router} from '@angular/router';
-import {ImageType, prepareImage} from '../../restConfig';
-import {Filter, Sort} from '../filter/filter.component';
+import {addCorrectTime, ImageType, prepareImage} from '../../restConfig';
+import {Filter, Sort, SortFilterMessage} from '../filter/filter.component';
 import {PostFilterSortModel} from '../../models/post';
 
-
 @Component({
-  selector: 'app-relations',
-  templateUrl: './relations.component.html',
-  styleUrls: ['./relations.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  selector: 'app-relations-homepage-section',
+  templateUrl: './relations-homepage-section.component.html',
+  styleUrls: ['./relations-homepage-section.component.css'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class RelationsComponent implements OnInit, OnDestroy {
+export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
 
   @Input()
   user: User;
@@ -38,6 +36,8 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   sortFilterMessage: PostFilterSortModel = {};
 
+  relationIsBeingAdded = false;
+
   constructor(private messageService: MessageService,
               public dialog: MatDialog,
               public relationService: RelationService,
@@ -45,17 +45,17 @@ export class RelationsComponent implements OnInit, OnDestroy {
               private router: Router) {
 
     this.messageFilterSubscription = this.messageService.getSortFilterMessage()
-      .subscribe((message: Sort | Filter) => {
+      .subscribe((message: SortFilterMessage) => {
         if (!message.isPost) {
-          if ('dir' in message) {
+          if (message.sort) {
             // sortowanie
             this.relations = [];
-            this.sortFilterMessage.ordering = message.dir === 1 ? message.id : '-'.concat(message.id);
+            this.sortFilterMessage.ordering = message.sort.dir === 1 ? message.sort.id : '-'.concat(message.sort.id);
             this.listFollowedRelations(null, this.sortFilterMessage);
           } else {
             this.relations = [];
-            this.sortFilterMessage.created_after = message.created_after;
-            this.sortFilterMessage.created_before = message.created_before;
+            this.sortFilterMessage.created_after = message.filter.created_after;
+            this.sortFilterMessage.created_before = message.filter.created_before;
             this.listFollowedRelations(null, this.sortFilterMessage);
           }
         }
@@ -92,58 +92,45 @@ export class RelationsComponent implements OnInit, OnDestroy {
           relations.forEach(relation => {
             relation.user.meta.avatar = prepareImage(relation.user.meta.avatar);
             relation.image = prepareImage(relation.image);
-            relation.created = this.addCorrectTime(relation.created);
+            relation.created = addCorrectTime(relation.created);
           });
           this.relations = this.relations.concat(relations);
         }
       });
   }
 
-  addCorrectTime(created: Date | number | string): string {
-    const currentTime = moment();
-    const relTime = moment(created);
-
-    const hours = currentTime.diff(relTime, 'hours');
-    created = hours + ' hours ago';
-    if (hours === 0) {
-      const minutes = currentTime.diff(relTime, 'minutes');
-      created = minutes + ' minutes ago';
-      if (minutes === 0) {
-        const seconds = currentTime.diff(relTime, 'seconds');
-        created = currentTime.diff(relTime, 'seconds') + ' seconds ago';
-        if (seconds === 0) {
-          created = 'just now';
-        }
-      }
-    }
-    return created;
-  }
 
   addRelation() {
     this.userService.get(this.user.id).subscribe(user => {
       user.meta.avatar = prepareImage(user.meta.avatar);
-      const dialogRef = this.dialog.open(SingleRelationComponent, {
+      const dialogRef = this.dialog.open(RelationDetailComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.ADD, relation: {user}}
       });
-
       dialogRef.afterClosed().subscribe(relationData => {
+        this.relationIsBeingAdded = true;
         if (relationData == null) {
+          this.relationIsBeingAdded = false;
           return;
         }
         this.relationService.add(relationData).subscribe(
           (res: any) => {
+            this.relationIsBeingAdded = false;
             res.user.meta.avatar = prepareImage(res.user.meta.avatar);
             res.image = prepareImage(res.image);
-            res.created = this.addCorrectTime(res.created);
+            res.created = addCorrectTime(res.created);
             this.relations.push(res);
           },
           (err) => {
+            this.relationIsBeingAdded = false;
+            const errorMessage = err.error.detail ? err.error.detail : 'Something went wrong. Try again.';
+            console.log(errorMessage);
           });
       });
     }, error => {
+      this.relationIsBeingAdded = false;
       if (error.status === 404) {
-          this.router.navigate(['login']);
+        this.router.navigate(['login']);
       }
     });
 
@@ -151,7 +138,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   playRelation(i?: number) {
     if (i !== undefined) {
-      const dialogRef = this.dialog.open(SingleRelationComponent, {
+      const dialogRef = this.dialog.open(RelationDetailComponent, {
         panelClass: 'custom-dialog-container',
         data: {mode: DialogMode.WATCH, relation: this.relations[i]}
       });
@@ -167,7 +154,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
     } else {
       const usersRelations = this.relations.filter(r => r.user.id === this.user.id);
       if (usersRelations.length > 0) {
-        const dialogRef = this.dialog.open(SingleRelationComponent, {
+        const dialogRef = this.dialog.open(RelationDetailComponent, {
           panelClass: 'custom-dialog-container',
           data: {mode: DialogMode.WATCH, relation: usersRelations[0]}
         });

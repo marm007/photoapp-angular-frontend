@@ -5,7 +5,7 @@ import {MessageService} from '../../services/message/message.service';
 import {UserService} from '../../services/user/user.service';
 import {prepareImage} from '../../restConfig';
 import {Subscription} from 'rxjs';
-import {Filter, Sort} from '../filter/filter.component';
+import {Filter, Sort, SortFilterMessage} from '../filter/filter.component';
 
 export interface FilterSortMessage {
   ordering: string;
@@ -13,11 +13,11 @@ export interface FilterSortMessage {
 }
 
 @Component({
-  selector: 'app-posts',
-  templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.css']
+  selector: 'app-posts-homepage-section',
+  templateUrl: './posts-homepage-section.component.html',
+  styleUrls: ['./posts-homepage-section.component.css']
 })
-export class PostsComponent implements OnInit, OnDestroy {
+export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
   @Output()
   componentLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -39,17 +39,41 @@ export class PostsComponent implements OnInit, OnDestroy {
               private messageService: MessageService,
               private userService: UserService) {
     this.messageFilterSubscription = this.messageService.getSortFilterMessage()
-      .subscribe((message: Sort | Filter) => {
+      .subscribe((message: SortFilterMessage) => {
         if (message.isPost) {
-          if ('dir' in message) {
+          console.log(message);
+
+          if (message.sort) {
             // sortowanie
             this.posts = [];
-            this.sortFilterMessage.ordering = message.dir === 1 ? message.id : '-'.concat(message.id);
+            this.sortFilterMessage.ordering = message.sort.dir === 1 ? message.sort.id : '-'.concat(message.sort.id);
+            this.listFollowedPosts(null, this.sortFilterMessage);
+          } else if (message.filter) {
+            this.posts = [];
+            this.sortFilterMessage.created_after = message.filter.created_after;
+            this.sortFilterMessage.created_before = message.filter.created_before;
             this.listFollowedPosts(null, this.sortFilterMessage);
           } else {
             this.posts = [];
-            this.sortFilterMessage.created_after = message.created_after;
-            this.sortFilterMessage.created_before = message.created_before;
+            console.log('herxzcxxzce');
+            console.log(message.likesSort.likes__gt);
+            console.log(message.likesSort.likesGtClicked);
+            if (message.likesSort.likes__gt != null) {
+              if (message.likesSort.likesGtClicked) {
+                console.log('here');
+                console.log(message.likesSort.likes__gt);
+                this.sortFilterMessage.likes__gt = message.likesSort.likes__gt;
+              } else {
+                delete this.sortFilterMessage.likes__gt;
+              }
+            } else {delete this.sortFilterMessage.likes__gt;}
+            if (message.likesSort.likes__lt != null) {
+              if (message.likesSort.likesLtClicked) {
+                this.sortFilterMessage.likes__lt = message.likesSort.likes__lt;
+              } else {
+                delete this.sortFilterMessage.likes__lt;
+              }
+            } else {delete this.sortFilterMessage.likes__lt;}
             this.listFollowedPosts(null, this.sortFilterMessage);
           }
         }

@@ -47,6 +47,16 @@
   cursor: pointer;
 }
 
+.post-comment-options {
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  margin-left: auto;
+  cursor: pointer;
+}
+
 .post-photo-block{
   display: inline-block;
   position: relative;
@@ -85,7 +95,6 @@
 .post-description {
   font-size: 12px;
   line-height: 16px;
-  height: 32px;
   overflow: hidden;
   margin-bottom: 6px;
 }
@@ -215,4 +224,13 @@
   max-width: 600px;
   position: relative;
   width: 100%;
+}
+
+
+@media (hover: hover) {
+
+  .post-comment:hover .post-comment-options {
+    opacity: 1;
+  }
+
 }

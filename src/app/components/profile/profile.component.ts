@@ -10,6 +10,7 @@ import {ImageType, prepareImage} from '../../restConfig';
 import {PostsService} from '../../services/post/posts.service';
 import {Follower} from '../../models/follower';
 import {environment} from '../../../environments/environment';
+import {faComment, faHeart} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loopIteration: number;
   buttonText: string;
   subscription: Subscription;
+  faComment = faComment;
+  faLike = faHeart;
 
   constructor(private authService: AuthService,
               private userService: UserService,
