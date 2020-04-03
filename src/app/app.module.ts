@@ -46,6 +46,7 @@ import { PostsHomepageSectionComponent } from './components/posts-homepage-secti
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 
 const appRoutes: Routes = [
   {
@@ -117,6 +118,7 @@ const appRoutes: Routes = [
     RelationsModalContainerComponent,
     RelationsHomepageSectionComponent,
     PostsHomepageSectionComponent,
+    ProfileEditComponent,
   ],
     imports: [
         RouterModule.forRoot(

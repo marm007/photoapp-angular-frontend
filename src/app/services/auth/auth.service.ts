@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {ActivatedRoute, CanActivate, Router} from '@angular/router';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {catchError, filter, shareReplay, switchMap, take, tap} from 'rxjs/operators';
+import {catchError, filter, retry, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import * as jwtDecode from 'jwt-decode';
 import moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
@@ -57,6 +57,7 @@ export class AuthService {
       { email, password },
       {headers: loginHeaders}
     ).pipe(
+      retry(2),
       tap(response => this.setSession(response)),
       shareReplay(),
     );
@@ -67,18 +68,16 @@ export class AuthService {
     formData.append('username', username);
     formData.append('email', email);
     formData.append('password', password);
-
     if (photo) {
       formData.append('meta.avatar', photo);
     }
-
-    console.log(formData);
     const url = `${environment.apiURL}/users/`;
 
     return this.http.post(
       url,
       formData
     ).pipe(
+      retry(2),
       tap(response => console.log(response)),
       shareReplay()
     );
@@ -147,7 +146,6 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-
     if (this.authService.tokenRefresh) {
       if (!this.isRefreshing) {
         this.isRefreshing = true;

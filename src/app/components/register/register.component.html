@@ -21,6 +21,9 @@
               <div *ngIf="nick.errors && (nick.dirty)">
                 <small class="text-danger" *ngIf="nick.errors.required">Nick is required</small>
               </div>
+              <div *ngIf="registerErrorUsernameMessage">
+                <small class="text-danger">{{registerErrorUsernameMessage}}</small>
+              </div>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
@@ -35,8 +38,8 @@
                 <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
                 <small class="text-danger" *ngIf="email.errors.pattern">Please provide a valid email address</small>
               </div>
-              <div *ngIf="registerError">
-                <small class="text-danger">{{registerErrorMessage}}</small>
+              <div *ngIf="registerErrorEmailMessage">
+                <small class="text-danger">{{registerErrorEmailMessage}}</small>
               </div>
             </div>
             <div class="form-group">
@@ -51,6 +54,7 @@
                 <small class="text-danger" *ngIf="password.errors.required">Password is required</small>
               </div>
             </div>
+
           </div>
           <div class="register-input-image-wrapper">
             <input #imageInput
@@ -73,7 +77,7 @@
                        class="register-item-middle fa-3x"
                        style="color: #ffffff" icon="times" (click)="resetImage()">
               </fa-icon>
-              <img *ngIf="selectedFile.file"
+              <img *ngIf="selectedFile.src"
                    class="register-input-image"
                    src="{{selectedFile.src}}"
                    style="outline:0; border-color: transparent" alt=""
@@ -84,7 +88,7 @@
         </div>
         <div style="display: flex; flex-direction: row; align-items: center;">
           <button type="submit" class="btn btn-primary"
-                  [disabled]="!registerForm.form.valid || !selectedFile.file || registerData.status == 'ok'"
+                  [disabled]="!registerForm.form.valid || registerData.status == 'ok'"
                   (click)="register();">Register
           </button>
           <div *ngIf="registerData.pending" style="display:flex; align-items:center;justify-content:center;"  class="pl-2" >
@@ -94,3 +98,4 @@
       </form>
     </div>
   </div>
+</div>

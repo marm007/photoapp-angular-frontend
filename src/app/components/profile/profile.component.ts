@@ -11,6 +11,8 @@ import {PostsService} from '../../services/post/posts.service';
 import {Follower} from '../../models/follower';
 import {environment} from '../../../environments/environment';
 import {faComment, faHeart} from '@fortawesome/free-solid-svg-icons';
+import {MatDialog} from '@angular/material/dialog';
+import {ProfileEditComponent} from '../profile-edit/profile-edit.component';
 
 @Component({
   selector: 'app-profile',
@@ -35,13 +37,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private dialog: MatDialog) {
     this.userID = authService.userID;
     this.posts = [];
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'logged_out') {
           this.userID = authService.userID;
+          this.posts = [];
           this.isFollowing();
         } else if (myMessage === 'logged_in') {
           this.userID = authService.userID;
@@ -77,7 +81,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (post.imageLoaded) {
       return;
     }
-    post.image = post.image.replace(ImageType.THUMBNAIL, '');
+    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
     post.image = prepareImage(post.image, ImageType.LARGE);
     post.imageLoaded = true;
   }
@@ -86,6 +90,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
         this.getUser(this.visitedUserProfile.id);
       });
+  }
+
+  handleEditProfile() {
+    const dialogRef = this.dialog.open(ProfileEditComponent, {
+      data: {user: this.visitedUserProfile}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.visitedUserProfile = result;
+      }
+    });
   }
 
   getFollower(id: string): Observable<Follower> {

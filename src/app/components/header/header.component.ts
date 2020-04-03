@@ -128,6 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getUser() {
     this.userService.get(null, false).subscribe(user => {
       if (user !== undefined && user !== null) {
+        console.log(user.meta.avatar);
         user.meta.avatar = prepareImage(user.meta.avatar);
         this.user = user;
       }
@@ -136,7 +137,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onSearchChange(searchValue: string): void {
     if (searchValue) {
-      this.userService.filter('username__contains', searchValue)
+      this.userService.filter('username__icontains', searchValue)
         .subscribe(users => {
           users.forEach(user => {
             user.meta.avatar = prepareImage(user.meta.avatar);

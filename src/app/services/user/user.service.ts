@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AuthService} from '../auth/auth.service';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError, retry, tap} from 'rxjs/operators';
 import handleError from '../errorHandler';
 import {User} from '../../models/user';
 import {Post, PostFilterSortModel} from '../../models/post';
@@ -40,6 +40,45 @@ export class UserService {
         tap((newUser: User) => console.log(`fetched user id=${id}`)),
         catchError(handleError<User>('getUser'))
     );
+  }
+
+  public update(username?: string, password?: string, email?: string, userPhoto?: File): Observable<User> {
+    const id = this.authService.userID;
+    const url = `${environment.apiURL}/users/${id}/`;
+
+    if (username && password && email && userPhoto) {
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('meta.avatar', userPhoto);
+      return this.http.put<User>(url, formData, {headers: this.authService.jwtAuthHeaders} )
+        .pipe(
+          retry(2),
+          tap(_ => console.log(`updated user id=${id}`))
+        );
+
+    } else {
+      const formData = new FormData();
+      if (username) {
+        formData.append('username', username);
+      }
+      if (email) {
+        formData.append('email', email);
+      }
+      if (password) {
+        formData.append('password', password);
+      }
+      if (userPhoto) {
+        formData.append('meta.avatar', userPhoto);
+      }
+      return this.http.patch<User>(url, formData, {headers: this.authService.jwtAuthHeaders} )
+        .pipe(
+          retry(2),
+          tap(_ => console.log(`patched user id=${id}`))
+
+        );
+    }
   }
 
   public listPosts(offset?: number): Observable<Post[]> {

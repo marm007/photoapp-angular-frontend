@@ -12,6 +12,9 @@
           <button *ngIf="userID !== visitedUserProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
             {{this.buttonText}}
           </button>
+          <button *ngIf="userID === visitedUserProfile.id" mat-button (click)="handleEditProfile()" class="profile-follow">
+            Edit profile
+          </button>
         </div>
         <div class="profile-data-wrapper">
           <div class="profile-data-statistics">

@@ -87,7 +87,8 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
       return;
     }
 
-    this.modelRelation.relation.image = this.modelRelation.relation.image.replace(ImageType.THUMBNAIL, '');
+    this.modelRelation.relation.image = this.modelRelation.relation.image.
+    replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
     this.modelRelation.relation.image = prepareImage(this.modelRelation.relation.image, ImageType.LARGE);
     this.modelRelation.relation.imageLoaded = true;
   }

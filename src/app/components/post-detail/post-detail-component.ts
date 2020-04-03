@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PostsService} from '../../services/post/posts.service';
 import {CommentService} from '../../services/comment/comment.service';
 import {faEllipsisH, faHeart, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
+import {faHeart as faHeartNoBorder} from '@fortawesome/free-regular-svg-icons';
 import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
 import {AuthService} from '../../services/auth/auth.service';
 import {ImageType, prepareImage} from '../../restConfig';
@@ -61,6 +62,7 @@ export class PostDetailComponent implements OnInit {
 
   moreIcon = faEllipsisH;
   likeIcon = faHeart;
+  likeIconNoBorder = faHeartNoBorder;
   faCircle = faPlusCircle;
 
   isPostOwner: boolean;
@@ -89,7 +91,7 @@ export class PostDetailComponent implements OnInit {
       return;
     }
 
-    post.image = post.image.replace(ImageType.THUMBNAIL, '');
+    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
     post.image = prepareImage(post.image, ImageType.LARGE);
     post.imageLoaded = true;
   }
@@ -165,7 +167,9 @@ export class PostDetailComponent implements OnInit {
           if (post !== null) {
             post.user.meta.avatar = prepareImage(post.user.meta.avatar);
             post.image = prepareImage(post.image);
-            this.post = post;
+            this.post.likes = post.likes;
+            this.post.liked = post.liked;
+            this.post.comments = post.comments;
           }
         });
       }
@@ -174,7 +178,9 @@ export class PostDetailComponent implements OnInit {
         if (post !== null) {
           post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
-          this.post = post;
+          this.post.likes = post.likes;
+          this.post.liked = post.liked;
+          this.post.comments = post.comments;
         }
       });
     }

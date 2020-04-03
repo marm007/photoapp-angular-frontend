@@ -59,14 +59,14 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
               } else {
                 delete this.sortFilterMessage.likes__gt;
               }
-            } else {delete this.sortFilterMessage.likes__gt;}
+            } else {delete this.sortFilterMessage.likes__gt; }
             if (message.likesSort.likes__lt != null) {
               if (message.likesSort.likesLtClicked) {
                 this.sortFilterMessage.likes__lt = message.likesSort.likes__lt;
               } else {
                 delete this.sortFilterMessage.likes__lt;
               }
-            } else {delete this.sortFilterMessage.likes__lt;}
+            } else {delete this.sortFilterMessage.likes__lt; }
             this.listFollowedPosts(null, this.sortFilterMessage);
           }
         }
@@ -107,6 +107,7 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
           this.messageService.updateMessage('posts loaded');
         }
         posts.forEach(post => {
+          console.log(post);
           post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
 

@@ -25,12 +25,12 @@
       <div class="post-footer">
         <mat-card-actions>
           <button (click)="handleClick(true)" mat-button style="outline: 0">
-            <i *ngIf="!isLiked" class="material-icons">
-              &#xe87e;
-            </i>
-            <i *ngIf="isLiked" class="material-icons">
-              &#xe87d;
-            </i>
+            <fa-icon *ngIf="!isLiked" style="line-height: 0"
+                     [icon]="likeIconNoBorder" icon="likeIconNoBorder">
+            </fa-icon>
+            <fa-icon *ngIf="isLiked" style="line-height: 0"
+                     [icon]="likeIcon" icon="likeIcon">
+            </fa-icon>
           </button>
         </mat-card-actions>
         <div class="post-likes">
@@ -134,12 +134,12 @@
     <div class="post-footer">
       <mat-card-actions>
         <button (click)="handleClick(true)" mat-button style="outline: 0">
-          <i *ngIf="!isLiked" class="material-icons">
-            &#xe87e;
-          </i>
-          <i *ngIf="isLiked" class="material-icons">
-            &#xe87d;
-          </i>
+          <fa-icon *ngIf="!isLiked" style="line-height: 0"
+                   [icon]="likeIconNoBorder" icon="likeIconNoBorder">
+          </fa-icon>
+          <fa-icon *ngIf="isLiked"  style="line-height: 0"
+                   [icon]="likeIcon" icon="likeIcon">
+          </fa-icon>
         </button>
       </mat-card-actions>
       <div class="post-likes">

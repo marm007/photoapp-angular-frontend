@@ -1,0 +1,94 @@
+<div class="form-section">
+  <div>
+    <div
+         class="container" [style]="isMobile ? 'border: none; ': '' ">
+      <div class="form-logo-container" fxLayout="row">
+        <img style="width: 55px; height: 55px"
+             src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+        <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
+      </div>
+      <form #editProfileForm="ngForm">
+        <div class="editProfile-fields-wrapper">
+          <div class="editProfile-input-fields">
+            <div class="form-group">
+              <label for="edit-profile-nick">Nick</label>
+              <input type="text"
+                     class="form-control"
+                     id="edit-profile-nick"
+                     [(ngModel)]="editProfileData.nick" name="edit-profile-nick"
+                     #editProfileNick="ngModel">
+              <div *ngIf="editProfileErrorUsernameMessage">
+                <small class="text-danger">{{editProfileErrorUsernameMessage}}</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="edit-profile-email">Email</label>
+              <input type="email"
+                     class="form-control"
+                     id="edit-profile-email"
+                     pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                     [(ngModel)]="editProfileData.email" name="edit-profile-email"
+                     #editProfileEmail="ngModel">
+              <div *ngIf="editProfileEmail.errors && (editProfileEmail.dirty)">
+                <small class="text-danger" *ngIf="editProfileEmail.errors.pattern">Please provide a valid email address</small>
+              </div>
+              <div *ngIf="editProfileErrorEmailMessage">
+                <small class="text-danger">{{editProfileErrorEmailMessage}}</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="edit-profile-password">Password</label>
+              <input type="password"
+                     class="form-control" id="edit-profile-password"
+                     [(ngModel)]="editProfileData.password"
+                     name="password"
+                     #editProfilePassword="ngModel">
+            </div>
+
+          </div>
+          <div class="editProfile-input-image-wrapper">
+            <input #editProfileInput
+                   id="edit-profile-photo"
+                   accept="image/*"
+                   type="file"
+                   class="editProfile-input-file"
+                   (change)="processFile(editProfileInput)"
+            />
+            <label for="edit-profile-photo" style="margin-bottom: 0">
+              <span>User photo </span>
+            </label>
+
+            <div style="position: relative">
+              <div *ngIf="selectedFile.file" style="left:0; top: 0; position: absolute; width: 100%; height: 100%"
+                   class="editProfile-item-opacity">
+              </div>
+              <fa-icon [icon]="times" *ngIf="selectedFile.file"
+                       class="editProfile-item-middle fa-3x"
+                       style="color: #ffffff" icon="times" (click)="resetImage()">
+              </fa-icon>
+              <img *ngIf="selectedFile.src"
+                   class="editProfile-input-image"
+                   src="{{selectedFile.src}}"
+                   style="outline:0; border-color: transparent" alt=""
+              />
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="messageSuccess"
+             class="alert alert-success">
+          {{messageSuccess}}
+        </div>
+        <div style="display: flex; flex-direction: row; align-items: center;">
+          <button type="submit" class="btn btn-primary"
+                  [disabled]="!editProfileForm.form.valid || editProfileData.status == 'ok'"
+                  (click)="editProfile();">Edit
+          </button>
+          <div *ngIf="editProfileData.pending" style="display:flex; align-items:center;justify-content:center;"  class="pl-2" >
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

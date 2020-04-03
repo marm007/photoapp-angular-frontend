@@ -6,6 +6,7 @@ import {ImageSnippet} from '../../models/imageSnippet';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '../../services/auth/auth.service';
 import {MessageService} from '../../services/message/message.service';
+import {environment} from '../../../environments/environment';
 
 class RegisterData {
   pending = false;
@@ -20,7 +21,7 @@ class RegisterData {
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  selectedFile = new ImageSnippet(null, null);
+  selectedFile = new ImageSnippet(environment.avatarURL, null);
   registerData = new RegisterData(null, null, null);
 
   times = faTimes;
@@ -29,7 +30,8 @@ export class RegisterComponent implements OnInit {
   dialogRef = null;
 
   registerError = false;
-  registerErrorMessage: string;
+  registerErrorEmailMessage: string;
+  registerErrorUsernameMessage: string;
 
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
@@ -78,7 +80,11 @@ export class RegisterComponent implements OnInit {
           const error = errorRes.error;
           this.registerError = true;
           if (error.email) {
-            this.registerErrorMessage = error.email;
+            this.registerErrorEmailMessage = error.email;
+          }
+          console.log(error);
+          if (error.username) {
+            this.registerErrorUsernameMessage = error.username;
           }
         });
   }
@@ -95,7 +101,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public resetImage() {
-    this.selectedFile = new ImageSnippet(null, null);
+    this.selectedFile = new ImageSnippet(environment.avatarURL, null);
   }
 
 }
