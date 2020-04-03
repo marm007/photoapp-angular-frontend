@@ -11,7 +11,7 @@ import {RelationService} from '../../services/relation/relation.service';
 import {Router} from '@angular/router';
 import {Post} from '../../models/post';
 import {environment} from '../../../environments/environment';
-import {ImageType, prepareImage} from '../../restConfig';
+import {addCorrectTime, ImageType, prepareImage} from '../../restConfig';
 
 interface DataRelation {
   relation: Relation;
@@ -42,6 +42,8 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
   showRelation = false;
 
   selectedFile = new ImageSnippet(null, null);
+
+  isDeleting = false;
 
   constructor(private dialogRef: MatDialogRef<RelationDetailComponent>,
               private dialog: MatDialog,
@@ -97,7 +99,26 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
   }
 
   handleAdd() {
-    this.dialogRef.close(this.selectedFile.file);
+    this.selectedFile.pending = true;
+    if (this.selectedFile.file == null) {
+      this.selectedFile.pending = false;
+      this.dialogRef.close();
+      return;
+    }
+    this.relationService.add(this.selectedFile.file).subscribe(
+      (res: any) => {
+        res.user.meta.avatar = prepareImage(res.user.meta.avatar);
+        res.image = prepareImage(res.image);
+        res.created = addCorrectTime(res.created);
+        this.selectedFile.pending = false;
+        this.dialogRef.close(res);
+      },
+      (err) => {
+        this.selectedFile.pending = false;
+        const errorMessage = err.error.detail ? err.error.detail : 'Something went wrong. Try again.';
+        console.log(errorMessage);
+        this.dialogRef.close();
+      });
   }
 
   handleOptionsClick() {
@@ -108,8 +129,12 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
 
     optionsDialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
+        this.isDeleting = true;
         this.relationService.delete(this.modelRelation.relation.id)
-          .subscribe(res => this.dialogRef.close('deleted'));
+          .subscribe(res => {
+            this.isDeleting = false;
+            this.dialogRef.close('deleted');
+          });
       } else {
         this.startTimer();
       }

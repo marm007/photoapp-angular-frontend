@@ -8,10 +8,9 @@ import {Relation} from '../../models/relation';
 import {User} from '../../models/user';
 import {DialogMode} from '../../models/dialogMode';
 import {UserService} from '../../services/user/user.service';
-import moment from 'moment';
 import {Router} from '@angular/router';
-import {addCorrectTime, ImageType, prepareImage} from '../../restConfig';
-import {Filter, Sort, SortFilterMessage} from '../filter/filter.component';
+import {addCorrectTime,  prepareImage} from '../../restConfig';
+import { SortFilterMessage} from '../filter/filter.component';
 import {PostFilterSortModel} from '../../models/post';
 
 @Component({
@@ -35,8 +34,6 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
   postsLoaded: Subject<boolean> = new Subject();
 
   sortFilterMessage: PostFilterSortModel = {};
-
-  relationIsBeingAdded = false;
 
   constructor(private messageService: MessageService,
               public dialog: MatDialog,
@@ -108,27 +105,12 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
         data: {mode: DialogMode.ADD, relation: {user}}
       });
       dialogRef.afterClosed().subscribe(relationData => {
-        this.relationIsBeingAdded = true;
         if (relationData == null) {
-          this.relationIsBeingAdded = false;
           return;
         }
-        this.relationService.add(relationData).subscribe(
-          (res: any) => {
-            this.relationIsBeingAdded = false;
-            res.user.meta.avatar = prepareImage(res.user.meta.avatar);
-            res.image = prepareImage(res.image);
-            res.created = addCorrectTime(res.created);
-            this.relations.push(res);
-          },
-          (err) => {
-            this.relationIsBeingAdded = false;
-            const errorMessage = err.error.detail ? err.error.detail : 'Something went wrong. Try again.';
-            console.log(errorMessage);
-          });
+        this.relations.push(relationData);
       });
     }, error => {
-      this.relationIsBeingAdded = false;
       if (error.status === 404) {
         this.router.navigate(['login']);
       }
