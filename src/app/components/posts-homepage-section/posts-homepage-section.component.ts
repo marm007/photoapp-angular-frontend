@@ -41,8 +41,6 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
     this.messageFilterSubscription = this.messageService.getSortFilterMessage()
       .subscribe((message: SortFilterMessage) => {
         if (message.isPost) {
-          console.log(message);
-
           if (message.sort) {
             // sortowanie
             this.posts = [];
@@ -55,13 +53,8 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
             this.listFollowedPosts(null, this.sortFilterMessage);
           } else {
             this.posts = [];
-            console.log('herxzcxxzce');
-            console.log(message.likesSort.likes__gt);
-            console.log(message.likesSort.likesGtClicked);
             if (message.likesSort.likes__gt != null) {
               if (message.likesSort.likesGtClicked) {
-                console.log('here');
-                console.log(message.likesSort.likes__gt);
                 this.sortFilterMessage.likes__gt = message.likesSort.likes__gt;
               } else {
                 delete this.sortFilterMessage.likes__gt;

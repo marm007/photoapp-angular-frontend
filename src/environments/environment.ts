@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   apiURL: 'http://127.0.0.1:8000/api',
   mediaURL: 'https://res.cloudinary.com/marm007-photo-app-devlopment/',
+  avatarURL: 'https://res.cloudinary.com/marm007-photo-app-devlopment/image/upload/v1585908796/avata_default_rzbc9v.png'
 };
 
 /*

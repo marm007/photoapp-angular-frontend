@@ -48,19 +48,6 @@ export class HomepageComponent implements OnInit{
     this.userService.get(this.authService.userID).subscribe(user => {
       user.meta.avatar = prepareImage(user.meta.avatar);
       this.user = user;
-      const requests = [];
-      console.log(this.user)
-      for (const followedID of this.user.followed) {
-        requests.push(
-          this.getFollower(followedID));
-      }
-      if (requests.length === 0) {
-        this.followed = [];
-      }
-      forkJoin(requests)
-        .subscribe((followed: Follower[]) => {
-          this.followed = followed;
-        });
     });
   }
 }

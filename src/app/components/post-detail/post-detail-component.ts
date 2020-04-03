@@ -89,7 +89,7 @@ export class PostDetailComponent implements OnInit {
       return;
     }
 
-    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
+    post.image = post.image.replace(ImageType.THUMBNAIL, '');
     post.image = prepareImage(post.image, ImageType.LARGE);
     post.imageLoaded = true;
   }
