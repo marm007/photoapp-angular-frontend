@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   listProfilePosts(offset?: number): void {
-    if ((offset !== null) && !this.postsLoaded) {
+    if (offset === null && !this.postsLoaded) {
       return;
     }
 
