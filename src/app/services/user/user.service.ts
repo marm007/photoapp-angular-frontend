@@ -18,9 +18,12 @@ export class UserService {
   constructor(private http: HttpClient,
               private authService: AuthService) { }
 
-   public filter(queryParams?: string, value?: string): Observable<User[]> {
+   public filter(queryParams?: string, value?: string, offset?: string): Observable<User[]> {
      const url = `${environment.apiURL}/users/filter/`;
-     const params = {[queryParams]: value};
+     let params = {[queryParams]: value};
+     if (offset) {
+       params = {...params, offset};
+     }
      return this.http.get<User[]>(url, {params})
       .pipe(
         tap(_ => console.log(_)),

@@ -11,9 +11,10 @@
     </div>
     <div class="header-search">
       <input #autocompleteInput (focus)="$event.target.value=''"
-             placeholder="Szukaj" class="header-search-input" type="search"
-             matInput  [matAutocomplete]="auto" (input)="onSearchChange($event.target.value)">
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+             placeholder="Search" class="header-search-input" type="search"
+             matInput  [matAutocomplete]="usersAutoComplete" (input)="onSearchChange($event.target.value)">
+      <mat-autocomplete #usersAutoComplete="matAutocomplete" [displayWith]="displayFn" (opened)="usersAutocompleteScroll()"
+                        style="line-height: 10px">
         <mat-option *ngFor="let user of userList" [value]="user" style="line-height: 0 !important;">
           <button (click)="handleSearchClick(user.id)" class="search-wrapper" style="outline: 0;">
             <div fxLayout="row">
@@ -37,11 +38,6 @@
           <fa-icon  style="line-height: 0" [icon]="faPhoto" icon="faPhoto" class="material-icons header-add-photo">
           </fa-icon>
         </button>
-    <!--    <a style="width: 22px; height: 22px">
-          <img class="header-user"
-               style="width: 22px; height: 22px"
-               src="https://instagram.ftun3-1.fna.fbcdn.net/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=instagram.ftun3-1.fna.fbcdn.net&_nc_ohc=mpZNugcTX-0AX-ycAq8&oh=25ec3b7192ae565b175c16f314248101&oe=5E9E17F1"/>
-        </a>-->
         <button class="header-icons-button" mat-button [matMenuTriggerFor]="menu">
           <img class="header-user"
                style="width: 22px; height: 22px"
@@ -49,7 +45,7 @@
         </button>
 
         <mat-menu #menu="matMenu">
-          <button  routerLink="/profile/{{user.id}}" mat-menu-item style="outline: 0;">Profil</button>
+          <button  routerLink="/profile/{{user.id}}" mat-menu-item style="outline: 0;">Profile</button>
           <button mat-menu-item style="outline: 0;" (click)="logout()">Wyloguj</button>
         </mat-menu>
       </div>

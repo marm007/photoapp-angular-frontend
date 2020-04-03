@@ -45,7 +45,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(myMessage => {
         if (myMessage === 'logged_out') {
           this.userID = authService.userID;
-          this.posts = [];
           this.isFollowing();
         } else if (myMessage === 'logged_in') {
           this.userID = authService.userID;
@@ -109,7 +108,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   isFollowing(): void {
-
+    this.posts = [];
     const requests = [];
 
     for (const followerID of this.visitedUserProfile.followers) {
@@ -122,7 +121,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.listProfilePosts();
       }
       this.postsLoaded = true;
-      this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
+      this.buttonText = flag ? 'Unfollow' : 'Follow';
     }
 
     forkJoin(requests)
@@ -135,7 +134,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           if (flag) {
             this.listProfilePosts();
           }
-          this.buttonText = flag ? 'Anuluj' : 'Obserwuj';
+          this.buttonText = flag ? 'Unfollow' : 'Follow';
         }
       });
   }

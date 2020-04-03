@@ -18,13 +18,13 @@
         </div>
         <div class="profile-data-wrapper">
           <div class="profile-data-statistics">
-            Posty: <b>{{visitedUserProfile.posts.length}}</b>
+            Posts: <b>{{visitedUserProfile.posts.length}}</b>
           </div>
           <div class="profile-data-statistics">
-            Obeswujacych: <b>{{visitedUserProfile.followers.length}}</b>
+            Followers: <b>{{visitedUserProfile.followers.length}}</b>
           </div>
           <div style="margin-right: 0" class="profile-data-statistics">
-            Obserwoawni: <b>{{visitedUserProfile.followed.length}}</b>
+            Followed: <b>{{visitedUserProfile.followed.length}}</b>
           </div>
         </div>
         <div>
@@ -47,6 +47,9 @@
           <button *ngIf="userID !== visitedUserProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
             {{this.buttonText}}
           </button>
+          <button *ngIf="userID === visitedUserProfile.id" mat-button (click)="handleEditProfile()" class="profile-follow">
+            Edit profile
+          </button>
         </div>
         <div>
           {{visitedUserProfile.first_name}} {{visitedUserProfile.last_name}}
@@ -56,7 +59,7 @@
     <ul style="margin: 0" class="d-flex d-md-none profile-data-statistics-mobile-wrapper" >
       <li class="profile-data-statistics-mobile">
         <span class="profile-data-statistics-name-mobile">
-          Posty:
+          Posts:
         </span>
         <span class="profile-data-statistics-value-mobile">
           {{visitedUserProfile.posts.length}}
@@ -64,7 +67,7 @@
       </li>
       <li class="profile-data-statistics-mobile">
         <span class="profile-data-statistics-name-mobile">
-          Obeswujacych:
+          Followers:
         </span>
         <span class="profile-data-statistics-value-mobile">
           {{visitedUserProfile.followers.length}}
@@ -72,7 +75,7 @@
       </li>
       <li class="profile-data-statistics-mobile">
         <span class="profile-data-statistics-name-mobile">
-          Obserwoawni:
+          Followed:
         </span>
         <span class="profile-data-statistics-value-mobile">
           {{visitedUserProfile.followed.length}}

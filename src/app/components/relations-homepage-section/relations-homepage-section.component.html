@@ -1,6 +1,6 @@
 <div class="d-none d-lg-block relation-section-wrapper" *ngIf="(postsLoaded | async) == true">
   <div id="relation-header-box">
-    <div id="relation-header-text">Relacje</div>
+    <div id="relation-header-text">Relations</div>
   </div>
   <cdk-virtual-scroll-viewport itemSize="52" class="relation-section-scroll"
                                infinite-scroll
@@ -17,7 +17,7 @@
         <div fxLayout="column" class="relation-data-wrapper">
           <div class="relation-username">
             <span>
-              Twoje relacje
+              Your relations
             </span>
 
           </div>
@@ -26,8 +26,8 @@
       </div>
     </button>
     <mat-menu #relationMenu="matMenu">
-      <button mat-menu-item style="outline: 0;" (click)="addRelation()">Dodaj</button>
-      <button mat-menu-item style="outline: 0;" (click)="playRelation()">Zobacz</button>
+      <button mat-menu-item style="outline: 0;" (click)="addRelation()">Add</button>
+      <button mat-menu-item style="outline: 0;" (click)="playRelation()">Watch</button>
     </mat-menu>
     <div
       style="width: 100%; height: 1px;  margin-bottom: 10px; margin-top: 10px; border-bottom: 1px solid rgba(219,219,219,1);"></div>
@@ -63,12 +63,12 @@
            [ngStyle]="{'background-image': 'url('+ user.meta.avatar +')'}">
       </div>
       <div style="min-width: 100px" class="relation-username-mobile">
-        Twoje relacje
+        Your relations
       </div>
     </div>
     <mat-menu #relationMenu="matMenu">
-      <button mat-menu-item style="outline: 0;" (click)="addRelation()">Dodaj</button>
-      <button mat-menu-item style="outline: 0;" (click)="playRelation()">Zobacz</button>
+      <button mat-menu-item style="outline: 0;" (click)="addRelation()">Add</button>
+      <button mat-menu-item style="outline: 0;" (click)="playRelation()">Watch</button>
     </mat-menu>
     <mat-divider [vertical]="true" style="margin-bottom: 20px;"></mat-divider>
     <div class="relation-mobile-others" *ngFor="let relation of relations; index as i">

@@ -126,7 +126,7 @@ export class EditPostComponent implements OnInit {
     }
 
     if (!image && !description) {
-      this.snackBar.open('Nie dokonano zadnych zmian!', null, {
+      this.snackBar.open('No changes were made!', null, {
         duration: 1500,
       });
       this.router.navigate(['post/'.concat(this.postToEdit.id)]);
@@ -135,7 +135,7 @@ export class EditPostComponent implements OnInit {
 
     this.postService.update(this.postToEdit.id, description, image).subscribe(
       (res: Post) => {
-        this.snackBar.open('Zmiany zostaly zapisane!', null, {
+        this.snackBar.open('Changes have been saved!', null, {
           duration: 1500,
         });
         this.onSuccess();

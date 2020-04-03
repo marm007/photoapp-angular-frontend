@@ -7,7 +7,7 @@
 
           <div class="mt-3 mb-3 divider"></div>
           <p *ngFor="let filter of filters"
-             [style]="currentFilterPost.id === filter.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+             [style]="currentFilterPost.id === filter.id ? 'font-weight: 700; font-size: 100%' : 'font-weight: 400; font-size: 80%'"
              class="filter-search"
              (click)="handleFilterClick(filter, true)">
             {{filter.title}}
@@ -18,20 +18,9 @@
           <p style="font-weight: 500">LIKES</p>
 
           <div class="mt-3 mb-3 divider"></div>
-          <!--<input #likesMoreThan
-                 id="likes-more-than"
-                 class="edit-inputfile"
-                 placeholder="More than"
-                 type="text">
-          <input #likesLessThan
-                 style="margin-top: 35px"
-                 id="likes-less-than"
-                 class="edit-inputfile"
-                 placeholder="Less than"
-                 type="text">-->
-          <p [style]="likesSort.likesGtClicked ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
-             class="filter-search-label" (click)="handleLikesGreaterThanClick()">
-            Więcej niż
+          <p [style]="likesSort.likesGtClicked ? 'font-weight: 700; font-size: 100%' : 'font-weight: 400; font-size: 80%'"
+             class="filter-search" (click)="handleLikesGreaterThanClick()">
+            More than
           </p>
           <mat-slider
             [value]="likesSort.likes__gt ? likesSort.likes__gt : 0"
@@ -42,9 +31,9 @@
             min="0"
             max="1000"></mat-slider>
 
-          <p [style]="likesSort.likesLtClicked ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
-             class="filter-search-label" (click)="handleLikesLowerThanClick()">
-            Mniej niż
+          <p [style]="likesSort.likesLtClicked ? 'font-weight: 700; font-size: 100%' : 'font-weight: 400; font-size: 80%'"
+             class="filter-search" (click)="handleLikesLowerThanClick()">
+            Less than
           </p>
           <mat-slider
             [value]="likesSort.likes__lt ? likesSort.likes__lt : 0"
@@ -63,7 +52,7 @@
           <div class="mt-3 mb-3 divider"></div>
           <div style="display: flex; flex-direction: row; align-items: center; justify-content: center" *ngFor="let sort of sortsPosts">
             <p
-              [style]="sort.id === currentSortPost.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+              [style]="sort.id === currentSortPost.id ? 'font-weight: 700; font-size: 100%' : 'font-weight: 400; font-size: 80%'"
               (click)="handleSortClick(sort, true)" class="filter-search">
               {{sort.title}}
             </p>
@@ -88,7 +77,7 @@
 
         <div class="mt-3 mb-3 divider"></div>
         <p *ngFor="let filter of filters"
-           [style]="currentFilterRelation.id === filter.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+           [style]="currentFilterRelation.id === filter.id ? 'font-weight: 700; font-size: 100%' : 'font-weight: 400; font-size: 80%'"
            class="filter-search"
            (click)="handleFilterClick(filter, false)">
           {{filter.title}}
@@ -101,7 +90,7 @@
         <div class="mt-3 mb-3 divider"></div>
         <div style="display: flex; flex-direction: row; align-items: center; justify-content: center" *ngFor="let sort of sortsRelations">
           <p
-            [style]="sort.id === currentSortRelation.id ? 'font-weight: 700; font-size: 120%' : 'font-weight: 400; font-size: 100%'"
+            [style]="sort.id === currentSortRelation.id ? 'font-weight: 700; font-size: 100%' : 'font-weight: 400; font-size: 80%'"
             (click)="handleSortClick(sort, false)" class="filter-search">
             {{sort.title}}
           </p>

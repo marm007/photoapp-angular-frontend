@@ -8,6 +8,7 @@ import {UserService} from '../../services/user/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {User} from '../../models/user';
 import {prepareImage} from '../../restConfig';
+import {MessageService} from '../../services/message/message.service';
 
 class EditProfileData {
   pending = false;
@@ -40,6 +41,7 @@ export class ProfileEditComponent implements OnInit {
               private dialogRef: MatDialogRef<ProfileEditComponent>,
               private userService: UserService,
               private snackBar: MatSnackBar,
+              private messageService: MessageService,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.isMobile = deviceService.isMobile();
   }
@@ -67,7 +69,7 @@ export class ProfileEditComponent implements OnInit {
       !this.editProfileData.email &&
       !this.editProfileData.password &&
       !this.selectedFile.file) {
-      this.snackBar.open('Nie dokonano zadnych zmian!', null, {
+      this.snackBar.open('No changes were made!', null, {
         duration: 1500,
       });
       this.dialogRef.close();
@@ -76,8 +78,9 @@ export class ProfileEditComponent implements OnInit {
 
     this.userService.update(this.editProfileData.nick, this.editProfileData.password, this.editProfileData.email, this.selectedFile.file)
       .subscribe(user => {
+          this.messageService.updateMessage('profile_edited');
           user.meta.avatar = prepareImage(user.meta.avatar);
-          this.snackBar.open('Zmiany zostały zapisane!', null, {
+          this.snackBar.open('Changes have been saved!', null, {
             duration: 1500,
           });
           this.onSuccess();

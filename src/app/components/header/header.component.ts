@@ -6,12 +6,14 @@ import {LoginComponent} from '../login/login.component';
 import {UserService} from '../../services/user/user.service';
 import {User} from '../../models/user';
 import {MessageService} from '../../services/message/message.service';
-import {Subscription} from 'rxjs';
+import {fromEvent, Subscription} from 'rxjs';
 import {prepareImage} from '../../restConfig';
 import {faFilter, faImage} from '@fortawesome/free-solid-svg-icons';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {FilterComponent, SortFilter} from '../filter/filter.component';
 import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {map, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -19,23 +21,6 @@ import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from '@a
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
-  @ViewChild('autocompleteInput') autocompleteInput: ElementRef;
-
-  user: User;
-  messageSubscription: Subscription;
-
-  isMobile: boolean;
-  isLoggedIn: boolean;
-
-  userList: User[];
-
-  isMainPage = false;
-
-  filterIcon = faFilter;
-  faPhoto = faImage;
-
-  currentSortFilter: SortFilter;
 
   constructor(private deviceService: DeviceDetectorService,
               public dialog: MatDialog,
@@ -65,13 +50,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.messageSubscription = messageService.getMessage()
       .subscribe(message => {
         if (message === 'logged_in') {
-          console.log('message');
-          console.log(message);
           this.isLoggedIn = true;
+          this.getUser();
+        } else if (message === 'profile_edited') {
           this.getUser();
         }
       });
   }
+
+  @ViewChild('autocompleteInput') autocompleteInput: ElementRef;
+
+  user: User;
+  messageSubscription: Subscription;
+
+  isMobile: boolean;
+  isLoggedIn: boolean;
+
+  userList: User[] = [];
+
+  isMainPage = false;
+
+  filterIcon = faFilter;
+  faPhoto = faImage;
+
+  currentSortFilter: SortFilter;
+
+  searchUsername: string;
+  @ViewChild('usersAutoComplete') usersAutocompleteRef: MatAutocomplete;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
 
   openDialog(): void {
     const dialogRef = this.dialog.open(LoginComponent, {
@@ -137,15 +143,56 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onSearchChange(searchValue: string): void {
     if (searchValue) {
+      this.userList = [];
       this.userService.filter('username__icontains', searchValue)
+        .subscribe(users => {
+          this.searchUsername = searchValue;
+          users.forEach(user => {
+            user.meta.avatar = prepareImage(user.meta.avatar);
+          });
+          this.userList = this.userList.concat(users);
+        });
+    } else {
+      this.userList = [];
+    }
+  }
+
+  usersAutocompleteScroll() {
+    setTimeout(() => {
+      if (
+        this.usersAutocompleteRef &&
+        this.autocompleteTrigger &&
+        this.usersAutocompleteRef.panel
+      ) {
+        fromEvent(this.usersAutocompleteRef.panel.nativeElement, 'scroll')
+          .pipe(
+            map(x => this.usersAutocompleteRef.panel.nativeElement.scrollTop),
+            takeUntil(this.autocompleteTrigger.panelClosingActions)
+          )
+          .subscribe(x => {
+            const scrollTop = this.usersAutocompleteRef.panel.nativeElement
+              .scrollTop;
+            const scrollHeight = this.usersAutocompleteRef.panel.nativeElement
+              .scrollHeight;
+            const elementHeight = this.usersAutocompleteRef.panel.nativeElement
+              .clientHeight;
+            const atBottom = scrollHeight === scrollTop + elementHeight;
+            if (atBottom) {
+              this.loadMoreSearchedUsers();
+            }
+          });
+      }
+    });
+  }
+  loadMoreSearchedUsers(): void {
+    if (this.searchUsername) {
+      this.userService.filter('username__icontains', this.searchUsername, this.userList.length.toString())
         .subscribe(users => {
           users.forEach(user => {
             user.meta.avatar = prepareImage(user.meta.avatar);
           });
-          this.userList = users;
+          this.userList = this.userList.concat(users);
         });
-    } else {
-      this.userList = [];
     }
   }
 
