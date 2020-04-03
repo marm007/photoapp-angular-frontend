@@ -46,7 +46,7 @@
 
         <mat-menu #menu="matMenu">
           <button  routerLink="/profile/{{user.id}}" mat-menu-item style="outline: 0;">Profile</button>
-          <button mat-menu-item style="outline: 0;" (click)="logout()">Wyloguj</button>
+          <button mat-menu-item style="outline: 0;" (click)="logout()">Logout</button>
         </mat-menu>
       </div>
       <div *ngIf="!isLoggedIn">

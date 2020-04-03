@@ -143,6 +143,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
     if (this.authService.tokenRefresh) {
+      console.log('Refresh token requested');
+      if (!this.authService.isLoggedIn()) {
+        this.authService.logout();
+        return next.handle(request);
+      }
+
       if (!this.isRefreshing) {
         this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
