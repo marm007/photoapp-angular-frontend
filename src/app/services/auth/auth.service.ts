@@ -46,18 +46,14 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-
     const loginToken = window.btoa(email + ':' + password);
-    const loginHeaders = new HttpHeaders(
-      {'Content-Type': 'application/json',
-      Authorization : 'Basic ' + loginToken});
+    const loginHeaders = new HttpHeaders({Authorization : 'Basic ' + loginToken});
     const url = `${environment.apiURL}/auth/`;
     return this.http.post(
       url,
       { email, password },
       {headers: loginHeaders}
     ).pipe(
-      retry(2),
       tap(response => this.setSession(response)),
       shareReplay(),
     );
