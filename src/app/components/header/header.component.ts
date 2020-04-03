@@ -144,7 +144,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onSearchChange(searchValue: string): void {
     if (searchValue) {
       this.userList = [];
-      this.userService.filter('username__icontains', searchValue)
+      this.userService.filter('username__istartswith', searchValue)
         .subscribe(users => {
           this.searchUsername = searchValue;
           users.forEach(user => {
@@ -186,7 +186,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   loadMoreSearchedUsers(): void {
     if (this.searchUsername) {
-      this.userService.filter('username__icontains', this.searchUsername, this.userList.length.toString())
+      this.userService.filter('username__istartswith', this.searchUsername, this.userList.length.toString())
         .subscribe(users => {
           users.forEach(user => {
             user.meta.avatar = prepareImage(user.meta.avatar);

@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   listProfilePosts(offset?: number): void {
-    if (offset && !this.postsLoaded) {
+    if ((offset !== null) && !this.postsLoaded) {
       return;
     }
 
@@ -152,8 +152,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       }
       this.posts.push(postsArray);
-      this.postsLoaded = true;
     }
+    this.postsLoaded = true;
   }
 
   getUser(id: string) {
