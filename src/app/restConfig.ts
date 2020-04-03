@@ -9,11 +9,17 @@ export enum ImageType {
 }
 
 export function prepareImage(path: string, imageType: ImageType = ImageType.THUMBNAIL): string {
-  if (path !== null) {
-    if (path.includes(environment.mediaURL)) {
+  if ( path !== null) {
+    console.log(path);
+
+    if (path.includes(environment.mediaURLHTTP)) {
+      console.log('INCLUDES');
+      const index = environment.mediaURLHTTP.length;
+      return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13,  path.length);
+    }  else if (path.includes(environment.mediaURL)) {
       const index = environment.mediaURL.length;
       return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13,  path.length);
-    }  else {
+    } else {
       return environment.mediaURL + path.slice(0, 13) + imageType + path.slice(13,  path.length);
     }
   } else {
