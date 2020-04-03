@@ -19,10 +19,14 @@
     </div>
   </mat-card-header>
 
-  <mat-progress-bar id="progress-bar" *ngIf="modelRelation.mode === 1" mode="determinate" style="margin-bottom: 10px" value="{{this.timeLeft}}"></mat-progress-bar>
+  <mat-progress-bar id="progress-bar" *ngIf="modelRelation.mode === 1 && !isDeleting"
+                    mode="determinate" style="margin-bottom: 10px" value="{{this.timeLeft}}"></mat-progress-bar>
+  <mat-progress-bar id="add-progress-bar" *ngIf="selectedFile.pending || isDeleting"
+                    mode="indeterminate" style="margin-bottom: 10px"></mat-progress-bar>
 
   <div *ngIf="modelRelation.mode === 1" class="s-relation-image-wrapper">
     <img class="s-relation-image" [ngStyle]="{
+          'max-width': !isDesktop ? 'calc(80vw - 48px)' : '',
           'height': this.innerHeight +'px',
           'width': this.innerWidth +'px'}"
          [src]="modelRelation.relation.image"
@@ -32,7 +36,9 @@
 
   <div *ngIf="modelRelation.mode !== 1" class="s-relation-image-wrapper">
     <div *ngIf="!selectedFile.file" class="s-relation-input-file" [ngStyle]="{
-          'height': this.innerHeight +'px', 'width': this.innerWidth +'px'}">
+          'max-width': !isDesktop ? 'calc(80vw - 48px)' : '',
+          'height': this.innerHeight +'px',
+          'width': this.innerWidth +'px'}">
       <input #imageInput
              id="photo-mobile"
              accept="image/*"
@@ -46,6 +52,7 @@
       </label>
     </div>
     <img *ngIf="selectedFile.file" class="s-relation-image" [ngStyle]="{
+          'max-width': !isDesktop ? 'calc(80vw - 48px)' : '',
           'height': this.innerHeight +'px',
           'width': this.innerWidth + 'px'}"
          src="{{selectedFile.src}}"

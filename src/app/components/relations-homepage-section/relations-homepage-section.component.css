@@ -113,7 +113,6 @@
   width: 120px;
   justify-content: center;
   flex-wrap: wrap;
-  cursor: pointer;
   min-width: 50px;
 }
 
@@ -122,12 +121,13 @@
 }
 
 .relation-photo-mobile{
+  background-size: cover;
   height: 40px;
   width: 40px;
-  display: flex;
   border-radius: 50%;
-  justify-content: center;
-  align-items: center;
+  flex-shrink: 0;
+  object-fit: cover;
+  cursor: pointer;
 }
 
 .relation-username-mobile{
@@ -137,6 +137,7 @@
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
+  user-select: none;
 }
 
 .relation-mobile-others {
