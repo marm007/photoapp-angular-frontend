@@ -72,8 +72,11 @@
                    style="outline:0; border-color: transparent" alt=""
               />
             </div>
-
+            <div style="margin-bottom: 15px">
+              <mat-slide-toggle (change)="isPrivateChanged()" checked="{{editProfileData.isPrivate}}">Private</mat-slide-toggle>
+            </div>
           </div>
+
         </div>
         <div *ngIf="messageSuccess"
              class="alert alert-success">

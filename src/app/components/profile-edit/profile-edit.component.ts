@@ -13,7 +13,7 @@ import {MessageService} from '../../services/message/message.service';
 class EditProfileData {
   pending = false;
   status = 'init';
-  constructor(public nick: string, public email: string, public password: string) {
+  constructor(public nick: string, public email: string, public password: string, public isPrivate: boolean) {
   }
 }
 
@@ -44,12 +44,12 @@ export class ProfileEditComponent implements OnInit {
               private messageService: MessageService,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.isMobile = deviceService.isMobile();
+    console.log(data.user.meta.is_private);
   }
 
   ngOnInit(): void {
     this.userToEdit = this.data.user;
-    console.log(this.userToEdit);
-    this.editProfileData = new EditProfileData(this.userToEdit.username, null, null);
+    this.editProfileData = new EditProfileData(this.userToEdit.username, null, null, this.userToEdit.meta.is_private);
     this.selectedFile.src = this.userToEdit.meta.avatar;
   }
 
@@ -68,6 +68,7 @@ export class ProfileEditComponent implements OnInit {
     if (this.editProfileData.nick === this.userToEdit.username &&
       !this.editProfileData.email &&
       !this.editProfileData.password &&
+      this.editProfileData.isPrivate === this.userToEdit.meta.is_private &&
       !this.selectedFile.file) {
       this.snackBar.open('No changes were made!', null, {
         duration: 1500,
@@ -76,7 +77,8 @@ export class ProfileEditComponent implements OnInit {
       return;
     }
 
-    this.userService.update(this.editProfileData.nick, this.editProfileData.password, this.editProfileData.email, this.selectedFile.file)
+    this.userService.update(this.editProfileData.nick, this.editProfileData.password,
+      this.editProfileData.email, this.selectedFile.file, this.editProfileData.isPrivate ? 'true' : 'false')
       .subscribe(user => {
           this.messageService.updateMessage('profile_edited');
           user.meta.avatar = prepareImage(user.meta.avatar);
@@ -92,7 +94,6 @@ export class ProfileEditComponent implements OnInit {
           if (error.email) {
             this.editProfileErrorEmailMessage = error.email;
           }
-          console.log(error);
           if (error.username) {
             this.editProfileErrorUsernameMessage = error.username;
           }
@@ -112,6 +113,10 @@ export class ProfileEditComponent implements OnInit {
 
   public resetImage() {
     this.selectedFile = new ImageSnippet(environment.avatarURL, null);
+  }
+
+  isPrivateChanged() {
+    this.editProfileData.isPrivate = !this.editProfileData.isPrivate;
   }
 
 }

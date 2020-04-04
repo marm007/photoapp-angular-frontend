@@ -94,7 +94,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.router.url);
     this.isMainPage = this.router.url === '/';
     this.getUser();
   }
@@ -108,7 +107,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.messageService.updateMessage('logged_out');
     this.isLoggedIn = this.authService.isLoggedIn();
     this.user = null;
-    console.log(this.router.url);
     if (!this.router.url.includes('profile')) {
       this.router.navigate(['login']);
     }
@@ -134,7 +132,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getUser() {
     this.userService.get(null, false).subscribe(user => {
       if (user !== undefined && user !== null) {
-        console.log(user.meta.avatar);
         user.meta.avatar = prepareImage(user.meta.avatar);
         this.user = user;
       }

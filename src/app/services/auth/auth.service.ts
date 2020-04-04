@@ -19,7 +19,6 @@ export class AuthService {
     if ('refresh' in authResult) {
       localStorage.setItem('token_refresh', authResult.refresh);
     }
-
     localStorage.setItem('token_access', authResult.access);
   }
 
@@ -74,7 +73,6 @@ export class AuthService {
       formData
     ).pipe(
       retry(2),
-      tap(response => console.log(response)),
       shareReplay()
     );
   }
@@ -143,7 +141,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
     if (this.authService.tokenRefresh) {
-      console.log('Refresh token requested');
       if (!this.authService.isLoggedIn()) {
         this.authService.logout();
         return next.handle(request);

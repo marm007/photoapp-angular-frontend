@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   listProfilePosts(offset?: number): void {
-    if (offset === null && !this.postsLoaded) {
+    if (offset !== undefined && !this.postsLoaded) {
       return;
     }
 
@@ -121,7 +121,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     if (requests.length === 0) {
       const flag = this.visitedUserProfile.id === this.authService.userID;
-      if (flag) {
+      if (flag || !this.visitedUserProfile.meta.is_private) {
         this.listProfilePosts();
       }
       this.buttonText = flag ? 'Unfollow' : 'Follow';
@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.listProfilePosts();
         } else {
           const flag = followers.find(follower => follower.user === this.userID) !== undefined;
-          if (flag) {
+          if (flag || !this.visitedUserProfile.meta.is_private) {
             this.listProfilePosts();
           }
           this.buttonText = flag ? 'Unfollow' : 'Follow';

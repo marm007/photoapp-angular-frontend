@@ -26,7 +26,6 @@ export class UserService {
      }
      return this.http.get<User[]>(url, {params})
       .pipe(
-        tap(_ => console.log(_)),
         catchError(handleError<User []>('filterUsers', []))
       );
    }
@@ -45,16 +44,17 @@ export class UserService {
     );
   }
 
-  public update(username?: string, password?: string, email?: string, userPhoto?: File): Observable<User> {
+  public update(username?: string, password?: string, email?: string, userPhoto?: File, isPrivate?: string): Observable<User> {
     const id = this.authService.userID;
     const url = `${environment.apiURL}/users/${id}/`;
-
-    if (username && password && email && userPhoto) {
+    console.log(isPrivate);
+    if (username && password && email && userPhoto && isPrivate) {
       const formData = new FormData();
       formData.append('username', username);
       formData.append('email', email);
       formData.append('password', password);
       formData.append('meta.avatar', userPhoto);
+      formData.append('meta.is_private', isPrivate);
       return this.http.put<User>(url, formData, {headers: this.authService.jwtAuthHeaders} )
         .pipe(
           retry(2),
@@ -74,6 +74,9 @@ export class UserService {
       }
       if (userPhoto) {
         formData.append('meta.avatar', userPhoto);
+      }
+      if (isPrivate !== undefined) {
+        formData.append('meta.is_private', isPrivate);
       }
       return this.http.patch<User>(url, formData, {headers: this.authService.jwtAuthHeaders} )
         .pipe(
@@ -96,7 +99,6 @@ export class UserService {
 
     return this.http.get<Post[]>(url, {params, headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(`listed my posts ${_}`)),
         catchError(handleError<Post[]>('listPosts'))
     );
   }
@@ -111,9 +113,8 @@ export class UserService {
       params = {limit: 12};
     }
 
-    return this.http.get<Post[]>(url, {params, headers: this.authService.jwtAuthHeaders})
+    return this.http.get<Post[]>(url, {params})
       .pipe(
-        tap(_ => console.log(`listed my posts ${_}`)),
         catchError(handleError<Post[]>('listPosts'))
     );
   }
@@ -135,7 +136,6 @@ export class UserService {
 
     return this.http.get<Post[]>(url, {params, headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(`listed my followed posts ${_}`)),
         catchError(handleError<Post[]>('listFollowedPosts'))
     );
   }
@@ -157,7 +157,6 @@ export class UserService {
 
     return this.http.get<Relation[]>(url, {params, headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(`listed my followed relations ${_}`)),
         catchError(handleError<Relation[]>('listFollowedRelations'))
     );
   }

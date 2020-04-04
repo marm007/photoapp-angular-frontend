@@ -43,16 +43,12 @@ export class EditPostComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.userService.get(this.authService.userID)
         .subscribe(user => {
-          console.log(user);
-          console.log(params.id);
-
           this.canEdit = user.posts.indexOf(params.id) > -1;
           if (!this.canEdit) {
             this.router.navigate(['/']);
           } else {
             this.postService.get(params.id)
               .subscribe(postToEdit => {
-                console.log(postToEdit);
                 postToEdit.image = prepareImage(postToEdit.image, ImageType.LARGE);
                 this.postToEdit = postToEdit;
                 this.selectedFile = new ImageSnippet(postToEdit.image);

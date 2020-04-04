@@ -10,6 +10,7 @@ import {AuthService} from '../../services/auth/auth.service';
 import {ImageType, prepareImage} from '../../restConfig';
 import {environment} from '../../../environments/environment';
 import {DeviceDetectorService} from 'ngx-device-detector';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-single-post',
@@ -81,9 +82,9 @@ export class PostDetailComponent implements OnInit {
               private commentService: CommentService,
               private authService: AuthService,
               private router: Router,
+              private snackBar: MatSnackBar,
               private deviceDetectorService: DeviceDetectorService) {
     this.isDesktop = deviceDetectorService.isDesktop();
-    console.log(this.isDesktop);
   }
 
   handleImageLoaded(post: Post) {
@@ -157,6 +158,13 @@ export class PostDetailComponent implements OnInit {
         this.post = post;
         this.isPostOwner = this.post.user.id === this.authService.userID;
       } else { this.router.navigate(['not-found']); }
+    }, error => {
+      if (error.status === 403) {
+        this.router.navigate(['forbidden']);
+        this.snackBar.open(error.error.detail, null, {
+          duration: 1500,
+        });
+      }
     });
   }
 
@@ -199,7 +207,6 @@ export class PostDetailComponent implements OnInit {
     this.commentService.delete(id).subscribe(res => {
       const comment = this.post.comments.find(c => c.id === id);
       const index = this.post.comments.indexOf(comment);
-      console.log(index);
       this.post.comments.splice(index, 1);
     }, error => {
 

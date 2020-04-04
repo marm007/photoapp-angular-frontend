@@ -32,7 +32,6 @@ export class PostsService {
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
         tap(_ => console.log(`fetched post id=${id}`)),
-        catchError(handleError<Post>(`getPost id=${id}`))
       );
   }
 

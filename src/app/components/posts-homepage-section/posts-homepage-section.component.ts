@@ -107,7 +107,6 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
           this.messageService.updateMessage('posts loaded');
         }
         posts.forEach(post => {
-          console.log(post);
           post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
 

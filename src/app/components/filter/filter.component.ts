@@ -238,7 +238,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   handleLikesGreaterThanClick() {
     this.likesSort.likesGtClicked = !this.likesSort.likesGtClicked;
-    console.log(this.likesSort.likes__gt);
     if (this.likesSort.likesGtClicked) {
       const message: SortFilterMessage = {likesSort: this.likesSort, isPost: true};
       this.messageService.updateSortFilterMessage(message);
@@ -259,7 +258,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   handleLikesGreaterThanChange(value: number) {
-    console.log(value);
     this.likesSort.likes__gt = value;
     if (this.likesSort.likesGtClicked) {
       const message: SortFilterMessage = {likesSort: this.likesSort, isPost: true};

@@ -10,11 +10,9 @@ export enum ImageType {
 
 export function prepareImage(path: string, imageType: ImageType = ImageType.THUMBNAIL): string {
   if ( path !== null) {
-    console.log(path);
 
-    if (path.includes(environment.mediaURLHTTP)) {
-      console.log('INCLUDES');
-      const index = environment.mediaURLHTTP.length;
+    if (path.includes(environment.mediaHttpURL)) {
+      const index = environment.mediaHttpURL.length;
       return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13,  path.length);
     }  else if (path.includes(environment.mediaURL)) {
       const index = environment.mediaURL.length;

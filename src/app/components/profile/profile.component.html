@@ -89,7 +89,8 @@
          (scrolled)="listProfilePosts(this.posts.length * 3)">
       <div class="profile-row" *ngFor="let row_posts of posts">
         <div *ngFor="let post of row_posts; index as i">
-          <div *ngIf="post" class="profile-column" [style]="i !== 2 ? 'margin-right: 2%': ''"
+          <div *ngIf="post" class="profile-column"
+               [style]="i !== 2 ? i === 1 ? 'justify-content: center; margin-right: 2%' : 'margin-right: 2%' : 'justify-content: flex-end'"
                style="display: flex; align-items: center;" routerLink="/post/{{post.id}}">
             <div style="display: block; position: relative">
 

@@ -29,7 +29,6 @@ export class RelationsModalContainerComponent implements OnInit, OnDestroy {
               private router: Router,
               private userService: UserService,
               private relationService: RelationService) {
-    console.log('CONSRUCCTOR');
     route.params.pipe(takeUntil(this.destroy)).subscribe(params => {
       this.playRelation(params.id);
     });

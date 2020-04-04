@@ -82,7 +82,6 @@ export class RegisterComponent implements OnInit {
           if (error.email) {
             this.registerErrorEmailMessage = error.email;
           }
-          console.log(error);
           if (error.username) {
             this.registerErrorUsernameMessage = error.username;
           }

@@ -47,6 +47,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 const appRoutes: Routes = [
   {
@@ -91,6 +93,9 @@ const appRoutes: Routes = [
   { path: 'not-found',
     component: PageNotFoundComponent
   },
+  { path: 'forbidden',
+    component: ForbiddenComponent
+  },
   { path: '',
     component: HomepageComponent,
     canActivate: [AuthGuard]
@@ -119,42 +124,44 @@ const appRoutes: Routes = [
     RelationsHomepageSectionComponent,
     PostsHomepageSectionComponent,
     ProfileEditComponent,
+    ForbiddenComponent,
   ],
-    imports: [
-        RouterModule.forRoot(
-            appRoutes,
-            /*{ enableTracing: true } // <-- debugging purposes only*/
-        ),
-        BrowserModule,
-        TruncateModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MatCardModule,
-        MatButtonModule,
-        FlexLayoutModule.withConfig({
-            useColumnBasisZero: false,
-            printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
-        }),
-        ScrollingModule,
-        MatInputModule,
-        FormsModule,
-        DeviceDetectorModule.forRoot(),
-        MatMenuModule,
-        MatDialogModule,
-        FontAwesomeModule,
-        MatProgressBarModule,
-        MatProgressSpinnerModule,
-        InfiniteScrollModule,
-        MatAutocompleteModule,
-        MatExpansionModule,
-        NgbCollapseModule,
-        MatBottomSheetModule,
-        MatListModule,
-        MatTabsModule,
-        MatSnackBarModule,
-        MatSelectModule,
-        MatSliderModule
-    ],
+  imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      /*{ enableTracing: true } // <-- debugging purposes only*/
+    ),
+    BrowserModule,
+    TruncateModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatButtonModule,
+    FlexLayoutModule.withConfig({
+      useColumnBasisZero: false,
+      printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
+    }),
+    ScrollingModule,
+    MatInputModule,
+    FormsModule,
+    DeviceDetectorModule.forRoot(),
+    MatMenuModule,
+    MatDialogModule,
+    FontAwesomeModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    InfiniteScrollModule,
+    MatAutocompleteModule,
+    MatExpansionModule,
+    NgbCollapseModule,
+    MatBottomSheetModule,
+    MatListModule,
+    MatTabsModule,
+    MatSnackBarModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSlideToggleModule
+  ],
   providers: [ AuthService,
     AuthGuard,
     {

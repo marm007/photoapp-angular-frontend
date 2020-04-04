@@ -116,7 +116,6 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
       (err) => {
         this.selectedFile.pending = false;
         const errorMessage = err.error.detail ? err.error.detail : 'Something went wrong. Try again.';
-        console.log(errorMessage);
         this.dialogRef.close();
       });
   }
