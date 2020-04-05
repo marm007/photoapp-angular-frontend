@@ -10,6 +10,17 @@
   height: 100%;
 }
 
+.s-relation-time{
+  display: flex;
+
+  text-align: center;
+  font-size: 10px;
+  line-height: 22px;
+  color: rgba(153,153,153,1);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .s-relation-header-wrapper{
   height: 60px;
   /*padding: 16px;*/

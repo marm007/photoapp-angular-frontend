@@ -158,7 +158,7 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
     const height = window.innerHeight - options - header;
 
     this.innerWidth = this.isDesktop ? width / 2.0 : width * 0.95;
-    this.innerHeight = this.isDesktop ? height * 0.7 : height * 0.5;
+    this.innerHeight = this.isDesktop ? height * 0.6 : height * 0.4;
   }
 
   startTimer() {

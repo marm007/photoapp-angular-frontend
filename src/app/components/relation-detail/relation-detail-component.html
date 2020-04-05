@@ -5,6 +5,8 @@
       <fa-icon  [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
       </fa-icon>
     </div>
+    <div class="s-relation-time">{{modelRelation.relation.created}}</div>
+
     <div class="s-relation-header-options-close clickable" style="user-select: none">
       <fa-icon [icon]="closeIcon" icon="closeIcon" class="fa fa-2x s-relation-header-options-icon"
                (click)="handleClose()">
