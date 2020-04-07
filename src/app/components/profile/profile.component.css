@@ -187,18 +187,13 @@
   text-align: center;
 }
 
-@media (hover: hover) {
-
-  .profile-column:hover .profile-image-hover {
-    opacity: 0.5;
-  }
-
-  .profile-column:hover .profile-middle {
-    opacity: 1;
-  }
+.profile-column:hover .profile-image-hover {
+  opacity: 0.5;
 }
 
-
+.profile-column:hover .profile-middle {
+  opacity: 1;
+}
 
 .post-more-comments {
   color: rgba(219, 219, 219, 1);

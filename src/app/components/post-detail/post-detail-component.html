@@ -45,9 +45,9 @@
                     (click)="showDescription = !showDescription">{{showDescription == false ? "more" : "less"}}</button>
           </div>
           <div>
-            <div *ngIf="post.comments[0]" fxLayout="row" class="post-comment">
-              <a>{{post.comments[0].author_name}}</a>
-              <span>{{post.comments[0].body}}</span>
+            <div *ngIf="post.comments[0]" style="display: flex; flex-direction: row" class="post-comment">
+              <a >{{post.comments[0].author_name}}</a>
+              <span  style="margin-left: 0; padding-left: 10px">{{post.comments[0].body}}</span>
               <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
                     class="fa fa-1x post-comment-options" *ngIf="post.comments[0].user === this.userID">
                 <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[0].id}"
@@ -57,7 +57,7 @@
             </div>
             <div *ngIf="post.comments[1]" fxLayout="row" class="post-comment">
               <a>{{post.comments[1].author_name}}</a>
-              <span>{{post.comments[1].body}}</span>
+              <span style="margin-left: 0; padding-left: 10px">{{post.comments[1].body}}</span>
               <div [style]="!isDesktop ? 'opacity: 1;' : ''"
                    class="fa fa-1x post-comment-options" *ngIf="post.comments[1].user === this.userID">
                 <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[1].id}"
@@ -76,7 +76,7 @@
               <div *ngFor="let comment of post.comments; index as i">
                 <div *ngIf="i != 0 && i != 1" fxLayout="row" class="post-comment">
                   <a>{{post.comments[i].author_name}}</a>
-                  <span>{{post.comments[i].body}}</span>
+                  <span style="margin-left: 0; padding-left: 10px">{{post.comments[i].body}}</span>
                   <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
                         class="fa fa-1x post-comment-options" *ngIf="post.comments[i].user === this.userID">
                     <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[i].id}"
@@ -156,7 +156,7 @@
         <div>
           <div *ngIf="post.comments[0]" fxLayout="row" class="post-comment" >
             <a>{{post.comments[0].author_name}}</a>
-            <span>{{post.comments[0].body}}</span>
+            <span style="margin-left: 0; padding-left: 10px">{{post.comments[0].body}}</span>
             <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
                   class="fa fa-1x post-comment-options" *ngIf="post.comments[0].user === this.userID">
               <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[0].id}"
@@ -166,7 +166,7 @@
           </div>
           <div *ngIf="post.comments[1]" style="display: flex; flex-direction: row;" class="post-comment">
             <a>{{post.comments[1].author_name}}</a>
-            <span>{{post.comments[1].body}}</span>
+            <span style="margin-left: 0; padding-left: 10px">{{post.comments[1].body}}</span>
             <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
                   class="fa fa-1x post-comment-options" *ngIf="post.comments[1].user === this.userID">
               <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[1].id}"
@@ -186,7 +186,7 @@
             <div *ngFor="let comment of post.comments; index as i">
               <div *ngIf="i != 0 && i != 1" fxLayout="row" class="post-comment">
                 <a>{{post.comments[i].author_name}}</a>
-                <span>{{post.comments[i].body}}</span>
+                <span style="margin-left: 0; padding-left: 10px">{{post.comments[i].body}}</span>
                 <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
                       class="fa fa-1x post-comment-options" *ngIf="post.comments[i].user === this.userID">
                   <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[i].id}"
