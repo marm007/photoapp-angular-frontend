@@ -231,11 +231,7 @@
   width: 100%;
 }
 
-
-@media (hover: hover) {
-
-  .post-comment:hover .post-comment-options {
-    opacity: 1;
-  }
-
+.post-comment:hover .post-comment-options {
+  opacity: 1;
 }
+
