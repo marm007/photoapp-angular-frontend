@@ -33,9 +33,9 @@
       style="width: 100%; height: 1px;  margin-bottom: 10px; margin-top: 10px; border-bottom: 1px solid rgba(219,219,219,1);"></div>
 
     <div *ngFor="let relation of relations; index as i" class="post">
-      <button class="relation-wrapper" style="outline: 0;">
-        <div fxLayout="row" (click)="playRelation(i)">
-          <div mat-card-avatar class="relation-photo"
+      <button class="relation-wrapper" style="outline: 0;"  (click)="playRelation(i)">
+        <div fxLayout="row">
+          <div class="relation-photo"
                [ngStyle]="{'background-image': 'url(' + relation.image +')'}"></div>
           <div fxLayout="column" class="relation-data-wrapper">
             <div class="relation-username"><span>{{relation.user.username}}</span></div>

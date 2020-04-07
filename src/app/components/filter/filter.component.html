@@ -56,11 +56,11 @@
               (click)="handleSortClick(sort, true)" class="filter-search">
               {{sort.title}}
             </p>
-            <div *ngIf="currentSortPost.id === sort.id && sort.dir === 1" class="ml-3">
+            <div *ngIf="currentSortPost.id === sort.id && currentSortPost.dir === 1" class="ml-3">
               <fa-icon [icon]="sortUp" icon="sortUp" class="fa fa-1x">
               </fa-icon>
             </div>
-            <div *ngIf="currentSortPost.id === sort.id && sort.dir === -1"  class="ml-3">
+            <div *ngIf="currentSortPost.id === sort.id && currentSortPost.dir === -1"  class="ml-3">
                 <fa-icon [icon]="sortDown" icon="sortDown" class="fa fa-1x">
                 </fa-icon>
               </div>
@@ -94,11 +94,11 @@
             (click)="handleSortClick(sort, false)" class="filter-search">
             {{sort.title}}
           </p>
-          <div *ngIf="sort.id === currentSortRelation.id && sort.dir === 1" class="ml-3">
+          <div *ngIf="sort.id === currentSortRelation.id && currentSortRelation.dir === 1" class="ml-3">
             <fa-icon [icon]="sortUp" icon="sortUp" class="fa fa-1x">
             </fa-icon>
           </div>
-          <div *ngIf="sort.id === currentSortRelation.id && sort.dir === -1"  class="ml-3">
+          <div *ngIf="sort.id === currentSortRelation.id && currentSortRelation.dir === -1"  class="ml-3">
             <fa-icon [icon]="sortDown" icon="sortDown" class="fa fa-1x">
             </fa-icon>
           </div>

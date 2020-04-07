@@ -83,6 +83,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.data);
     if (this.data.sort_post !== undefined) {
       this.currentSortPost = this.data.sort_post;
     }
@@ -182,7 +183,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   handleSortClick(sort: Sort, isPost: boolean) {
-
+    console.log(sort);
+    console.log(this.currentSortPost);
     if (isPost) {
 
       if (this.currentSortPost !== undefined && this.currentSortPost.id === sort.id) {
@@ -190,7 +192,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       } else {
         this.currentSortPost = sort;
       }
-      const message: SortFilterMessage = {sort, isPost};
+      const message: SortFilterMessage = {sort:  this.currentSortPost, isPost};
       this.messageService.updateSortFilterMessage(message);
     } else {
 
@@ -200,7 +202,7 @@ export class FilterComponent implements OnInit, OnDestroy {
         this.currentSortRelation = sort;
       }
 
-      const message: SortFilterMessage = {sort, isPost};
+      const message: SortFilterMessage = {sort:  this.currentSortRelation, isPost};
       this.messageService.updateSortFilterMessage(message);
     }
 
