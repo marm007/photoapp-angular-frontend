@@ -1,0 +1,162 @@
+.relation-section-wrapper{
+  border: 1px solid rgba(219,219,219,1);
+  position: fixed;
+  /*margin-top: 4px;*/
+}
+
+#relation-header-box {
+  padding: 4px 16px;
+  margin-top: 12px;
+}
+
+#relation-header-text {
+  color: rgba(153,153,153,1);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  margin: -3px 0 -4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.relation-section-scroll {
+  height: 223px;
+  width: 293px;
+  margin-top: 8px;
+  margin-left: 16px;
+}
+
+.relation {
+  margin: 2px;
+  height: 52px;
+}
+
+.relation-wrapper{
+  height: 44px;
+  width: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  align-items: center;
+  border: 0;
+  padding-left: 5px;
+  text-align: left;
+}
+
+.relation-photo {
+  background-size: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.relation-data-wrapper {
+  flex: 0 1 100%;
+  margin-left: 14px;
+}
+
+.relation-username{
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(38,38,38,1);
+}
+
+.relation-time{
+  font-size: 10px;
+  line-height: 12px;
+  color: rgba(153,153,153,1);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+
+/* small version ---------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------*/
+
+
+.relation-section-mobile {
+  height: 82px;
+  overflow-y: hidden;
+  outline: 0;
+  border: 1px solid rgba(219, 219, 219, 1);
+  border-radius: 3px;
+  margin-bottom: 24px;
+  display: block;
+  margin-top: 52px;
+  padding: 10px 0;
+  scrollbar-color: transparent transparent;
+}
+
+.relation-section-wrapper-mobile {
+  height: 82px;
+  overflow-y: hidden;
+  outline: 0;
+  border: 0 solid #000;
+  display: flex;
+  position: relative;
+
+  /*wazne!*/
+  flex-direction: row;
+  display: flex;
+}
+
+
+.relation-mobile {
+  display: flex;
+  height: auto;
+  margin: 0 10px;
+  width: 120px;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-width: 50px;
+}
+
+.relation-mobile:hover div{
+  /* margin-left: 4px;*/
+}
+
+.relation-photo-mobile{
+  background-size: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.relation-username-mobile{
+  color: rgba(153,153,153,1);
+  font-size: 12px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.relation-mobile-others {
+  display: flex;
+  height: auto;
+  margin: 0 10px;
+  width: 50px;
+  justify-content: center;
+  flex-wrap: wrap;
+  cursor: pointer;
+  min-width: 50px;
+}
+
+
+
+.custom-dialog-container .mat-dialog-container {
+  padding: 5px;
+}
+
+.custom-dialog-container .mat-card-header-text {
+  margin: 5px;
+}

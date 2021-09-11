@@ -1,0 +1,4 @@
+<div class="mt-5"*ngIf="tokenData.message"
+        [className]="tokenData.status == 'ok' ? 'alert alert-success' : 'alert alert-danger'">
+  {{tokenData.message}}
+</div>

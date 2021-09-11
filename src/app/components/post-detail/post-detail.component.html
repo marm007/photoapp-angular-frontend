@@ -1,0 +1,232 @@
+<div *ngIf="post != null" class="d-none d-lg-block post-section-wrapper"
+     [style]="addPaddingToTop ? 'padding-top:120px;   margin: 0 auto 0 auto;'
+ : '  margin: 0 28px 0 auto;'">
+  <div class="post-section">
+    <mat-card class="post">
+      <mat-card-header class="post-header">
+        <div mat-card-avatar class="post-header-image clickable" routerLink="/profile/{{this.post.user.id}}"
+             [ngStyle]="{'background-image': 'url(' + post.user.meta.avatar +')'}"></div>
+        <div class="post-header-username">
+          <p>{{post.user.username}}</p>
+        </div>
+        <div  class="fa fa-1x post-options">
+          <fa-icon [matMenuTriggerFor]="postMenu"
+                   [icon]="moreIcon" icon="moreIcon">
+          </fa-icon>
+        </div>
+      </mat-card-header>
+      <div class="post-photo-block" (dblclick)="handleClick()">
+        &nbsp;
+        <img class="post-photo" [src]="post.image" (load)="handleImageLoaded(post)" alt="">
+          <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger"
+                   [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
+          </fa-icon>
+      </div>
+      <div class="post-footer">
+        <mat-card-actions>
+          <button (click)="handleClick(true)" mat-button style="outline: 0">
+            <fa-icon *ngIf="!isLiked" style="line-height: 0"
+                     [icon]="likeIconNoBorder" icon="likeIconNoBorder">
+            </fa-icon>
+            <fa-icon *ngIf="isLiked" style="line-height: 0"
+                     [icon]="likeIcon" icon="likeIcon">
+            </fa-icon>
+          </button>
+        </mat-card-actions>
+        <div class="post-likes">
+          Liczba polubień:
+          <span>{{post.likes}}</span>
+        </div>
+        <mat-card-content class="post-scroll-section">
+          <div class="post-description" [ngClass]="{show: showDescription}">
+            <span *ngIf="!showDescription && showMoreDescription">{{post.description  | words: MAX_DESCRIPTION_WORDS}}</span>
+            <span *ngIf="showDescription || (!showDescription && !showMoreDescription)">{{post.description}}</span>
+            <button class="post-description-show-more" *ngIf="showMoreDescription"
+                    (click)="showDescription = !showDescription">{{showDescription == false ? "more" : "less"}}</button>
+          </div>
+          <div>
+            <div *ngIf="post.comments[0]" style="display: flex; flex-direction: row" class="post-comment">
+              <a >{{post.comments[0].author_name}}</a>
+              <span  style="margin-left: 0; padding-left: 10px">{{post.comments[0].body}}</span>
+              <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
+                    class="fa fa-1x post-comment-options" *ngIf="post.comments[0].user === this.userID">
+                <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[0].id}"
+                         [icon]="moreIcon" icon="moreIcon">
+                </fa-icon>
+              </div>
+            </div>
+            <div *ngIf="post.comments[1]" fxLayout="row" class="post-comment">
+              <a>{{post.comments[1].author_name}}</a>
+              <span style="margin-left: 0; padding-left: 10px">{{post.comments[1].body}}</span>
+              <div [style]="!isDesktop ? 'opacity: 1;' : ''"
+                   class="fa fa-1x post-comment-options" *ngIf="post.comments[1].user === this.userID">
+                <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[1].id}"
+                         [icon]="moreIcon" icon="moreIcon">
+                </fa-icon>
+              </div>
+            </div>
+            <div *ngIf="!showMoreComments && post.comments[2]" class="post-load-more-comments-wrapper">
+              <button class="post-load-more-comments" style="outline: 0"
+                      (click)="showMoreComments = !showMoreComments">
+                <fa-icon  style="line-height: 0" [icon]="faCircle" icon="faCircle" class=" material-icons post-more-comments">
+                </fa-icon>
+              </button>
+            </div>
+            <div *ngIf="showMoreComments && post.comments[2]">
+              <div *ngFor="let comment of post.comments; index as i">
+                <div *ngIf="i != 0 && i != 1" fxLayout="row" class="post-comment">
+                  <a>{{post.comments[i].author_name}}</a>
+                  <span style="margin-left: 0; padding-left: 10px">{{post.comments[i].body}}</span>
+                  <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
+                        class="fa fa-1x post-comment-options" *ngIf="post.comments[i].user === this.userID">
+                    <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[i].id}"
+                             [icon]="moreIcon" icon="moreIcon">
+                    </fa-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        <section class="post-add-comment-section">
+          <div class="post-add-comment">
+            <form class="post-add-comment-form">
+            <textarea [(ngModel)]="addCommentContent"
+                      name="userCommentContent"
+                      matInput
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="1"
+                      cdkAutosizeMaxRows="5"
+                      aria-label="Add comment..."
+                      placeholder="Add comment..."
+                      class="post-add-comment-text-area"></textarea>
+              <button style="outline: 0" (click)="addComment(addCommentContent)"
+                      [disabled]="!addCommentContent" type="button"
+                      mat-button>Publish
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </mat-card>
+  </div>
+</div>
+<div *ngIf="post != null" class="d-block d-lg-none post-section-mobile" [style]="addPaddingToTop ? 'padding-top:120px;' : ''">
+  <mat-card class="post">
+    <mat-card-header class="post-header">
+      <div mat-card-avatar class="post-header-image  clickable" routerLink="/profile/{{this.post.user.id}}"
+           [ngStyle]="{'background-image': 'url(' + post.user.meta.avatar +')'}"></div>
+      <div class="post-header-username">
+        <p>{{post.user.username}}</p>
+      </div>
+      <div  class="fa fa-1x post-options">
+        <fa-icon [matMenuTriggerFor]="postMenu"
+                 [icon]="moreIcon" icon="moreIcon">
+        </fa-icon>
+      </div>
+    </mat-card-header>
+    <div class="post-photo-block" (dblclick)="handleClick()">
+      <img class="post-photo"  [src]="post.image" (load)="handleImageLoaded(post)" alt="">
+      <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger"
+               [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
+      </fa-icon>
+    </div>
+    <div class="post-footer">
+      <mat-card-actions>
+        <button (click)="handleClick(true)" mat-button style="outline: 0">
+          <fa-icon *ngIf="!isLiked" style="line-height: 0"
+                   [icon]="likeIconNoBorder" icon="likeIconNoBorder">
+          </fa-icon>
+          <fa-icon *ngIf="isLiked"  style="line-height: 0"
+                   [icon]="likeIcon" icon="likeIcon">
+          </fa-icon>
+        </button>
+      </mat-card-actions>
+      <div class="post-likes">
+        Liczba polubień:
+        <span>{{post.likes}}</span>
+      </div>
+      <mat-card-content class="post-scroll-section">
+        <div class="post-description" [ngClass]="{show: showDescription}">
+          <span *ngIf="!showDescription && showMoreDescription">{{post.description  | words: MAX_DESCRIPTION_WORDS}}</span>
+          <span *ngIf="showDescription || (!showDescription && !showMoreDescription)">{{post.description}}</span>
+          <button class="post-description-show-more" *ngIf="showMoreDescription"
+                  (click)="showDescription = !showDescription">{{showDescription == false ? "more" : "less"}}</button>
+        </div>
+        <div>
+          <div *ngIf="post.comments[0]" fxLayout="row" class="post-comment" >
+            <a>{{post.comments[0].author_name}}</a>
+            <span style="margin-left: 0; padding-left: 10px">{{post.comments[0].body}}</span>
+            <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
+                  class="fa fa-1x post-comment-options" *ngIf="post.comments[0].user === this.userID">
+              <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[0].id}"
+                [icon]="moreIcon" icon="moreIcon">
+              </fa-icon>
+            </div>
+          </div>
+          <div *ngIf="post.comments[1]" style="display: flex; flex-direction: row;" class="post-comment">
+            <a>{{post.comments[1].author_name}}</a>
+            <span style="margin-left: 0; padding-left: 10px">{{post.comments[1].body}}</span>
+            <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
+                  class="fa fa-1x post-comment-options" *ngIf="post.comments[1].user === this.userID">
+              <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[1].id}"
+                       [icon]="moreIcon" icon="moreIcon">
+              </fa-icon>
+            </div>
+          </div>
+          <div *ngIf="!showMoreComments && post.comments[2]" class="post-load-more-comments-wrapper">
+            <button class="post-load-more-comments" style="outline: 0"
+                    (click)="showMoreComments = !showMoreComments">
+              <fa-icon  style="line-height: 0" [icon]="faCircle" icon="faCircle" class=" material-icons post-more-comments">
+              </fa-icon>
+            </button>
+
+          </div>
+          <div *ngIf="showMoreComments && post.comments[2]">
+            <div *ngFor="let comment of post.comments; index as i">
+              <div *ngIf="i != 0 && i != 1" fxLayout="row" class="post-comment">
+                <a>{{post.comments[i].author_name}}</a>
+                <span style="margin-left: 0; padding-left: 10px">{{post.comments[i].body}}</span>
+                <div  [style]="!isDesktop ? 'opacity: 1;' : ''"
+                      class="fa fa-1x post-comment-options" *ngIf="post.comments[i].user === this.userID">
+                  <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: post.comments[i].id}"
+                    [icon]="moreIcon" icon="moreIcon">
+                  </fa-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+      <section class="post-add-comment-section">
+        <div class="post-add-comment">
+          <form class="post-add-comment-form">
+            <textarea [(ngModel)]="addCommentContent"
+                      name="userCommentContent"
+                      matInput
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="1"
+                      cdkAutosizeMaxRows="5"
+                      aria-label="Add comment..."
+                      placeholder="Add comment..."
+                      class="post-add-comment-text-area"></textarea>
+            <button style="outline: 0" (click)="addComment(addCommentContent)"
+                    [disabled]="!addCommentContent" type="button"
+                    mat-button>Publish
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </mat-card>
+</div>
+<mat-menu #postMenu="matMenu">
+  <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleDelete()">Usun</button>
+  <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleEdit()">Edytuj</button>
+  <button mat-menu-item style="outline: 0;" (click)="handleSee()">Zobacz</button>
+</mat-menu>
+<mat-menu #deleteCommentMenu="matMenu">
+  <ng-template matMenuContent let-id="id">
+  <button mat-menu-item style="outline: 0;" (click)="handleCommentDelete(id)">Usuń</button>
+  </ng-template>
+</mat-menu>

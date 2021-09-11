@@ -1,0 +1,67 @@
+<div [hidden]="!showRelation">
+  <div class="s-relation-header-options-wrapper" id="s-relation-header-options">
+    <div *ngIf="modelRelation.mode === 1 && isOwner" (click)="handleOptionsClick()"
+         class="s-relation-header-options-more clickable" style="user-select: none">
+      <fa-icon  [icon]="moreIcon" icon="moreIcon" class="fa fa-2x s-relation-header-options-icon">
+      </fa-icon>
+    </div>
+    <div class="s-relation-time">{{modelRelation.relation.created}}</div>
+
+    <div class="s-relation-header-options-close clickable" style="user-select: none">
+      <fa-icon [icon]="closeIcon" icon="closeIcon" class="fa fa-2x s-relation-header-options-icon"
+               (click)="handleClose()">
+      </fa-icon>
+    </div>
+  </div>
+  <mat-card-header class="s-relation-header" id="s-relation-header">
+    <div mat-card-avatar class="s-relation-header-image clickable" (click)="handleWatchProfile()"
+         [ngStyle]="{'background-image': 'url(' + modelRelation.relation.user.meta.avatar + ')'}"></div>
+    <div class="s-relation-header-username">
+      <p>{{modelRelation.relation.user.username}}</p>
+    </div>
+  </mat-card-header>
+
+  <mat-progress-bar id="progress-bar" *ngIf="modelRelation.mode === 1 && !isDeleting"
+                    mode="determinate" style="margin-bottom: 10px" value="{{this.timeLeft}}"></mat-progress-bar>
+  <mat-progress-bar id="add-progress-bar" *ngIf="selectedFile.pending || isDeleting"
+                    mode="indeterminate" style="margin-bottom: 10px"></mat-progress-bar>
+
+  <div *ngIf="modelRelation.mode === 1" class="s-relation-image-wrapper">
+    <img class="s-relation-image" [ngStyle]="{
+          'max-width': !isDesktop ? 'calc(80vw - 48px)' : '',
+          'height': this.innerHeight +'px',
+          'width': this.innerWidth +'px'}"
+         [src]="modelRelation.relation.image"
+         (load)="handleImageLoaded()"
+         alt=""/>
+  </div>
+
+  <div *ngIf="modelRelation.mode !== 1" class="s-relation-image-wrapper">
+    <div *ngIf="!selectedFile.file" class="s-relation-input-file" [ngStyle]="{
+          'max-width': !isDesktop ? 'calc(80vw - 48px)' : '',
+          'height': this.innerHeight +'px',
+          'width': this.innerWidth +'px'}">
+      <input #imageInput
+             id="photo-mobile"
+             accept="image/*"
+             type="file"
+             required
+             class="s-relation-inputfile"
+             (change)="processFile(imageInput)"
+      />
+      <label for="photo-mobile" style="margin-bottom: 0">
+        <span>Add photo </span>
+      </label>
+    </div>
+    <img *ngIf="selectedFile.file" class="s-relation-image" [ngStyle]="{
+          'max-width': !isDesktop ? 'calc(80vw - 48px)' : '',
+          'height': this.innerHeight +'px',
+          'width': this.innerWidth + 'px'}"
+         src="{{selectedFile.src}}"
+         alt=""/>
+  </div>
+  <div *ngIf="selectedFile.file" class="s-relation-buttons-wrapper">
+    <button class="s-relation-button" mat-menu-item (click)="handleAdd()">Dodaj</button>
+    <button class="s-relation-button" mat-menu-item (click)="handleClose()">Anuluj</button>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="header-container">
+  <div class="header-content">
+    <div class="header-logo" [style]="isMobile ? 'flex: 0 0 0' : ''">
+      <a routerLink="/" style="cursor: pointer; color: rgba(0,0,0,.9);; text-decoration: none;">
+        <div class="header-logo-container" fxLayout="row">
+          <img style="width: 22px; height: 22px"
+               src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
+          <p class="d-none d-sm-block" style="margin-left: 10px;">PhotoApp</p>
+        </div>
+      </a>
+    </div>
+    <div class="header-search">
+      <input #autocompleteInput (focus)="$event.target.value=''"
+             placeholder="Search" class="header-search-input" type="search"
+             matInput  [matAutocomplete]="usersAutoComplete" (input)="onSearchChange($event.target.value)">
+      <mat-autocomplete #usersAutoComplete="matAutocomplete" [displayWith]="displayFn" (opened)="usersAutocompleteScroll()"
+                        style="line-height: 10px">
+        <mat-option *ngFor="let user of userList" [value]="user" style="line-height: 0 !important;">
+          <button (click)="handleSearchClick(user.id)" class="search-wrapper" style="outline: 0;">
+            <div fxLayout="row">
+              <div mat-card-avatar class="search-photo"
+                   [ngStyle]="{'background-image': 'url(' + user.meta.avatar +')'}"></div>
+              <div fxLayout="column" class="search-data-wrapper">
+                <div class="search-username"><span>{{user.username}}</span></div>
+              </div>
+            </div>
+          </button>
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+    <div class="header-icons">
+      <div *ngIf="isLoggedIn && user" class="header-icons">
+        <button *ngIf="isMainPage" class="header-icons-button" mat-button style="margin-right: 15px;" (click)="handleFilterClick()">
+          <fa-icon style="line-height: 0" [icon]="filterIcon" icon="filterIcon" class="fa fa-1x header-icons-filter">
+          </fa-icon>
+        </button>
+        <button  routerLink="/add"  class="header-icons-button" mat-button style="margin-right: 15px;">
+          <fa-icon  style="line-height: 0" [icon]="faPhoto" icon="faPhoto" class="material-icons header-add-photo">
+          </fa-icon>
+        </button>
+        <button class="header-icons-button" mat-button [matMenuTriggerFor]="menu">
+          <img class="header-user"
+               style="width: 22px; height: 22px"
+               src="{{user.meta.avatar}}"/>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button  routerLink="/profile/{{user.id}}" mat-menu-item style="outline: 0;">Profile</button>
+          <button mat-menu-item style="outline: 0;" (click)="logout()">Logout</button>
+        </mat-menu>
+      </div>
+      <div *ngIf="!isLoggedIn">
+        <button mat-button style="outline: 0;"  (click)="openDialog()">Login</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,115 @@
+<main *ngIf="profileLoaded">
+  <div class="profile-section">
+    <header class="d-none d-md-flex profile-header">
+      <div mat-card-avatar class="profile-image-wrapper">
+        <img  mat-card-avatar class="profile-image" src="{{visitedUserProfile.meta.avatar}}" />
+      </div>
+      <section class="profile-data">
+        <div class="profile-data-wrapper">
+          <div  class="profile-username">
+            {{visitedUserProfile.username}}
+          </div>
+          <button *ngIf="userID !== visitedUserProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
+            {{this.buttonText}}
+          </button>
+          <button *ngIf="userID === visitedUserProfile.id" mat-button (click)="handleEditProfile()" class="profile-follow">
+            Edit profile
+          </button>
+        </div>
+        <div class="profile-data-wrapper">
+          <div class="profile-data-statistics">
+            Posts: <b>{{visitedUserProfile.posts.length}}</b>
+          </div>
+          <div class="profile-data-statistics">
+            Followers: <b>{{visitedUserProfile.followers.length}}</b>
+          </div>
+          <div style="margin-right: 0" class="profile-data-statistics">
+            Followed: <b>{{visitedUserProfile.followed.length}}</b>
+          </div>
+        </div>
+        <div>
+          {{visitedUserProfile.first_name}} {{visitedUserProfile.last_name}}
+        </div>
+      </section>
+
+    </header>
+    <header class="d-flex d-md-none profile-header-mobile">
+       <div class="profile-image-wrapper-mobile">
+         <img class="profile-image-mobile"
+              src="{{visitedUserProfile.meta.avatar}}"
+         />
+       </div>
+      <section class="profile-data">
+        <div class="profile-data-wrapper" style="margin-bottom: 5px">
+        <div class="profile-nick">
+          {{visitedUserProfile.username}}
+        </div>
+          <button *ngIf="userID !== visitedUserProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
+            {{this.buttonText}}
+          </button>
+          <button *ngIf="userID === visitedUserProfile.id" mat-button (click)="handleEditProfile()" class="profile-follow">
+            Edit profile
+          </button>
+        </div>
+        <div>
+          {{visitedUserProfile.first_name}} {{visitedUserProfile.last_name}}
+        </div>
+      </section>
+    </header>
+    <ul style="margin: 0" class="d-flex d-md-none profile-data-statistics-mobile-wrapper" >
+      <li class="profile-data-statistics-mobile">
+        <span class="profile-data-statistics-name-mobile">
+          Posts:
+        </span>
+        <span class="profile-data-statistics-value-mobile">
+          {{visitedUserProfile.posts.length}}
+        </span>
+      </li>
+      <li class="profile-data-statistics-mobile">
+        <span class="profile-data-statistics-name-mobile">
+          Followers:
+        </span>
+        <span class="profile-data-statistics-value-mobile">
+          {{visitedUserProfile.followers.length}}
+        </span>
+      </li>
+      <li class="profile-data-statistics-mobile">
+        <span class="profile-data-statistics-name-mobile">
+          Followed:
+        </span>
+        <span class="profile-data-statistics-value-mobile">
+          {{visitedUserProfile.followed.length}}
+        </span>
+      </li>
+    </ul>
+    <div class="profile-posts"
+         infinite-scroll
+         [infiniteScrollDistance]="2"
+         [infiniteScrollThrottle]="150"
+         (scrolled)="listProfilePosts(this.posts.length * 3)">
+      <div class="profile-row" *ngFor="let row_posts of posts">
+        <div *ngFor="let post of row_posts; index as i">
+          <div *ngIf="post" class="profile-column"
+               [style]="i !== 2 ? i === 1 ? 'justify-content: center; margin-right: 2%' : 'margin-right: 2%' : 'justify-content: flex-end'"
+               style="display: flex; align-items: center;" routerLink="/post/{{post.id}}">
+            <div style="display: block; position: relative">
+
+            <img class="profile-image-hover" [src]="post.image" (load)="handleImageLoaded(post)" alt="" style="max-height:200px; width: 100%; object-fit: cover" />
+            <div class="profile-middle">
+              <div style="display: flex; flex-direction: row">
+                <fa-icon style="margin-right: 10px" [icon]="faComment" icon="faComment" class=" fa fa-1x">
+                </fa-icon>
+                <p>{{post.comments.length}}</p>
+                <div style="margin-left: 10px; margin-right: 10px"></div>
+                <fa-icon style="margin-right: 10px" [icon]="faLike" icon="faLike" class=" fa fa-1x">
+                </fa-icon>
+                <p>{{post.likes}}</p>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

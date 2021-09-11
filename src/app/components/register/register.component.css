@@ -1,0 +1,95 @@
+.register-input-image {
+  background-size: cover;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.register-fields-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.register-input-fields {
+  flex: 1;
+}
+
+.register-input-image-wrapper {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+}
+
+.register-alert {
+  position: absolute;
+}
+
+.register-input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.register-input-file + label {
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline;
+  overflow: hidden;
+}
+
+.no-js .register-input-file + label {
+  display: none;
+}
+
+.register-input-file + label:hover {
+  color: #3ba8c5;
+}
+
+/*.img-preview-container {
+  background-color: #f7f7f7;
+  position: relative;
+}*/
+
+.register-item-opacity {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+.register-item-middle {
+  cursor: pointer;
+  opacity: 0.8;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .register-input-image {
+    background-size: cover;
+    width: 75px;
+    height: 75px;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .register-fields-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+}
+
