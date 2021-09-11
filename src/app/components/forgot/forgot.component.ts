@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../services/auth/auth.service';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {MatDialog} from '@angular/material/dialog';
-import {UserService} from '../../services/user/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { AuthService } from '../../auth/services/auth.service';
+import { UserService } from '../../services/user/user.service';
+
 class ForgotData {
   pending = false;
   status = 'init';
@@ -24,9 +25,9 @@ export class ForgotComponent implements OnInit {
   dialogRef = null;
 
   constructor(private authService: AuthService,
-              private userService: UserService,
-              private deviceService: DeviceDetectorService,
-              public dialog: MatDialog) {
+    private userService: UserService,
+    private deviceService: DeviceDetectorService,
+    public dialog: MatDialog) {
     this.isMobile = deviceService.isMobile();
   }
 

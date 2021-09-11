@@ -1,17 +1,17 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
-import {MessageService} from '../../services/message/message.service';
-import {MatDialog} from '@angular/material/dialog';
-import {RelationDetailComponent} from '../relation-detail/relation-detail-component';
-import {RelationService} from '../../services/relation/relation.service';
-import {Relation} from '../../models/relation';
-import {User} from '../../models/user';
-import {DialogMode} from '../../models/dialogMode';
-import {UserService} from '../../services/user/user.service';
-import {Router} from '@angular/router';
-import {addCorrectTime,  prepareImage} from '../../restConfig';
-import { SortFilterMessage} from '../filter/filter.component';
-import {PostFilterSortModel} from '../../models/post';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { Subject, Subscription } from 'rxjs';
+import { DialogMode } from '../../models/dialogMode';
+import { PostFilterSortModel } from '../../models/post';
+import { Relation } from '../../models/relation';
+import { User } from '../../models/user';
+import { addCorrectTime, prepareImage } from '../../restConfig';
+import { MessageService } from '../../services/message/message.service';
+import { RelationService } from '../../services/relation/relation.service';
+import { UserService } from '../../services/user/user.service';
+import { SortFilterMessage } from '../filter/filter.component';
+import { RelationDetailComponent } from '../relation-detail/relation-detail.component';
 
 @Component({
   selector: 'app-relations-homepage-section',
@@ -36,10 +36,10 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
   sortFilterMessage: PostFilterSortModel = {};
 
   constructor(private messageService: MessageService,
-              public dialog: MatDialog,
-              public relationService: RelationService,
-              private userService: UserService,
-              private router: Router) {
+    public dialog: MatDialog,
+    public relationService: RelationService,
+    private userService: UserService,
+    private router: Router) {
 
     this.messageFilterSubscription = this.messageService.getSortFilterMessage()
       .subscribe((message: SortFilterMessage) => {
@@ -67,7 +67,7 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
         if (myMessage === 'reset_filter_false') {
           this.sortFilterMessage = {};
           this.relations = [];
-          this.listFollowedRelations(null,  this.sortFilterMessage);
+          this.listFollowedRelations(null, this.sortFilterMessage);
         }
         this.message = myMessage;
       });
@@ -102,7 +102,7 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
       user.meta.avatar = prepareImage(user.meta.avatar);
       const dialogRef = this.dialog.open(RelationDetailComponent, {
         panelClass: 'custom-dialog-container',
-        data: {mode: DialogMode.ADD, relation: {user}}
+        data: { mode: DialogMode.ADD, relation: { user } }
       });
       dialogRef.afterClosed().subscribe(relationData => {
         if (relationData == null) {
@@ -122,7 +122,7 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
     if (i !== undefined) {
       const dialogRef = this.dialog.open(RelationDetailComponent, {
         panelClass: 'custom-dialog-container',
-        data: {mode: DialogMode.WATCH, relation: this.relations[i]}
+        data: { mode: DialogMode.WATCH, relation: this.relations[i] }
       });
       dialogRef.afterClosed().subscribe(value => {
         if (value === 'deleted') {
@@ -138,11 +138,11 @@ export class RelationsHomepageSectionComponent implements OnInit, OnDestroy {
       if (usersRelations.length > 0) {
         const dialogRef = this.dialog.open(RelationDetailComponent, {
           panelClass: 'custom-dialog-container',
-          data: {mode: DialogMode.WATCH, relation: usersRelations[0]}
+          data: { mode: DialogMode.WATCH, relation: usersRelations[0] }
         });
         dialogRef.afterClosed().subscribe(value => {
           if (value === 'deleted') {
-            const relationToDelete = this.relations.find(r => r.id ===  usersRelations[0].id);
+            const relationToDelete = this.relations.find(r => r.id === usersRelations[0].id);
             const index = this.relations.indexOf(relationToDelete);
             if (index !== -1) {
               this.relations.splice(index, 1);

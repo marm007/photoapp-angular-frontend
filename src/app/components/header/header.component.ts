@@ -1,19 +1,19 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {MatDialog} from '@angular/material/dialog';
-import {AuthService} from '../../services/auth/auth.service';
-import {LoginComponent} from '../login/login.component';
-import {UserService} from '../../services/user/user.service';
-import {User} from '../../models/user';
-import {MessageService} from '../../services/message/message.service';
-import {fromEvent, Subscription} from 'rxjs';
-import {prepareImage} from '../../restConfig';
-import {faFilter, faImage} from '@fortawesome/free-solid-svg-icons';
-import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {FilterComponent, SortFilter} from '../filter/filter.component';
-import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
-import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
-import {map, takeUntil} from 'rxjs/operators';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
+import { Event, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { faFilter, faImage } from '@fortawesome/free-solid-svg-icons';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { fromEvent, Subscription } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../auth/services/auth.service';
+import { User } from '../../models/user';
+import { prepareImage } from '../../restConfig';
+import { MessageService } from '../../services/message/message.service';
+import { UserService } from '../../services/user/user.service';
+import { FilterComponent, SortFilter } from '../filter/filter.component';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-header',
@@ -23,12 +23,12 @@ import {map, takeUntil} from 'rxjs/operators';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(private deviceService: DeviceDetectorService,
-              public dialog: MatDialog,
-              private router: Router,
-              private bottomSheet: MatBottomSheet,
-              public authService: AuthService,
-              private userService: UserService,
-              private messageService: MessageService) {
+    public dialog: MatDialog,
+    private router: Router,
+    private bottomSheet: MatBottomSheet,
+    public authService: AuthService,
+    private userService: UserService,
+    private messageService: MessageService) {
 
     this.isMobile = deviceService.isMobile();
 

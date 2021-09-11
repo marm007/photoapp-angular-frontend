@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../services/auth/auth.service';
+import {AuthService} from '../../auth/services/auth.service';
 import {UserService} from '../../services/user/user.service';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {ActivatedRoute, Router} from '@angular/router';

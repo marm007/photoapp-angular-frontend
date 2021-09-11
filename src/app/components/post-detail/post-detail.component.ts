@@ -1,16 +1,16 @@
-import {Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output} from '@angular/core';
-import {Post} from '../../models/post';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PostsService} from '../../services/post/posts.service';
-import {CommentService} from '../../services/comment/comment.service';
-import {faEllipsisH, faHeart, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
-import {faHeart as faHeartNoBorder} from '@fortawesome/free-regular-svg-icons';
-import {animate, query, stagger, state, style, transition, trigger} from '@angular/animations';
-import {AuthService} from '../../services/auth/auth.service';
-import {ImageType, prepareImage} from '../../restConfig';
-import {environment} from '../../../environments/environment';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { faHeart as faHeartNoBorder } from '@fortawesome/free-regular-svg-icons';
+import { faEllipsisH, faHeart, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/services/auth.service';
+import { Post } from '../../models/post';
+import { ImageType, prepareImage } from '../../restConfig';
+import { CommentService } from '../../services/comment/comment.service';
+import { PostsService } from '../../services/post/posts.service';
 
 @Component({
   selector: 'app-single-post',
@@ -42,8 +42,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
       ])
     ]),
   ],
-  templateUrl: './post-detail-component.html',
-  styleUrls: ['./post-detail-component.css']
+  templateUrl: './post-detail.component.html',
+  styleUrls: ['./post-detail.component.css']
 })
 export class PostDetailComponent implements OnInit {
 
@@ -78,12 +78,12 @@ export class PostDetailComponent implements OnInit {
   isDesktop: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private postsService: PostsService,
-              private commentService: CommentService,
-              private authService: AuthService,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              private deviceDetectorService: DeviceDetectorService) {
+    private postsService: PostsService,
+    private commentService: CommentService,
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private deviceDetectorService: DeviceDetectorService) {
     this.isDesktop = deviceDetectorService.isDesktop();
   }
 
@@ -109,7 +109,7 @@ export class PostDetailComponent implements OnInit {
   }
 
   handleEdit() {
-      this.router.navigate([`edit/${this.post.id}`]);
+    this.router.navigate([`edit/${this.post.id}`]);
   }
 
   handleSee() {
@@ -134,7 +134,7 @@ export class PostDetailComponent implements OnInit {
     }
 
   }
-//
+  //
   get isLiked(): boolean {
     return this.post.liked.some(like => like.user === this.userID);
   }
@@ -196,7 +196,7 @@ export class PostDetailComponent implements OnInit {
   }
 
   addComment(commentText: string): void {
-    const comment = {body: commentText, post: this.post.id, author_name: this.post.user.username};
+    const comment = { body: commentText, post: this.post.id, author_name: this.post.user.username };
     this.commentService.addComment(comment).subscribe(newComment => {
       this.post.comments.push(newComment);
       this.addCommentContent = '';

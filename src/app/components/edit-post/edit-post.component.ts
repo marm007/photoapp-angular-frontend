@@ -1,17 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Post} from '../../models/post';
-import {ImageSnippet} from '../../models/imageSnippet';
-import {PostsService} from '../../services/post/posts.service';
-import {UserService} from '../../services/user/user.service';
-import {AuthService} from '../../services/auth/auth.service';
-import {environment} from '../../../environments/environment';
-import {ImageType, prepareImage} from '../../restConfig';
-import {MatSnackBar} from '@angular/material/snack-bar';
-
-
-
+import { AuthService } from '../../auth/services/auth.service';
+import { ImageSnippet } from '../../models/imageSnippet';
+import { Post } from '../../models/post';
+import { ImageType, prepareImage } from '../../restConfig';
+import { PostsService } from '../../services/post/posts.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-edit-post',

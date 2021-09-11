@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import {Router} from '@angular/router';
-import {Post} from '../../models/post';
-import {ImageSnippet} from '../../models/imageSnippet';
-import {PostsService} from '../../services/post/posts.service';
-
-
+import { ImageSnippet } from '../../models/imageSnippet';
+import { Post } from '../../models/post';
+import { PostsService } from '../../services/post/posts.service';
 
 @Component({
   selector: 'app-add-post',

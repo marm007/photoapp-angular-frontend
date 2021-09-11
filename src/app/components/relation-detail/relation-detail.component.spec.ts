@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RelationDetailComponent } from './relation-detail-component';
+import { RelationDetailComponent } from './relation-detail.component';
 
 describe('SingleRelationComponent', () => {
   let component: RelationDetailComponent;

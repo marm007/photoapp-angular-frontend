@@ -1,18 +1,17 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {UserService} from '../../services/user/user.service';
-import {User} from '../../models/user';
-import {Follower} from '../../models/follower';
-import {AuthService} from '../../services/auth/auth.service';
-import {ImageType, prepareImage} from '../../restConfig';
-import {forkJoin, Observable} from 'rxjs';
-import {faEllipsisH, faFilter} from '@fortawesome/free-solid-svg-icons';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../auth/services/auth.service';
+import { Follower } from '../../models/follower';
+import { User } from '../../models/user';
+import { prepareImage } from '../../restConfig';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent implements OnInit{
+export class HomepageComponent implements OnInit {
 
   followed: Follower[];
 
@@ -23,7 +22,7 @@ export class HomepageComponent implements OnInit{
   innerWidth: any;
 
   constructor(private userService: UserService,
-              private authService: AuthService) {
+    private authService: AuthService) {
     this.innerWidth = window.innerWidth;
   }
 
@@ -41,13 +40,14 @@ export class HomepageComponent implements OnInit{
   }
 
   getFollower(id: string): Observable<Follower> {
-      return this.userService.getFollower(id);
+    return this.userService.getFollower(id);
   }
 
   getLoggedUserData() {
-    this.userService.get(this.authService.userID).subscribe(user => {
-      user.meta.avatar = prepareImage(user.meta.avatar);
-      this.user = user;
-    });
+    this.userService.get(this.authService.userID)
+      .subscribe(user => {
+        user.meta.avatar = prepareImage(user.meta.avatar);
+        this.user = user;
+      });
   }
 }

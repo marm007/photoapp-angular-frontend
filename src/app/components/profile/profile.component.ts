@@ -1,18 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from '../../services/auth/auth.service';
-import {UserService} from '../../services/user/user.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Post} from '../../models/post';
-import {MessageService} from '../../services/message/message.service';
-import {forkJoin, Observable, Subscription} from 'rxjs';
-import {User} from '../../models/user';
-import {ImageType, prepareImage} from '../../restConfig';
-import {PostsService} from '../../services/post/posts.service';
-import {Follower} from '../../models/follower';
-import {environment} from '../../../environments/environment';
-import {faComment, faHeart} from '@fortawesome/free-solid-svg-icons';
-import {MatDialog} from '@angular/material/dialog';
-import {ProfileEditComponent} from '../profile-edit/profile-edit.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { faComment, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { forkJoin, Observable, Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/services/auth.service';
+import { Follower } from '../../models/follower';
+import { Post } from '../../models/post';
+import { User } from '../../models/user';
+import { ImageType, prepareImage } from '../../restConfig';
+import { MessageService } from '../../services/message/message.service';
+import { UserService } from '../../services/user/user.service';
+import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 
 @Component({
   selector: 'app-profile',
@@ -34,11 +33,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   faLike = faHeart;
 
   constructor(private authService: AuthService,
-              private userService: UserService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private messageService: MessageService,
-              private dialog: MatDialog) {
+    private userService: UserService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private messageService: MessageService,
+    private dialog: MatDialog) {
     this.userID = authService.userID;
     this.posts = [];
     this.subscription = this.messageService.getMessage()
@@ -90,14 +89,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   handleFollow() {
-      this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
-        this.getUser(this.visitedUserProfile.id);
-      });
+    this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
+      this.getUser(this.visitedUserProfile.id);
+    });
   }
 
   handleEditProfile() {
     const dialogRef = this.dialog.open(ProfileEditComponent, {
-      data: {user: this.visitedUserProfile}
+      data: { user: this.visitedUserProfile }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -108,7 +107,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getFollower(id: string): Observable<Follower> {
-     return  this.userService.getFollower(id);
+    return this.userService.getFollower(id);
   }
 
   isFollowing(): void {
@@ -159,7 +158,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getUser(id: string) {
     this.userService.get(id, false).subscribe(user => {
       if (user === null) {
-        this.router.navigate(['not-found']) ;
+        this.router.navigate(['not-found']);
         return;
       }
       user.meta.avatar = prepareImage(user.meta.avatar);

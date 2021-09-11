@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../services/auth/auth.service';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {RegisterComponent} from '../register/register.component';
-import {ForgotComponent} from '../forgot/forgot.component';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { AuthService } from '../../auth/services/auth.service';
+import { ForgotComponent } from '../forgot/forgot.component';
+import { RegisterComponent } from '../register/register.component';
 
 class LoginModel {
   pending = false;
@@ -27,9 +27,9 @@ export class LoginComponent implements OnInit {
   dialogRef = null;
 
   constructor(private authService: AuthService,
-              private deviceService: DeviceDetectorService,
-              private router: Router,
-              public dialog: MatDialog) {
+    private deviceService: DeviceDetectorService,
+    private router: Router,
+    public dialog: MatDialog) {
     this.isMobile = deviceService.isMobile();
   }
 
@@ -42,24 +42,27 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loginModel.pending = true;
-    this.authService.login(this.loginModel.email, this.loginModel.password).subscribe(
-      auth => {
-        this.loginModel.pending = false;
-        this.loginModel.status = 'ok';
-        this.loginModel.message = 'Logged in successfully!';
+    this.authService.login(this.loginModel.email, this.loginModel.password)
+      .subscribe(
+        auth => {
+          console.log('login', auth)
+          this.loginModel.pending = false;
+          this.loginModel.status = 'ok';
+          this.loginModel.message = 'Logged in successfully!';
 
-        if (this.dialogRef == null) {
-          this.router.navigate(['']);
-        } else {
-          this.dialogRef.close('logged_in');
+          if (this.dialogRef == null) {
+            this.router.navigate(['']);
+          } else {
+            this.dialogRef.close('logged_in');
+          }
+        },
+        error => {
+          console.log('aldldaldald', error)
+          this.loginModel.pending = false;
+          this.loginModel.status = 'fail';
+          this.loginModel.message = error.error.detail ? error.error.detail : 'Something went wrong.';
         }
-      },
-      error => {
-        this.loginModel.pending = false;
-        this.loginModel.status = 'fail';
-        this.loginModel.message = error.error.detail ? error.error.detail : 'Something went wrong.';
-      }
-    );
+      );
   }
 
   handleRegister() {

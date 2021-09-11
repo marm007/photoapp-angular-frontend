@@ -1,15 +1,15 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Post, PostFilterSortModel} from '../../models/post';
-import {PostsService} from '../../services/post/posts.service';
-import {MessageService} from '../../services/message/message.service';
-import {UserService} from '../../services/user/user.service';
-import {prepareImage} from '../../restConfig';
-import {Subscription} from 'rxjs';
-import {Filter, Sort, SortFilterMessage} from '../filter/filter.component';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Post, PostFilterSortModel } from '../../models/post';
+import { prepareImage } from '../../restConfig';
+import { MessageService } from '../../services/message/message.service';
+import { PostsService } from '../../services/post/posts.service';
+import { UserService } from '../../services/user/user.service';
+import { SortFilterMessage } from '../filter/filter.component';
 
 export interface FilterSortMessage {
   ordering: string;
-  sorting: {created_after: string, created_before: string};
+  sorting: { created_after: string, created_before: string };
 }
 
 @Component({
@@ -36,8 +36,8 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
   sortFilterMessage: PostFilterSortModel = {};
 
   constructor(private postService: PostsService,
-              private messageService: MessageService,
-              private userService: UserService) {
+    private messageService: MessageService,
+    private userService: UserService) {
     this.messageFilterSubscription = this.messageService.getSortFilterMessage()
       .subscribe((message: SortFilterMessage) => {
         if (message.isPost) {
@@ -59,14 +59,14 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
               } else {
                 delete this.sortFilterMessage.likes__gt;
               }
-            } else {delete this.sortFilterMessage.likes__gt; }
+            } else { delete this.sortFilterMessage.likes__gt; }
             if (message.likesSort.likes__lt != null) {
               if (message.likesSort.likesLtClicked) {
                 this.sortFilterMessage.likes__lt = message.likesSort.likes__lt;
               } else {
                 delete this.sortFilterMessage.likes__lt;
               }
-            } else {delete this.sortFilterMessage.likes__lt; }
+            } else { delete this.sortFilterMessage.likes__lt; }
             this.listFollowedPosts(null, this.sortFilterMessage);
           }
         }
@@ -77,7 +77,7 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
         if (message === 'reset_filter_true') {
           this.sortFilterMessage = {};
           this.posts = [];
-          this.listFollowedPosts(null,  this.sortFilterMessage);
+          this.listFollowedPosts(null, this.sortFilterMessage);
         }
       });
   }

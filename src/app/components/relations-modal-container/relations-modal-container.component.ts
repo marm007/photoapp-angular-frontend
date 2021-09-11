@@ -1,16 +1,14 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {RelationDetailComponent} from '../relation-detail/relation-detail-component';
-import {addCorrectTime, prepareImage} from '../../restConfig';
-import {DialogMode} from '../../models/dialogMode';
-import {UserService} from '../../services/user/user.service';
-import {User} from '../../models/user';
-import {RelationService} from '../../services/relation/relation.service';
-import {Relation} from '../../models/relation';
-import {Post} from '../../models/post';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { DialogMode } from '../../models/dialogMode';
+import { Relation } from '../../models/relation';
+import { addCorrectTime, prepareImage } from '../../restConfig';
+import { RelationService } from '../../services/relation/relation.service';
+import { UserService } from '../../services/user/user.service';
+import { RelationDetailComponent } from '../relation-detail/relation-detail.component';
 
 @Component({
   selector: 'app-relations-modal-container',
@@ -25,10 +23,10 @@ export class RelationsModalContainerComponent implements OnInit, OnDestroy {
   destroy = new Subject<any>();
 
   constructor(private dialog: MatDialog,
-              private route: ActivatedRoute,
-              private router: Router,
-              private userService: UserService,
-              private relationService: RelationService) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private userService: UserService,
+    private relationService: RelationService) {
     route.params.pipe(takeUntil(this.destroy)).subscribe(params => {
       this.playRelation(params.id);
     });
@@ -45,30 +43,30 @@ export class RelationsModalContainerComponent implements OnInit, OnDestroy {
 
   playRelation(id: string) {
     this.relationService.get(id).subscribe(relation => {
-        if (relation !== null) {
-          relation.user.meta.avatar = prepareImage(relation.user.meta.avatar);
-          relation.image = prepareImage(relation.image);
-          relation.created = addCorrectTime(relation.created);
-          const dialogRef = this.dialog.open(RelationDetailComponent, {
-            panelClass: 'custom-dialog-container',
-            data: {mode: DialogMode.WATCH, relation}
-          });
-          dialogRef.afterClosed().subscribe(value => {
-            if (value === 'deleted') {
-              this.relationDeleted.emit(relation);
-              // TODO: emmit relation to delete
-              /*          const relationToDelete = this.relations.find(r => r.id === this.relations[i].id);
-                        const index = this.relations.indexOf(relationToDelete);
-                        if (index !== -1) {
-                          this.relations.splice(index, 1);
-                        }*/
-              this.router.navigate(['/']);
-            } else {
-              // TODO: something went wrong
-              this.router.navigate(['/']);
-            }
-          });
-        }
+      if (relation !== null) {
+        relation.user.meta.avatar = prepareImage(relation.user.meta.avatar);
+        relation.image = prepareImage(relation.image);
+        relation.created = addCorrectTime(relation.created);
+        const dialogRef = this.dialog.open(RelationDetailComponent, {
+          panelClass: 'custom-dialog-container',
+          data: { mode: DialogMode.WATCH, relation }
+        });
+        dialogRef.afterClosed().subscribe(value => {
+          if (value === 'deleted') {
+            this.relationDeleted.emit(relation);
+            // TODO: emmit relation to delete
+            /*          const relationToDelete = this.relations.find(r => r.id === this.relations[i].id);
+                      const index = this.relations.indexOf(relationToDelete);
+                      if (index !== -1) {
+                        this.relations.splice(index, 1);
+                      }*/
+            this.router.navigate(['/']);
+          } else {
+            // TODO: something went wrong
+            this.router.navigate(['/']);
+          }
+        });
+      }
     });
 
 

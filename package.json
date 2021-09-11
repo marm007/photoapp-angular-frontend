@@ -33,6 +33,7 @@
     "jquery": "^3.4.1",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
+    "ng-recaptcha": "^7.0.1",
     "ngx-device-detector": "^1.4.0",
     "ngx-infinite-scroll": "^8.0.1",
     "rxjs": "~6.5.4",

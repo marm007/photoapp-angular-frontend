@@ -1,17 +1,16 @@
-import {AfterContentInit, Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
-import {faEllipsisH, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {ImageSnippet} from '../../models/imageSnippet';
-import {Relation} from '../../models/relation';
-import {DialogMode} from '../../models/dialogMode';
-import {AuthService} from '../../services/auth/auth.service';
-import {OptionsComponent} from '../options/options.component';
-import {RelationService} from '../../services/relation/relation.service';
-import {Router} from '@angular/router';
-import {Post} from '../../models/post';
-import {environment} from '../../../environments/environment';
-import {addCorrectTime, ImageType, prepareImage} from '../../restConfig';
+import { AfterContentInit, Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { faEllipsisH, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/services/auth.service';
+import { DialogMode } from '../../models/dialogMode';
+import { ImageSnippet } from '../../models/imageSnippet';
+import { Relation } from '../../models/relation';
+import { addCorrectTime, ImageType, prepareImage } from '../../restConfig';
+import { RelationService } from '../../services/relation/relation.service';
+import { OptionsComponent } from '../options/options.component';
 
 interface DataRelation {
   relation: Relation;
@@ -20,8 +19,8 @@ interface DataRelation {
 
 @Component({
   selector: 'app-single-relation',
-  templateUrl: './relation-detail-component.html',
-  styleUrls: ['./relation-detail-component.css']
+  templateUrl: './relation-detail.component.html',
+  styleUrls: ['./relation-detail.component.css']
 })
 export class RelationDetailComponent implements OnInit, AfterContentInit, OnDestroy {
 
@@ -46,12 +45,12 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
   isDeleting = false;
 
   constructor(private dialogRef: MatDialogRef<RelationDetailComponent>,
-              private dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
-              private router: Router,
-              private authService: AuthService,
-              private relationService: RelationService,
-              private deviceService: DeviceDetectorService) {
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public dataRelation: DataRelation,
+    private router: Router,
+    private authService: AuthService,
+    private relationService: RelationService,
+    private deviceService: DeviceDetectorService) {
 
     this.isDesktop = deviceService.isDesktop();
     this.modelRelation = dataRelation;
@@ -88,7 +87,7 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
     }
 
     this.modelRelation.relation.image = this.modelRelation.relation.image.
-    replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
+      replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
     this.modelRelation.relation.image = prepareImage(this.modelRelation.relation.image, ImageType.LARGE);
     this.modelRelation.relation.imageLoaded = true;
   }

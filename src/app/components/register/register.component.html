@@ -7,7 +7,7 @@
              src="https://marm007.github.io/filmapp_frontend/static/media/ico.f5c2ef23.png"/>
         <p class="form-logo" style="margin-left: 10px;">PhotoApp</p>
       </div>
-      <form #registerForm="ngForm">
+      <form #registerForm="ngForm" >
         <div class="register-fields-wrapper">
           <div class="register-input-fields">
             <div class="form-group">
@@ -53,6 +53,9 @@
               <div *ngIf="password.errors && (password.dirty)">
                 <small class="text-danger" *ngIf="password.errors.required">Password is required</small>
               </div>
+              <div *ngIf="registerErrorPasswordMessage">
+                <small class="text-danger">{{registerErrorPasswordMessage}}</small>
+              </div>
             </div>
 
           </div>
@@ -86,9 +89,13 @@
 
           </div>
         </div>
+        <re-captcha class="m-1"
+          (resolved)="resolved($event)"
+          siteKey="6LdleykaAAAAAMoWy4Jc0AvRjIxgkljvrhdxjyKN"
+        ></re-captcha>
         <div style="display: flex; flex-direction: row; align-items: center;">
           <button type="submit" class="btn btn-primary"
-                  [disabled]="!registerForm.form.valid || registerData.status == 'ok'"
+                  [disabled]="!registerForm.form.valid || registerData.status == 'ok' || recaptchaValid == false"
                   (click)="register();">Register
           </button>
           <div *ngIf="registerData.pending" style="display:flex; align-items:center;justify-content:center;"  class="pl-2" >
