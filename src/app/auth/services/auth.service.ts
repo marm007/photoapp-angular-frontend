@@ -11,7 +11,6 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   private setSession(authResult) {
-    console.log('session', authResult)
     if ('refresh' in authResult) {
       localStorage.setItem('token_refresh', authResult.refresh);
     }
@@ -82,12 +81,11 @@ export class AuthService {
     return this.http.post<any>(url, null, { headers: this.jwtAuthHeaders })
       .subscribe(
         data => {
-          console.log(data);
           localStorage.removeItem('token_access');
           localStorage.removeItem('token_refresh');
         },
         err => {
-          console.log(err);
+          console.error('logout', err);
         }
       );
   }
@@ -99,7 +97,6 @@ export class AuthService {
       { refresh: this.tokenRefresh })
       .pipe(
         tap(response => {
-          console.log('refreshToken401Error', response)
           this.setSession(response);
         })
       )

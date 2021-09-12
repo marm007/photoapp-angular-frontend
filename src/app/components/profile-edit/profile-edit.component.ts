@@ -44,7 +44,6 @@ export class ProfileEditComponent implements OnInit {
               private messageService: MessageService,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.isMobile = deviceService.isMobile();
-    console.log(data.user.meta.is_private);
   }
 
   ngOnInit(): void {

@@ -13,7 +13,7 @@ import handleError from '../errorHandler';
 export class PostsService {
 
   constructor(private http: HttpClient,
-              private authService: AuthService) { }
+    private authService: AuthService) { }
 
   add(image: File, description: string): Observable<Post> {
     const url = `${environment.apiURL}/posts/`;
@@ -21,26 +21,23 @@ export class PostsService {
     formData.append('description', description);
     formData.append('image', image);
     return this.http.post<Post>(url, formData,
-      {headers: this.authService.jwtAuthHeaders}).pipe(
+      { headers: this.authService.jwtAuthHeaders }).pipe(
         retry(2)
-    );
+      );
   }
 
   get(id: number): Observable<Post> {
     const url = `${environment.apiURL}/posts/${id}/`;
     return this.http.get<Post>(url,
-      {headers: this.authService.jwtAuthHeaders})
-      .pipe(
-        tap(_ => console.log(`fetched post id=${id}`)),
-      );
+      { headers: this.authService.jwtAuthHeaders })
+      .pipe();
   }
 
   like(id: string): Observable<Post> {
     const url = `${environment.apiURL}/posts/${id}/like/`;
     return this.http.patch<Post>(url,
-      null, {headers: this.authService.jwtAuthHeaders})
+      null, { headers: this.authService.jwtAuthHeaders })
       .pipe(
-        tap(_ => console.log(`liked post id=${id}`)),
         catchError(handleError<Post>('likePost'))
       );
   }
@@ -48,9 +45,8 @@ export class PostsService {
   delete(id: string): Observable<any> {
     const url = `${environment.apiURL}/posts/${id}/`;
     return this.http.delete<any>(url,
-      {headers: this.authService.jwtAuthHeaders})
+      { headers: this.authService.jwtAuthHeaders })
       .pipe(
-        tap(_ => console.log(`deleted post id=${id}`)),
         catchError(handleError<any>('deletePost'))
       );
   }
@@ -63,10 +59,9 @@ export class PostsService {
       formData.append('description', description);
       formData.append('image', image);
       return this.http.put<Post>(url, formData,
-        {headers: this.authService.jwtAuthHeaders})
+        { headers: this.authService.jwtAuthHeaders })
         .pipe(
           retry(2),
-          tap(_ => console.log(`updated post id=${id}`)),
           catchError(handleError<Post>('updatePost'))
         );
     } else {
@@ -78,10 +73,9 @@ export class PostsService {
       }
 
       return this.http.patch<Post>(url, formData,
-        {headers: this.authService.jwtAuthHeaders})
+        { headers: this.authService.jwtAuthHeaders })
         .pipe(
           retry(2),
-          tap(_ => console.log(`updated post id=${id}`)),
           catchError(handleError<Post>('updatePost'))
         );
     }

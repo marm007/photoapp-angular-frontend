@@ -82,7 +82,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
     if (this.data.sort_post !== undefined) {
       this.currentSortPost = this.data.sort_post;
     }
@@ -182,8 +181,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   handleSortClick(sort: Sort, isPost: boolean) {
-    console.log(sort);
-    console.log(this.currentSortPost);
     if (isPost) {
 
       if (this.currentSortPost !== undefined && this.currentSortPost.id === sort.id) {

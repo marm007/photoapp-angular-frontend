@@ -22,7 +22,6 @@ export class RelationService {
       formData, {headers: this.authService.jwtAuthHeaders})
       .pipe(
         retry(2),
-        tap((newRelation: Relation) => console.log(`added relation id=${newRelation.id}`))
       );
   }
 
@@ -32,7 +31,6 @@ export class RelationService {
     return this.http.get<Relation>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(`fetched relation id=${id}`)),
         catchError(handleError<Relation>('getRelation'))
       );
   }
@@ -42,7 +40,6 @@ export class RelationService {
     return this.http.delete<Relation>(url,
       {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(`deleted realtion id=${id}`)),
         catchError(handleError<Relation>('deleteRaltion'))
       );
   }

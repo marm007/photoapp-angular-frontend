@@ -39,7 +39,6 @@ export class UserService {
     return this.http.get<User>(url,
       addJWTHeaders ? {headers: this.authService.jwtAuthHeaders} : {})
       .pipe(
-        tap((newUser: User) => console.log(`fetched user id=${id}`)),
         catchError(handleError<User>('getUser'))
     );
   }
@@ -47,7 +46,6 @@ export class UserService {
   public update(username?: string, password?: string, email?: string, userPhoto?: File, isPrivate?: string): Observable<User> {
     const id = this.authService.userID;
     const url = `${environment.apiURL}/users/${id}/`;
-    console.log(isPrivate);
     if (username && password && email && userPhoto && isPrivate) {
       const formData = new FormData();
       formData.append('username', username);
@@ -57,8 +55,7 @@ export class UserService {
       formData.append('meta.is_private', isPrivate);
       return this.http.put<User>(url, formData, {headers: this.authService.jwtAuthHeaders} )
         .pipe(
-          retry(2),
-          tap(_ => console.log(`updated user id=${id}`))
+          retry(2)
         );
 
     } else {
@@ -80,9 +77,7 @@ export class UserService {
       }
       return this.http.patch<User>(url, formData, {headers: this.authService.jwtAuthHeaders} )
         .pipe(
-          retry(2),
-          tap(_ => console.log(`patched user id=${id}`))
-
+          retry(2)
         );
     }
   }
@@ -167,7 +162,6 @@ export class UserService {
     return this.http.post<any>(url,
       {followed: id}, {headers: this.authService.jwtAuthHeaders})
       .pipe(
-        tap(_ => console.log(`followed user id=${id}`)),
         catchError(handleError<User>('followUser'))
       );
   }

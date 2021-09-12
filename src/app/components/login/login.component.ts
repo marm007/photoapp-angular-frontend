@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginModel.email, this.loginModel.password)
       .subscribe(
         auth => {
-          console.log('login', auth)
           this.loginModel.pending = false;
           this.loginModel.status = 'ok';
           this.loginModel.message = 'Logged in successfully!';
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
-          console.log('aldldaldald', error)
+          console.error('login', error)
           this.loginModel.pending = false;
           this.loginModel.status = 'fail';
           this.loginModel.message = error.error.detail ? error.error.detail : 'Something went wrong.';

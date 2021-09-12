@@ -74,7 +74,7 @@ export class RegisterComponent implements OnInit {
         }
       },
       err => {
-        console.log(err);
+        console.error('register', err);
       },
       () => { }
     );
