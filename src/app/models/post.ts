@@ -1,7 +1,6 @@
-import {User} from './user';
-import {Comment} from './comment';
-import {Like} from './like';
-import {MomentCreationData} from 'moment';
+import { Comment } from './comment';
+import { Like } from './like';
+import { User } from './user';
 
 export interface Post {
   id: string;

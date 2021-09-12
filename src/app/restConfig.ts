@@ -1,4 +1,4 @@
-import { environment} from '../environments/environment';
+import { environment } from '../environments/environment';
 import moment from 'moment';
 
 // ng build --prod --output-path docs --base-href /frontend/
@@ -9,16 +9,18 @@ export enum ImageType {
 }
 
 export function prepareImage(path: string, imageType: ImageType = ImageType.THUMBNAIL): string {
-  if ( path !== null) {
+  if (path !== null) {
+    console.log('path', path)
 
     if (path.includes(environment.mediaHttpURL)) {
       const index = environment.mediaHttpURL.length;
-      return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13,  path.length);
-    }  else if (path.includes(environment.mediaURL)) {
+      return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13, path.length);
+    } else if (path.includes(environment.mediaURL)) {
       const index = environment.mediaURL.length;
-      return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13,  path.length);
+      return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13, path.length);
     } else {
-      return environment.mediaURL + path.slice(0, 13) + imageType + path.slice(13,  path.length);
+      console.log('daldla')
+      return environment.mediaURL + path.slice(0, 13) + imageType + path.slice(13, path.length);
     }
   } else {
     return environment.avatarURL;
@@ -26,7 +28,7 @@ export function prepareImage(path: string, imageType: ImageType = ImageType.THUM
 
 }
 
-export function   addCorrectTime(created: Date | number | string): string {
+export function addCorrectTime(created: Date | number | string): string {
   const currentTime = moment();
   const relTime = moment(created);
 

@@ -22,27 +22,31 @@ export class AuthInterceptor implements HttpInterceptor {
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
     if (this.authService.tokenRefresh) {
 
+      console.log('refrshing', this.isRefreshing)
+
       if (!this.isRefreshing) {
 
         this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
 
-        return this.authService.refreshToken401Error().pipe(
-          switchMap((token: any) => {
-            console.log('token', token)
-            this.isRefreshing = false;
-            this.refreshTokenSubject.next(token.access);
-            return next.handle(this.addToken(request, token.access));
-          }),
-          catchError((err) => {
-            this.isRefreshing = false;
-            console.log('wdkqkdwk', 'erro')
-            return throwError(err);
-          })
+        return this.authService.refreshToken401Error()
+          .pipe(
+            switchMap((token: any) => {
+              console.log('token', token)
+              this.isRefreshing = false;
+              this.refreshTokenSubject.next(token.access);
+              return next.handle(this.addToken(request, token.access));
+            }),
+            catchError((err) => {
+              this.isRefreshing = false;
+              console.log('wdkqkdwk', 'erro')
+              return throwError(err);
+            })
 
-        );
+          );
 
       } else {
+        console.log('probilem')
         return this.refreshTokenSubject.pipe(
           filter(token => token != null),
           take(1),
@@ -71,18 +75,22 @@ export class AuthInterceptor implements HttpInterceptor {
       request = this.addToken(request, this.authService.tokenAccess);
     }
 
-    return next.handle(request).pipe(catchError(error => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
-        if (error.url.includes('refresh')) {
-          this.authService.clearSession()
-          this.router.navigate(['login']);
-          return EMPTY;
-        } else
-          return this.handle401Error(request, next);
-      } else {
-        return throwError(error);
-      }
-    })) as any;
+    return next.handle(request)
+      .pipe(
+        catchError(error => {
+          console.log('error', error)
+          if (error instanceof HttpErrorResponse && error.status === 401) {
+            if (error.url.includes('refresh')) {
+              this.isRefreshing = false
+              this.authService.clearSession()
+              this.router.navigate(['login']);
+              return EMPTY;
+            } else
+              return this.handle401Error(request, next);
+          } else {
+            return throwError(error);
+          }
+        })) as any;
   }
 
   private addToken(request: HttpRequest<any>, token: string) {

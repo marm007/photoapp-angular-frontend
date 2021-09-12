@@ -108,6 +108,7 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
         }
         posts.forEach(post => {
           post.user.meta.avatar = prepareImage(post.user.meta.avatar);
+          console.log('images', post.image)
           post.image = prepareImage(post.image);
 
         });

@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
 
   title = 'frontend';
   showHeader = true;
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit() {
     // listenging to routing navigation event
@@ -22,13 +22,13 @@ export class AppComponent implements OnInit {
   }
 
   modifyHeader(location) {
-      if (location.url !== undefined) {
+    if (location.url !== undefined) {
 
-        const flag = location.url !== '/login' && location.url !== '/register'
-          && location.url !== '/forgot' && !location.url.includes('/reset') && !location.url.includes('/relations');
-        if (this.showHeader !== flag) {
-          this.showHeader = flag;
-        }
+      const flag = location.url !== '/login' && location.url !== '/register'
+        && location.url !== '/forgot' && !location.url.includes('/reset') && !location.url.includes('/relations');
+      if (this.showHeader !== flag) {
+        this.showHeader = flag;
+      }
     }
   }
 

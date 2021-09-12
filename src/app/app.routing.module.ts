@@ -61,13 +61,16 @@ const appRoutes: Routes = [
     component: AddPostComponent,
     canActivate: [AuthGuard]
   },
-  { path: 'not-found',
+  {
+    path: 'not-found',
     component: PageNotFoundComponent
   },
-  { path: 'forbidden',
+  {
+    path: 'forbidden',
     component: ForbiddenComponent
   },
-  { path: '',
+  {
+    path: '',
     component: HomepageComponent,
     canActivate: [AuthGuard]
   },
