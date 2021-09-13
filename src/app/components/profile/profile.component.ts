@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   userID: string; // id of currently logged user
 
   visitedUserProfile: User; // Meta and data of currently visited user
-  posts: Array<Array<Post>> = [];
+  posts: Array<Post> = [];
   profileLoaded = false;
   postsLoaded = false;
   loopIteration: number;
@@ -40,44 +40,61 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private dialog: MatDialog) {
     this.userID = authService.userID;
     this.posts = [];
+
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'logged_out') {
           this.userID = authService.userID;
-          this.isFollowing();
+          // this.isFollowing();
         } else if (myMessage === 'logged_in') {
           this.userID = authService.userID;
-          this.isFollowing();
+          // this.isFollowing();
         }
       });
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => {
-      this.posts = [];
-      this.getUser(params.id);
-    });
+    console.log(this.posts)
+
+    this.activatedRoute.params
+      .subscribe(params => {
+        this.getUser(params.id);
+      });
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  listProfilePosts(offset?: number): void {
-    if (offset !== undefined && !this.postsLoaded) {
-      return;
-    }
+  loadInitialProfilePosts(): void {
 
-    this.userService.listProfilePosts(this.visitedUserProfile.id, offset)
+    this.userService.
+      listProfilePosts(this.visitedUserProfile.id, 0)
       .subscribe((posts: Post[]) => {
         posts.forEach(post => {
-          // post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
-
         });
-        this.serializeUserProfile(posts);
+        this.posts = posts;
+        this.postsLoaded = true;
       });
   }
+
+
+  loadOnScrollProfilePosts(): void {
+    if (!this.postsLoaded) return
+
+    this.userService.
+      listProfilePosts(this.visitedUserProfile.id, this.posts.length)
+      .subscribe((posts: Post[]) => {
+        posts.forEach(post => {
+          post.image = prepareImage(post.image);
+        });
+        console.log('asddqewqe', posts)
+
+        this.posts.push(...posts);
+      });
+  }
+
 
   handleImageLoaded(post: Post) {
     if (post.imageLoaded) {
@@ -111,60 +128,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   isFollowing(): void {
-    this.posts = [];
-    const requests = [];
 
-    for (const followerID of this.visitedUserProfile.followers) {
-      requests.push(this.getFollower(followerID));
+    this.buttonText = this.visitedUserProfile.is_following ? 'Unfollow' : 'Follow';
+
+    if (this.visitedUserProfile.is_following || !this.visitedUserProfile.meta.is_private ||
+      this.visitedUserProfile.id === this.userID) {
+      this.loadInitialProfilePosts();
+
     }
-
-    if (requests.length === 0) {
-      const flag = this.visitedUserProfile.id === this.authService.userID;
-      if (flag || !this.visitedUserProfile.meta.is_private) {
-        this.listProfilePosts();
-      }
-      this.buttonText = flag ? 'Unfollow' : 'Follow';
-    }
-
-    forkJoin(requests)
-      .subscribe((followers: Follower[]) => {
-        if (this.visitedUserProfile.id === this.authService.userID) {
-          this.listProfilePosts();
-        } else {
-          const flag = followers.find(follower => follower.user === this.userID) !== undefined;
-          if (flag || !this.visitedUserProfile.meta.is_private) {
-            this.listProfilePosts();
-          }
-          this.buttonText = flag ? 'Unfollow' : 'Follow';
-        }
-      });
-  }
-
-  serializeUserProfile(posts: Post[]) {
-    this.loopIteration = posts.length / 3;
-    for (let i = 0; i < this.loopIteration; i++) {
-      const postsArray = Array<Post>();
-
-      for (let j = 0; j < 3; j++) {
-        if (posts[j + i * 3] !== undefined) {
-          postsArray[j] = posts[j + i * 3];
-        }
-      }
-      this.posts.push(postsArray);
-    }
-    this.postsLoaded = true;
   }
 
   getUser(id: string) {
-    this.userService.get(id, false).subscribe(user => {
-      if (user === null) {
-        this.router.navigate(['not-found']);
-        return;
-      }
-      user.meta.avatar = prepareImage(user.meta.avatar);
-      this.visitedUserProfile = user;
-      this.profileLoaded = true;
-      this.isFollowing();
-    });
+    this.userService.get(id, false)
+      .subscribe(user => {
+        if (user === null) {
+          this.router.navigate(['not-found']);
+          return;
+        }
+        user.meta.avatar = prepareImage(user.meta.avatar);
+        this.visitedUserProfile = user;
+        this.profileLoaded = true;
+        this.isFollowing();
+      });
   }
 }

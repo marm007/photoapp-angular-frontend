@@ -130,12 +130,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getUser() {
-    this.userService.get(null, false).subscribe(user => {
-      if (user !== undefined && user !== null) {
-        user.meta.avatar = prepareImage(user.meta.avatar);
-        this.user = user;
-      }
-    });
+    this.userService.get(null, false)
+      .subscribe(user => {
+        if (user !== undefined && user !== null) {
+          user.meta.avatar = prepareImage(user.meta.avatar);
+          this.user = user;
+        }
+      });
   }
 
   onSearchChange(searchValue: string): void {

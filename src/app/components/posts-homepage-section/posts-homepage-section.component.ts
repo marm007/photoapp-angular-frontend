@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { Post, PostFilterSortModel } from '../../models/post';
 import { prepareImage } from '../../restConfig';
 import { MessageService } from '../../services/message/message.service';
-import { PostsService } from '../../services/post/posts.service';
 import { UserService } from '../../services/user/user.service';
 import { SortFilterMessage } from '../filter/filter.component';
 
@@ -18,8 +17,13 @@ export interface FilterSortMessage {
   styleUrls: ['./posts-homepage-section.component.css']
 })
 export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
+
   @Output()
   componentLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+
+  @Input()
+  userID: string;
 
   posts: Post[] = [];
 
@@ -27,30 +31,28 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
 
   message: string;
 
-  @Input()
-  userID: string;
-
   messageSubscription: Subscription;
   messageFilterSubscription: Subscription;
 
   sortFilterMessage: PostFilterSortModel = {};
 
-  constructor(private postService: PostsService,
+  constructor(
     private messageService: MessageService,
     private userService: UserService) {
-    this.messageFilterSubscription = this.messageService.getSortFilterMessage()
+    this.messageFilterSubscription = this.messageService
+      .getSortFilterMessage()
       .subscribe((message: SortFilterMessage) => {
         if (message.isPost) {
           if (message.sort) {
             // sortowanie
             this.posts = [];
             this.sortFilterMessage.ordering = message.sort.dir === 1 ? message.sort.id : '-'.concat(message.sort.id);
-            this.listFollowedPosts(null, this.sortFilterMessage);
+            this.loadInitialPosts(0, this.sortFilterMessage);
           } else if (message.filter) {
             this.posts = [];
             this.sortFilterMessage.created_after = message.filter.created_after;
             this.sortFilterMessage.created_before = message.filter.created_before;
-            this.listFollowedPosts(null, this.sortFilterMessage);
+            this.loadInitialPosts(0, this.sortFilterMessage);
           } else {
             this.posts = [];
             if (message.likesSort.likes__gt != null) {
@@ -67,7 +69,7 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
                 delete this.sortFilterMessage.likes__lt;
               }
             } else { delete this.sortFilterMessage.likes__lt; }
-            this.listFollowedPosts(null, this.sortFilterMessage);
+            this.loadInitialPosts(0, this.sortFilterMessage);
           }
         }
       });
@@ -77,13 +79,13 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
         if (message === 'reset_filter_true') {
           this.sortFilterMessage = {};
           this.posts = [];
-          this.listFollowedPosts(null, this.sortFilterMessage);
+          this.loadInitialPosts(0, this.sortFilterMessage);
         }
       });
   }
 
   ngOnInit(): void {
-    this.listFollowedPosts();
+    this.loadInitialPosts();
   }
 
   ngOnDestroy() {
@@ -98,26 +100,41 @@ export class PostsHomepageSectionComponent implements OnInit, OnDestroy {
     }
   }
 
-  listFollowedPosts(offset?: number, filters?: PostFilterSortModel): void {
-    this.userService.listFollowedPosts(offset, filters)
+  loadInitialPosts(offset?: number, filters?: PostFilterSortModel): void {
+    this.userService
+      .listFollowedPosts(offset, filters)
       .subscribe((posts: Post[]) => {
         if (!offset) {
           this.componentLoaded.emit(true);
           this.postsLoaded = true;
           this.messageService.updateMessage('posts loaded');
         }
+
         posts.forEach(post => {
           post.user.meta.avatar = prepareImage(post.user.meta.avatar);
           post.image = prepareImage(post.image);
-
         });
-        this.posts = this.posts.concat(posts);
+
+        this.posts = posts
 
       });
   }
 
   onScrolled() {
-    this.listFollowedPosts(this.posts.length, this.sortFilterMessage);
+    if (!this.postsLoaded) return
+
+    this.userService
+      .listFollowedPosts(this.posts.length, this.sortFilterMessage)
+      .subscribe((posts: Post[]) => {
+        this.messageService.updateMessage('posts loaded');
+        posts.forEach(post => {
+          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
+          post.image = prepareImage(post.image);
+        });
+
+        this.posts = [...this.posts, ...posts]
+
+      });
   }
 
 }

@@ -1,5 +1,5 @@
 <div *ngIf="post != null" class="d-none d-lg-block post-section-wrapper"
-     [style]="addPaddingToTop ? 'padding-top:120px;   margin: 0 auto 0 auto;'
+     [style]="!isHomePage ? 'padding-top:120px;   margin: 0 auto 0 auto;'
  : '  margin: 0 28px 0 auto;'">
   <div class="post-section">
     <mat-card class="post">
@@ -26,7 +26,7 @@
         <mat-card-actions>
           <button (click)="handleClick(true)" mat-button style="outline: 0">
             <fa-icon *ngIf="!isLiked" style="line-height: 0"
-                     [icon]="likeIconNoBorder" icon="likeIconNoBorder">
+                     [icon]="likeNoBorderIcon" icon="likeNoBorderIcon">
             </fa-icon>
             <fa-icon *ngIf="isLiked" style="line-height: 0"
                      [icon]="likeIcon" icon="likeIcon">
@@ -68,7 +68,7 @@
             <div *ngIf="!showMoreComments && post.comments[2]" class="post-load-more-comments-wrapper">
               <button class="post-load-more-comments" style="outline: 0"
                       (click)="showMoreComments = !showMoreComments">
-                <fa-icon  style="line-height: 0" [icon]="faCircle" icon="faCircle" class=" material-icons post-more-comments">
+                <fa-icon  style="line-height: 0" [icon]="circleIcon" icon="circleIcon" class=" material-icons post-more-comments">
                 </fa-icon>
               </button>
             </div>
@@ -111,7 +111,7 @@
     </mat-card>
   </div>
 </div>
-<div *ngIf="post != null" class="d-block d-lg-none post-section-mobile" [style]="addPaddingToTop ? 'padding-top:120px;' : ''">
+<div *ngIf="post != null" class="d-block d-lg-none post-section-mobile" [style]="!isHomePage ? 'padding-top:120px;' : ''">
   <mat-card class="post">
     <mat-card-header class="post-header">
       <div mat-card-avatar class="post-header-image  clickable" routerLink="/profile/{{this.post.user.id}}"
@@ -135,7 +135,7 @@
       <mat-card-actions>
         <button (click)="handleClick(true)" mat-button style="outline: 0">
           <fa-icon *ngIf="!isLiked" style="line-height: 0"
-                   [icon]="likeIconNoBorder" icon="likeIconNoBorder">
+                   [icon]="likeNoBorderIcon" icon="likeNoBorderIcon">
           </fa-icon>
           <fa-icon *ngIf="isLiked"  style="line-height: 0"
                    [icon]="likeIcon" icon="likeIcon">
@@ -177,7 +177,7 @@
           <div *ngIf="!showMoreComments && post.comments[2]" class="post-load-more-comments-wrapper">
             <button class="post-load-more-comments" style="outline: 0"
                     (click)="showMoreComments = !showMoreComments">
-              <fa-icon  style="line-height: 0" [icon]="faCircle" icon="faCircle" class=" material-icons post-more-comments">
+              <fa-icon  style="line-height: 0" [icon]="circleIcon" icon="circleIcon" class=" material-icons post-more-comments">
               </fa-icon>
             </button>
 
@@ -221,8 +221,8 @@
   </mat-card>
 </div>
 <mat-menu #postMenu="matMenu">
-  <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleDelete()">Usun</button>
-  <button  *ngIf="isPostOwner" mat-menu-item style="outline: 0;" (click)="handleEdit()">Edytuj</button>
+  <button  *ngIf="isOwner" mat-menu-item style="outline: 0;" (click)="handleDelete()">Usun</button>
+  <button  *ngIf="isOwner" mat-menu-item style="outline: 0;" (click)="handleEdit()">Edytuj</button>
   <button mat-menu-item style="outline: 0;" (click)="handleSee()">Zobacz</button>
 </mat-menu>
 <mat-menu #deleteCommentMenu="matMenu">

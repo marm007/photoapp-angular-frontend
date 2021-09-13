@@ -63,11 +63,10 @@ export class PostDetailComponent implements OnInit {
 
   moreIcon = faEllipsisH;
   likeIcon = faHeart;
-  likeIconNoBorder = faHeartNoBorder;
-  faCircle = faPlusCircle;
+  likeNoBorderIcon = faHeartNoBorder;
+  circleIcon = faPlusCircle;
 
-  isPostOwner: boolean;
-  addPaddingToTop: boolean;
+  isHomePage: boolean;
 
   showMoreDescription = false;
   showDescription = false;
@@ -123,20 +122,24 @@ export class PostDetailComponent implements OnInit {
     }
 
     if (this.post == null) {
-      this.addPaddingToTop = true;
-      this.activatedRoute.params.subscribe(params => {
-        this.getPost(params.id);
-      });
+      this.isHomePage = false;
+      this.activatedRoute.params.
+        subscribe(params => {
+          this.getPost(params.id);
+        });
     } else {
-      this.isPostOwner = this.post.user.id === this.authService.userID;
-      this.addPaddingToTop = false;
+      this.isHomePage = true;
       this.showMoreDescription = this.post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
     }
 
   }
-  //
+
   get isLiked(): boolean {
-    return this.post.liked.some(like => like.user === this.userID);
+    return this.post.is_liked;
+  }
+
+  get isOwner(): boolean {
+    return this.post.user.id === this.authService.userID;
   }
 
   handleClick(buttonClicked?: boolean) {
@@ -150,47 +153,45 @@ export class PostDetailComponent implements OnInit {
   }
 
   getPost(id: number) {
-    this.postsService.get(id).subscribe(post => {
-      if (post !== null) {
-        this.showMoreDescription = post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
-        post.user.meta.avatar = prepareImage(post.user.meta.avatar);
-        post.image = prepareImage(post.image);
-        this.post = post;
-        this.isPostOwner = this.post.user.id === this.authService.userID;
-      } else { this.router.navigate(['not-found']); }
-    }, error => {
-      if (error.status === 403) {
-        this.router.navigate(['forbidden']);
-        this.snackBar.open(error.error.detail, null, {
-          duration: 1500,
-        });
-      }
-    });
+    this.postsService.get(id)
+      .subscribe(post => {
+        if (post !== null) {
+          this.showMoreDescription = post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
+          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
+          post.image = prepareImage(post.image);
+          this.post = post;
+        } else { this.router.navigate(['not-found']); }
+      }, error => {
+        if (error.status === 403) {
+          this.router.navigate(['forbidden']);
+          this.snackBar.open(error.error.detail, null, {
+            duration: 1500,
+          });
+        }
+      });
   }
 
   likePost(id: string, buttonClicked?: boolean) {
     if (buttonClicked !== true) {
       if (!this.isLiked) {
-        this.postsService.like(id).subscribe(post => {
+        this.postsService.like(id)
+          .subscribe(post => {
+            if (post !== null) {
+              this.post.is_liked = post.is_liked;
+              this.post.likes = post.likes;
+              this.post.comments = post.comments;
+            }
+          });
+      }
+    } else {
+      this.postsService.like(id).
+        subscribe(post => {
           if (post !== null) {
-            post.user.meta.avatar = prepareImage(post.user.meta.avatar);
-            post.image = prepareImage(post.image);
+            this.post.is_liked = post.is_liked;
             this.post.likes = post.likes;
-            this.post.liked = post.liked;
             this.post.comments = post.comments;
           }
         });
-      }
-    } else {
-      this.postsService.like(id).subscribe(post => {
-        if (post !== null) {
-          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
-          post.image = prepareImage(post.image);
-          this.post.likes = post.likes;
-          this.post.liked = post.liked;
-          this.post.comments = post.comments;
-        }
-      });
     }
 
   }
@@ -204,12 +205,13 @@ export class PostDetailComponent implements OnInit {
   }
 
   handleCommentDelete(id: string) {
-    this.commentService.delete(id).subscribe(res => {
-      const comment = this.post.comments.find(c => c.id === id);
-      const index = this.post.comments.indexOf(comment);
-      this.post.comments.splice(index, 1);
-    }, error => {
+    this.commentService.delete(id)
+      .subscribe(res => {
+        const comment = this.post.comments.find(c => c.id === id);
+        const index = this.post.comments.indexOf(comment);
+        this.post.comments.splice(index, 1);
+      }, error => {
 
-    });
+      });
   }
 }
