@@ -9,9 +9,11 @@ export interface Post {
   likes: number;
   description: string;
   user: User;
-  liked: Like[];
-  comments: Comment[];
   created: Date;
+  comments: Comment[];
+
+  liked?: Like[];
+  is_liked?: boolean;
 }
 
 
