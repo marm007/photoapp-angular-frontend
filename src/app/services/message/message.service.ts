@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {Filter, Sort, SortFilterMessage} from '../../components/filter/filter.component';
+import { Observable, Subject } from 'rxjs';
+import { SortFilterMessage } from '../../components/filter/filter.component';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class MessageService {
   }
 
   updateMessage(message: string) {
-  this.myMessage.next(message);
+    this.myMessage.next(message);
   }
 
   getSortFilterMessage(): Observable<SortFilterMessage> {
@@ -25,7 +25,7 @@ export class MessageService {
   }
 
   updateSortFilterMessage(message: SortFilterMessage) {
-  this.sortFilterMessage.next(message);
+    this.sortFilterMessage.next(message);
   }
 }
 
