@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { SortFilterMessage } from '../../components/filter/filter.component';
+import { SortFilterMessage } from '../../navigation/filter/filter.component';
 
 @Injectable({
   providedIn: 'root'

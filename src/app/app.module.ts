@@ -30,88 +30,37 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
 import { AuthModule } from './auth/auth.module';
-import { ActivateUserComponent } from './components/activate-user/activate-user.component';
-import { AddPostComponent } from './components/add-post/add-post.component';
-import { EditPostComponent } from './components/edit-post/edit-post.component';
-import { FilterComponent } from './components/filter/filter.component';
+import { FilterComponent } from './navigation/filter/filter.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { ForgotComponent } from './components/forgot/forgot.component';
-import { HeaderComponent } from './components/header/header.component';
-import { HomepageComponent } from './components/homepage/homepage.component';
-import { LoginComponent } from './components/login/login.component';
-import { OptionsComponent } from './components/options/options.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { PostDetailComponent } from './components/post-detail/post-detail.component';
-import { PostsHomepageSectionComponent } from './components/posts-homepage-section/posts-homepage-section.component';
-import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { RegisterComponent } from './components/register/register.component';
-import { RelationDetailComponent } from './components/relation-detail/relation-detail.component';
-import { RelationsHomepageSectionComponent } from './components/relations-homepage-section/relations-homepage-section.component';
-import { RelationsModalContainerComponent } from './components/relations-modal-container/relations-modal-container.component';
-import { ResetComponent } from './components/reset/reset.component';
+import { HomeModule } from './home/home.module';
+import { PostModule } from './post/post.module';
+import { ProfileModule } from './profile/profile.module';
+import { RelationModule } from './relation/relation.module';
+import { NavigationModule } from './navigation/navigation.module';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    LoginComponent,
-    RegisterComponent,
     PageNotFoundComponent,
-    ProfileComponent,
-    HomepageComponent,
-    AddPostComponent,
-    ForgotComponent,
-    PostDetailComponent,
-    RelationDetailComponent,
-    OptionsComponent,
-    ResetComponent,
-    FilterComponent,
-    EditPostComponent,
-    RelationsModalContainerComponent,
-    RelationsHomepageSectionComponent,
-    PostsHomepageSectionComponent,
-    ProfileEditComponent,
     ForbiddenComponent,
-    ActivateUserComponent,
   ],
   imports: [
-    AppRoutingModule,
     AuthModule,
+    NavigationModule,
+    HomeModule,
+    PostModule,
+    RelationModule,
+    ProfileModule,
     BrowserModule,
-    RecaptchaModule,
-    RecaptchaFormsModule,
-    TruncateModule,
+    AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatCardModule,
-    MatButtonModule,
-    FlexLayoutModule.withConfig({
-      useColumnBasisZero: false,
-      printWithBreakpoints: ['md', 'lt-lg', 'lt-xl', 'gt-sm', 'gt-xs']
-    }),
-    ScrollingModule,
-    MatInputModule,
-    FormsModule,
     DeviceDetectorModule.forRoot(),
-    MatMenuModule,
     MatDialogModule,
-    FontAwesomeModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    InfiniteScrollModule,
-    MatAutocompleteModule,
-    MatExpansionModule,
-    NgbCollapseModule,
-    MatBottomSheetModule,
-    MatListModule,
-    MatTabsModule,
-    MatSnackBarModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule
+    MatBottomSheetModule
   ],
   bootstrap: [AppComponent]
 })

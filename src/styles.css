@@ -44,6 +44,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .form-logo-container {
+  display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
