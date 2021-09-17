@@ -78,16 +78,7 @@ export class AuthService {
 
   logout() {
     const url = `${environment.apiURL}/logout/`;
-    return this.http.post<any>(url, null, { headers: this.jwtAuthHeaders })
-      .subscribe(
-        data => {
-          localStorage.removeItem('token_access');
-          localStorage.removeItem('token_refresh');
-        },
-        err => {
-          console.error('logout', err);
-        }
-      );
+    return this.http.post<any>(url, null, { headers: this.jwtAuthHeaders });
   }
 
   refreshToken401Error() {

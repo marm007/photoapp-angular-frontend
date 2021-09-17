@@ -104,9 +104,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.messageService.updateMessage('logged_out');
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.logout()
+    .subscribe(
+      data => {
+        localStorage.removeItem('token_access');
+        localStorage.removeItem('token_refresh');
+        this.messageService.updateMessage('logged_out');
+        this.isLoggedIn = false;
+       
+      },
+      err => {
+        localStorage.removeItem('token_access');
+        localStorage.removeItem('token_refresh');
+        this.messageService.updateMessage('logged_out');
+        this.isLoggedIn = false;
+      }
+    );
+   
     this.user = null;
     if (!this.router.url.includes('profile')) {
       this.router.navigate(['login']);
