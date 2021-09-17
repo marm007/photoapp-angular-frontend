@@ -1,0 +1,6 @@
+<div class="image-container embed-responsive" [style.padding-bottom.%]="aspectRatio">
+    <img class="post-photo thumbnail embed-responsive-item" [src]="thumbnail" alt=""
+        [style]="isFullLoaded ? 'visibility: hidden;' : 'visibility: visible;'">
+    <img class="full embed-responsive-item" [src]="full" alt="" (load)="isFullLoaded = true"
+        [style]="isFullLoaded ? 'opacity: 1;' : 'opacity: 0;'" />
+</div>

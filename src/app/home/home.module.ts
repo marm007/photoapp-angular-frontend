@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PostModule } from '../post/post.module';
+import { RelationModule } from '../relation/relation.module';
 import { HomepageComponent } from './home.component';
 import { HomeRoutingModule } from './home.routing.module';
 import { PostsComponent } from './posts/posts.component';
@@ -26,14 +27,15 @@ import { RelationsComponent } from './relations/relations.component';
     CommonModule,
     FormsModule,
     FontAwesomeModule,
-    HomeRoutingModule,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     MatMenuModule,
     MatDividerModule,
     MatSnackBarModule,
     ScrollingModule,
-    PostModule
+    PostModule,
+    RelationModule,
+    HomeRoutingModule
   ]
 })
 export class HomeModule { }

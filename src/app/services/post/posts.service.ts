@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
+import { Comment } from 'src/app/models/comment';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { Post } from '../../models/post';
@@ -31,6 +32,14 @@ export class PostsService {
     return this.http.get<Post>(url,
       { headers: this.authService.jwtAuthHeaders })
       .pipe();
+  }
+
+  getComments(id: string, offset: string): Observable<[Comment]> {
+    const url = `${environment.apiURL}/posts/${id}/comments_in_post/`;
+    const params = { offset }
+    return this.http.get<[Comment]>(url,
+      { params, headers: this.authService.jwtAuthHeaders })
+      .pipe()
   }
 
   like(id: string): Observable<Post> {

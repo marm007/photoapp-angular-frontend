@@ -3,12 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faComment, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subscription } from 'rxjs';
-import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/services/auth.service';
 import { Follower } from '../models/follower';
 import { Post } from '../models/post';
-import { User } from '../models/user';
-import { ImageType, prepareImage } from '../restConfig';
+import { UserProfile } from '../models/user';
 import { MessageService } from '../services/message/message.service';
 import { UserService } from '../services/user/user.service';
 import { ProfileEditComponent } from './edit/edit.component';
@@ -22,10 +20,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   userID: string; // id of currently logged user
 
-  visitedUserProfile: User; // Meta and data of currently visited user
+  userProfile: UserProfile; // Meta and data of currently visited user
   posts: Array<Post> = [];
   profileLoaded = false;
-  postsLoaded = false;
   loopIteration: number;
   buttonText: string;
   subscription: Subscription;
@@ -44,18 +41,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscription = this.messageService.getMessage()
       .subscribe(myMessage => {
         if (myMessage === 'logged_out') {
-          this.userID = authService.userID;
-          // this.isFollowing();
+          this.getUser(this.userProfile.id)
         } else if (myMessage === 'logged_in') {
-          this.userID = authService.userID;
-          // this.isFollowing();
+          this.getUser(this.userProfile.id)
         }
       });
   }
 
   ngOnInit(): void {
-    console.log(this.posts)
-
     this.activatedRoute.params
       .subscribe(params => {
         this.getUser(params.id);
@@ -66,87 +59,47 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  loadInitialProfilePosts(): void {
-
-    this.userService.
-      listProfilePosts(this.visitedUserProfile.id, 0)
-      .subscribe((posts: Post[]) => {
-        posts.forEach(post => {
-          post.image = prepareImage(post.image);
-        });
-        this.posts = posts;
-        this.postsLoaded = true;
-      });
-  }
-
-
   loadOnScrollProfilePosts(): void {
-    if (!this.postsLoaded) return
+    if (!this.profileLoaded) return
 
     this.userService.
-      listProfilePosts(this.visitedUserProfile.id, this.posts.length)
+      listProfilePosts(this.userProfile.id, this.posts.length)
       .subscribe((posts: Post[]) => {
-        posts.forEach(post => {
-          post.image = prepareImage(post.image);
-        });
-        console.log('asddqewqe', posts)
-
-        this.posts.push(...posts);
+        this.posts = [...this.posts, ...posts];
       });
   }
 
-
-  handleImageLoaded(post: Post) {
-    if (post.imageLoaded) {
-      return;
-    }
-    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
-    post.image = prepareImage(post.image, ImageType.LARGE);
-    post.imageLoaded = true;
-  }
 
   handleFollow() {
-    this.userService.follow(this.visitedUserProfile.id).subscribe(res => {
-      this.getUser(this.visitedUserProfile.id);
+    this.userService.follow(this.userProfile.id).subscribe(res => {
+      this.getUser(this.userProfile.id);
     });
   }
 
   handleEditProfile() {
     const dialogRef = this.dialog.open(ProfileEditComponent, {
-      data: { user: this.visitedUserProfile }
+      data: { user: this.userProfile }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.visitedUserProfile = result;
+        this.userProfile = result;
       }
     });
   }
-
-  getFollower(id: string): Observable<Follower> {
-    return this.userService.getFollower(id);
-  }
-
   isFollowing(): void {
-
-    this.buttonText = this.visitedUserProfile.is_following ? 'Unfollow' : 'Follow';
-
-    if (this.visitedUserProfile.is_following || !this.visitedUserProfile.meta.is_private ||
-      this.visitedUserProfile.id === this.userID) {
-      this.loadInitialProfilePosts();
-
-    }
+    this.buttonText = this.userProfile.is_following ? 'Unfollow' : 'Follow';
   }
 
   getUser(id: string) {
-    this.userService.get(id, false)
+    this.userService.getProfile(id)
       .subscribe(user => {
         if (user === null) {
           this.router.navigate(['not-found']);
           return;
         }
-        user.meta.avatar = prepareImage(user.meta.avatar);
-        this.visitedUserProfile = user;
+        this.userProfile = user;
+        this.posts = user.posts;
         this.profileLoaded = true;
         this.isFollowing();
       });

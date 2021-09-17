@@ -10,6 +10,8 @@ export enum ImageType {
 
 export function prepareImage(path: string, imageType: ImageType = ImageType.THUMBNAIL): string {
   if (path !== null) {
+    return path.split('/upload/').join(`/upload/${imageType}`)
+    /* 
     if (path.includes(environment.mediaHttpURL)) {
       const index = environment.mediaHttpURL.length;
       return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13, path.length);
@@ -18,7 +20,8 @@ export function prepareImage(path: string, imageType: ImageType = ImageType.THUM
       return environment.mediaURL + path.slice(index, index + 13) + imageType + path.slice(index + 13, path.length);
     } else {
       return environment.mediaURL + path.slice(0, 13) + imageType + path.slice(13, path.length);
-    }
+    } 
+    */
   } else {
     return environment.avatarURL;
   }

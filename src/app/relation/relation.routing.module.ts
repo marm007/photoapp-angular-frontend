@@ -7,7 +7,7 @@ const appRoutes: Routes = [
   {
     path: 'relations/:id',
     component: RelationModalComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   }
 ];
 

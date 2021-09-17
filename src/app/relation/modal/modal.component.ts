@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DialogMode } from '../../models/dialogMode';
 import { Relation } from '../../models/relation';
-import { addCorrectTime, prepareImage } from '../../restConfig';
+import { addCorrectTime } from '../../restConfig';
 import { RelationService } from '../../services/relation/relation.service';
 import { UserService } from '../../services/user/user.service';
 import { RelationDetailComponent } from '../detail/detail.component';
@@ -35,6 +35,7 @@ export class RelationModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log("INIT")
   }
 
   ngOnDestroy(): void {
@@ -45,8 +46,6 @@ export class RelationModalComponent implements OnInit, OnDestroy {
   playRelation(id: string) {
     this.relationService.get(id).subscribe(relation => {
       if (relation !== null) {
-        relation.user.meta.avatar = prepareImage(relation.user.meta.avatar);
-        relation.image = prepareImage(relation.image);
         relation.created = addCorrectTime(relation.created);
         const dialogRef = this.dialog.open(RelationDetailComponent, {
           panelClass: 'custom-dialog-container',

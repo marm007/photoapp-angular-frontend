@@ -2,57 +2,57 @@
   <div class="profile-section">
     <header class="d-none d-md-flex profile-header">
       <div mat-card-avatar class="profile-image-wrapper">
-        <img mat-card-avatar class="profile-image" src="{{visitedUserProfile.meta.avatar}}" />
+        <img mat-card-avatar class="profile-image" src="{{userProfile.meta.avatar}}" />
       </div>
       <section class="profile-data">
         <div class="profile-data-wrapper">
           <div class="profile-username">
-            {{visitedUserProfile.username}}
+            {{userProfile.username}}
           </div>
-          <button *ngIf="userID !== visitedUserProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
+          <button *ngIf="userID !== userProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
             {{this.buttonText}}
           </button>
-          <button *ngIf="userID === visitedUserProfile.id" mat-button (click)="handleEditProfile()"
+          <button *ngIf="userID === userProfile.id" mat-button (click)="handleEditProfile()"
             class="profile-follow">
             Edit profile
           </button>
         </div>
         <div class="profile-data-wrapper">
           <div class="profile-data-statistics">
-            Posts: <b>{{visitedUserProfile.posts.length}}</b>
+            Posts: <b>{{userProfile.posts_count}}</b>
           </div>
           <div class="profile-data-statistics">
-            Followers: <b>{{visitedUserProfile.followers.length}}</b>
+            Followers: <b>{{userProfile.followers}}</b>
           </div>
           <div style="margin-right: 0" class="profile-data-statistics">
-            Followed: <b>{{visitedUserProfile.followed.length}}</b>
+            Followed: <b>{{userProfile.followed}}</b>
           </div>
         </div>
         <div>
-          {{visitedUserProfile.first_name}} {{visitedUserProfile.last_name}}
+          {{userProfile.first_name}} {{userProfile.last_name}}
         </div>
       </section>
 
     </header>
     <header class="d-flex d-md-none profile-header-mobile">
       <div class="profile-image-wrapper-mobile">
-        <img class="profile-image-mobile" src="{{visitedUserProfile.meta.avatar}}" />
+        <img class="profile-image-mobile" src="{{userProfile.meta.avatar}}" />
       </div>
       <section class="profile-data">
         <div class="profile-data-wrapper" style="margin-bottom: 5px">
           <div class="profile-nick">
-            {{visitedUserProfile.username}}
+            {{userProfile.username}}
           </div>
-          <button *ngIf="userID !== visitedUserProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
+          <button *ngIf="userID !== userProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
             {{this.buttonText}}
           </button>
-          <button *ngIf="userID === visitedUserProfile.id" mat-button (click)="handleEditProfile()"
+          <button *ngIf="userID === userProfile.id" mat-button (click)="handleEditProfile()"
             class="profile-follow">
             Edit profile
           </button>
         </div>
         <div>
-          {{visitedUserProfile.first_name}} {{visitedUserProfile.last_name}}
+          {{userProfile.first_name}} {{userProfile.last_name}}
         </div>
       </section>
     </header>
@@ -62,7 +62,7 @@
           Posts:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{visitedUserProfile.posts.length}}
+          {{userProfile.posts_count}}
         </span>
       </li>
       <li class="profile-data-statistics-mobile">
@@ -70,7 +70,7 @@
           Followers:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{visitedUserProfile.followers.length}}
+          {{userProfile.followers}}
         </span>
       </li>
       <li class="profile-data-statistics-mobile">
@@ -78,7 +78,7 @@
           Followed:
         </span>
         <span class="profile-data-statistics-value-mobile">
-          {{visitedUserProfile.followed.length}}
+          {{userProfile.followed}}
         </span>
       </li>
     </ul>
@@ -86,9 +86,10 @@
     <div class="profile-posts" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
       (scrolled)="loadOnScrollProfilePosts()">
       <div class="row m-0 p-0">
-        <div class="col col-12 col-sm-6 col-md-4 mb-4 profile-column" *ngFor="let post of posts" routerLink="/post/{{post.id}}">
-          <div class="embed-responsive embed-responsive-16by9">
-            <img class="profile-image-hover embed-responsive-item" [src]="post.image" alt="" />
+        <div class="col col-12 col-sm-6 col-md-4 mb-4 profile-column" *ngFor="let post of posts"
+          routerLink="/post/{{post.id}}">
+          <div class="profile-image-hover">
+            <app-blured-image [meta]="post.image_meta"></app-blured-image>
           </div>
           <div class="profile-middle">
             <div style="display: flex; flex-direction: row">

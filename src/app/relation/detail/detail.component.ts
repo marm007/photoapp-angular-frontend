@@ -66,7 +66,7 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
     this.setSize();
 
     if (this.modelRelation.mode === DialogMode.WATCH) {
-      this.startTimer();
+     // this.startTimer();
     }
   }
 
@@ -79,17 +79,6 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
     });
 
     reader.readAsDataURL(file);
-  }
-
-  handleImageLoaded() {
-    if (this.modelRelation.relation.imageLoaded) {
-      return;
-    }
-
-    this.modelRelation.relation.image = this.modelRelation.relation.image.
-      replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
-    this.modelRelation.relation.image = prepareImage(this.modelRelation.relation.image, ImageType.LARGE);
-    this.modelRelation.relation.imageLoaded = true;
   }
 
   handleClose() {
@@ -106,8 +95,6 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
     }
     this.relationService.add(this.selectedFile.file).subscribe(
       (res: any) => {
-        res.user.meta.avatar = prepareImage(res.user.meta.avatar);
-        res.image = prepareImage(res.image);
         res.created = addCorrectTime(res.created);
         this.selectedFile.pending = false;
         this.dialogRef.close(res);

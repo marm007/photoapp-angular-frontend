@@ -1,9 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
-import { Follower } from '../models/follower';
-import { User } from '../models/user';
-import { prepareImage } from '../restConfig';
+import { Dashboard } from '../models/dashboard';
 import { UserService } from '../services/user/user.service';
 
 @Component({
@@ -13,9 +10,7 @@ import { UserService } from '../services/user/user.service';
 })
 export class HomepageComponent implements OnInit {
 
-  followed: Follower[];
-
-  user: User;
+  dashboard: Dashboard;
 
   componentLoaded = false;
 
@@ -27,7 +22,7 @@ export class HomepageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLoggedUserData();
+    this.getDashboard();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -35,19 +30,12 @@ export class HomepageComponent implements OnInit {
     this.innerWidth = window.innerWidth;
   }
 
-  onComponentLoaded() {
-    this.componentLoaded = true;
-  }
 
-  getFollower(id: string): Observable<Follower> {
-    return this.userService.getFollower(id);
-  }
-
-  getLoggedUserData() {
-    this.userService.get(this.authService.userID)
-      .subscribe(user => {
-        user.meta.avatar = prepareImage(user.meta.avatar);
-        this.user = user;
+  getDashboard() {
+    this.userService.getDashboard()
+      .subscribe(dashboard => {
+        this.componentLoaded = true;
+        this.dashboard = dashboard
       });
   }
 }

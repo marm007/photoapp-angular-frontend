@@ -3,7 +3,10 @@
     <mat-spinner style="margin-top: 80px"></mat-spinner>
   </div>
   <div [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
-    <app-posts *ngIf="user"  (componentLoaded)="onComponentLoaded()"></app-posts>
-    <app-relations *ngIf="user"  [user]="user"></app-relations>
+    <app-posts *ngIf="dashboard" [posts]="dashboard.posts"></app-posts>
+    <app-relations *ngIf="dashboard" [relations]="dashboard.relations" [userId]="dashboard.id"
+      [userAvatar]="dashboard.meta.avatar">
+    </app-relations>
   </div>
+  <router-outlet></router-outlet>
 </div>

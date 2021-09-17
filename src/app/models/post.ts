@@ -2,17 +2,19 @@ import { Comment } from './comment';
 import { Like } from './like';
 import { User } from './user';
 
+export interface PostMeta  {
+  width: number;
+  height: number;
+  url: string;
+}
 export interface Post {
   id: string;
-  image: string;
-  imageLoaded: boolean;
   likes: number;
   description: string;
   user: User;
   created: Date;
   comments: Comment[];
-
-  liked?: Like[];
+  image_meta: PostMeta;
   is_liked?: boolean;
 }
 

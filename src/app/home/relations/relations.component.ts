@@ -5,13 +5,12 @@ import { Subject, Subscription } from 'rxjs';
 import { DialogMode } from '../../models/dialogMode';
 import { PostFilterSortModel } from '../../models/post';
 import { Relation } from '../../models/relation';
-import { User } from '../../models/user';
-import { addCorrectTime, prepareImage } from '../../restConfig';
+import { SortFilterMessage } from '../../navigation/filter/filter.component';
+import { RelationDetailComponent } from '../../relation/detail/detail.component';
+import { addCorrectTime, ImageType, prepareImage } from '../../restConfig';
 import { MessageService } from '../../services/message/message.service';
 import { RelationService } from '../../services/relation/relation.service';
 import { UserService } from '../../services/user/user.service';
-import { SortFilterMessage } from '../../navigation/filter/filter.component';
-import { RelationDetailComponent } from '../../relation/detail/detail.component';
 
 @Component({
   selector: 'app-relations',
@@ -22,9 +21,13 @@ import { RelationDetailComponent } from '../../relation/detail/detail.component'
 export class RelationsComponent implements OnInit, OnDestroy {
 
   @Input()
-  user: User;
+  userId: string;
 
-  relations: Relation[] = [];
+  @Input()
+  userAvatar: string;
+
+  @Input()
+  relations: Relation[] = []
 
   subscription: Subscription;
   messageFilterSubscription: Subscription;
@@ -75,11 +78,14 @@ export class RelationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.listFollowedRelations();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  relationThumbnail(relation: Relation) {
+    return prepareImage(relation.image_meta.url, ImageType.THUMBNAIL);
   }
 
   listFollowedRelations(offset?: number, queryParams?: PostFilterSortModel): void {
@@ -87,9 +93,8 @@ export class RelationsComponent implements OnInit, OnDestroy {
       .subscribe((relations: Relation[]) => {
         if (relations.length > 0) {
           relations.forEach(relation => {
-            relation.user.meta.avatar = prepareImage(relation.user.meta.avatar);
-            relation.image = prepareImage(relation.image);
             relation.created = addCorrectTime(relation.created);
+            relation.thumbnail = prepareImage(relation.image_meta.url, ImageType.THUMBNAIL)
           });
           this.relations = this.relations.concat(relations);
         }
@@ -98,7 +103,7 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
 
   addRelation() {
-    this.userService.get(this.user.id).subscribe(user => {
+    this.userService.get(this.userId).subscribe(user => {
       user.meta.avatar = prepareImage(user.meta.avatar);
       const dialogRef = this.dialog.open(RelationDetailComponent, {
         panelClass: 'custom-dialog-container',
@@ -120,21 +125,11 @@ export class RelationsComponent implements OnInit, OnDestroy {
 
   playRelation(i?: number) {
     if (i !== undefined) {
-      const dialogRef = this.dialog.open(RelationDetailComponent, {
-        panelClass: 'custom-dialog-container',
-        data: { mode: DialogMode.WATCH, relation: this.relations[i] }
-      });
-      dialogRef.afterClosed().subscribe(value => {
-        if (value === 'deleted') {
-          const relationToDelete = this.relations.find(r => r.id === this.relations[i].id);
-          const index = this.relations.indexOf(relationToDelete);
-          if (index !== -1) {
-            this.relations.splice(index, 1);
-          }
-        }
-      });
+      this.router.navigate([`relations/${this.relations[i].id}`]);
+
+
     } else {
-      const usersRelations = this.relations.filter(r => r.user.id === this.user.id);
+      const usersRelations = this.relations.filter(r => r.user.id === this.userId);
       if (usersRelations.length > 0) {
         const dialogRef = this.dialog.open(RelationDetailComponent, {
           panelClass: 'custom-dialog-container',

@@ -35,8 +35,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isLoggedIn = this.authService.isLoggedIn();
 
     this.router.events.subscribe((event: Event) => {
+      
       if (event instanceof NavigationStart) {
-        this.isMainPage = event.url === '/';
+        this.isMainPage = event.url === '/' || event.url.includes('/relations/');
       }
 
       if (event instanceof NavigationError) {
@@ -94,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isMainPage = this.router.url === '/';
+    this.isMainPage = this.router.url === '/' || this.router.url.includes('/relations/');
     this.getUser();
   }
 

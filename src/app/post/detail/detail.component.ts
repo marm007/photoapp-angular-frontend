@@ -5,10 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faHeart as faHeartNoBorder } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisH, faHeart, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { Post } from '../../models/post';
-import { ImageType, prepareImage } from '../../restConfig';
 import { CommentService } from '../../services/comment/comment.service';
 import { PostsService } from '../../services/post/posts.service';
 
@@ -50,7 +48,7 @@ export class PostDetailComponent implements OnInit {
   MAX_DESCRIPTION_WORDS = 10;
 
   @Input()
-  post: Post;
+  post: Post | null;
 
   @Input()
   userID: string;
@@ -64,13 +62,11 @@ export class PostDetailComponent implements OnInit {
   moreIcon = faEllipsisH;
   likeIcon = faHeart;
   likeNoBorderIcon = faHeartNoBorder;
-  circleIcon = faPlusCircle;
 
   isHomePage: boolean;
 
   showMoreDescription = false;
-  showDescription = false;
-  showMoreComments = false;
+  showDescription = false; // delete (?)
 
   addCommentContent: string;
 
@@ -86,25 +82,18 @@ export class PostDetailComponent implements OnInit {
     this.isDesktop = deviceDetectorService.isDesktop();
   }
 
-  handleImageLoaded(post: Post) {
-    if (post.imageLoaded) {
-      return;
-    }
-
-    post.image = post.image.replace(environment.mediaURL, '').replace(ImageType.THUMBNAIL, '');
-    post.image = prepareImage(post.image, ImageType.LARGE);
-    post.imageLoaded = true;
-  }
-
   handleDelete() {
-    this.postsService.delete(String(this.post.id)).subscribe(res => {
-      if (res === null) {
-        if (this.router.url === '/') {
-          this.postDeleted.emit(this.post);
+    this.postsService.delete(String(this.post.id))
+      .subscribe(res => {
+        if (res === null) {
+          if (this.router.url === '/') {
+            this.postDeleted.emit(this.post);
+          }
+          this.router.navigate(['']);
         }
-        this.router.navigate(['']);
-      }
-    });
+      }, err => {
+
+      });
   }
 
   handleEdit() {
@@ -117,11 +106,9 @@ export class PostDetailComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.userID === undefined) {
-      this.userID = this.authService.userID;
-    }
+    if (!this.userID) this.userID = this.authService.userID;
 
-    if (this.post == null) {
+    if (!this.post) {
       this.isHomePage = false;
       this.activatedRoute.params.
         subscribe(params => {
@@ -135,11 +122,11 @@ export class PostDetailComponent implements OnInit {
   }
 
   get isLiked(): boolean {
-    return this.post.is_liked;
+    return this.post && this.post.is_liked;
   }
 
   get isOwner(): boolean {
-    return this.post.user.id === this.authService.userID;
+    return this.post && this.post.user.id === this.authService.userID;
   }
 
   handleClick(buttonClicked?: boolean) {
@@ -157,8 +144,6 @@ export class PostDetailComponent implements OnInit {
       .subscribe(post => {
         if (post !== null) {
           this.showMoreDescription = post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
-          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
-          post.image = prepareImage(post.image);
           this.post = post;
         } else { this.router.navigate(['not-found']); }
       }, error => {
@@ -204,14 +189,4 @@ export class PostDetailComponent implements OnInit {
     });
   }
 
-  handleCommentDelete(id: string) {
-    this.commentService.delete(id)
-      .subscribe(res => {
-        const comment = this.post.comments.find(c => c.id === id);
-        const index = this.post.comments.indexOf(comment);
-        this.post.comments.splice(index, 1);
-      }, error => {
-
-      });
-  }
 }

@@ -1,9 +1,9 @@
 <div class="post-section-my">
 </div>
-<div *ngIf="postsLoaded" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
+<div infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
   (scrolled)="onScrolled()">
 
-  <app-post *ngFor="let _post of posts" [post]="_post" [userID]="userID" (postDeleted)="onPostDeleted($event)">
+  <app-post *ngFor="let post of posts" [post]="post" [userID]="userID" (postDeleted)="onPostDeleted($event)">
   </app-post>
 
 </div>

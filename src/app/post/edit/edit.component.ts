@@ -45,9 +45,8 @@ export class PostEditComponent implements OnInit {
           } else {
             this.postService.get(params.id)
               .subscribe(postToEdit => {
-                postToEdit.image = prepareImage(postToEdit.image, ImageType.LARGE);
                 this.postToEdit = postToEdit;
-                this.selectedFile = new ImageSnippet(postToEdit.image);
+                this.selectedFile = new ImageSnippet(prepareImage(postToEdit.image_meta.url, ImageType.LARGE));
                 this.descriptionModel.text = postToEdit.description;
               });
           }
@@ -104,7 +103,7 @@ export class PostEditComponent implements OnInit {
     let image = null;
     let description = null;
 
-    if (this.postToEdit.image !== this.selectedFile.src) {
+    if (prepareImage(this.postToEdit.image_meta.url, ImageType.LARGE) !== this.selectedFile.src) {
       if (this.selectedFile.file.type === 'image/jpeg') {
         image = this.selectedFile.file;
       } else {

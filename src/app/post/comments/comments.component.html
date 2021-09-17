@@ -1,0 +1,36 @@
+<div>
+    <div *ngFor="let comment of initialComments" class="post-comment">
+        <a>{{comment.author_name}}</a>
+        <span style="margin-left: 0; padding-left: 10px">{{comment.body}}</span>
+        <div [style]="!isDesktop ? 'opacity: 1;' : ''" class="fa fa-1x post-comment-options"
+            *ngIf="comment.user === this.userId">
+            <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: comment.id}" [icon]="moreIcon"
+                icon="moreIcon">
+            </fa-icon>
+        </div>
+    </div>
+    <div *ngFor="let comment of comments">
+        <div class="post-comment">
+            <a>{{comment.author_name}}</a>
+            <span style="margin-left: 0; padding-left: 10px">{{comment.body}}</span>
+            <div [style]="!isDesktop ? 'opacity: 1;' : ''" class="fa fa-1x post-comment-options"
+                *ngIf="comment.user === this.userId">
+                <fa-icon [matMenuTriggerFor]="deleteCommentMenu" [matMenuTriggerData]="{id: comment.id}"
+                    [icon]="moreIcon" icon="moreIcon">
+                </fa-icon>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isMoreComments" class="post-load-more-comments-wrapper">
+        <button class="post-load-more-comments" style="outline: 0" (click)="loadMoreComments()">
+            <fa-icon style="line-height: 0" [icon]="circleIcon" icon="circleIcon"
+                class=" material-icons post-more-comments">
+            </fa-icon>
+        </button>
+    </div>
+</div>
+<mat-menu #deleteCommentMenu="matMenu">
+    <ng-template matMenuContent let-id="id">
+        <button mat-menu-item style="outline: 0;" (click)="handleCommentDelete(id)">Usuń</button>
+    </ng-template>
+</mat-menu>

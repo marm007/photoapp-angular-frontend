@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Post, PostFilterSortModel } from '../../models/post';
-import { prepareImage } from '../../restConfig';
 import { MessageService } from '../../services/message/message.service';
 import { UserService } from '../../services/user/user.service';
 import { SortFilterMessage } from '../../navigation/filter/filter.component';
@@ -18,14 +17,11 @@ export interface FilterSortMessage {
 })
 export class PostsComponent implements OnInit, OnDestroy {
 
-  @Output()
-  componentLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-
   @Input()
   userID: string;
 
-  posts: Post[] = [];
+  @Input()
+  posts: Post[];
 
   postsLoaded = false;
 
@@ -85,7 +81,7 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadInitialPosts();
+    this.postsLoaded = true;
   }
 
   ngOnDestroy() {
@@ -105,18 +101,10 @@ export class PostsComponent implements OnInit, OnDestroy {
       .listFollowedPosts(offset, filters)
       .subscribe((posts: Post[]) => {
         if (!offset) {
-          this.componentLoaded.emit(true);
           this.postsLoaded = true;
           this.messageService.updateMessage('posts loaded');
         }
-
-        posts.forEach(post => {
-          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
-          post.image = prepareImage(post.image);
-        });
-
         this.posts = posts
-
       });
   }
 
@@ -127,13 +115,7 @@ export class PostsComponent implements OnInit, OnDestroy {
       .listFollowedPosts(this.posts.length, this.sortFilterMessage)
       .subscribe((posts: Post[]) => {
         this.messageService.updateMessage('posts loaded');
-        posts.forEach(post => {
-          post.user.meta.avatar = prepareImage(post.user.meta.avatar);
-          post.image = prepareImage(post.image);
-        });
-
         this.posts = [...this.posts, ...posts]
-
       });
   }
 
