@@ -13,7 +13,7 @@
           </fa-icon>
         </div>
       </mat-card-header>
-      <div class="post-photo-block" (dblclick)="handleClick()">
+      <div class="post-photo-block" (click)="handleDoubleClick()">
         &nbsp;
         <app-blured-image [meta]="post.image_meta"></app-blured-image>
         <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger" [icon]="likeIcon" icon="likeIcon"
@@ -75,7 +75,7 @@
         </fa-icon>
       </div>
     </mat-card-header>
-    <div class="post-photo-block" (dblclick)="handleClick()">
+    <div class="post-photo-block" (click)="handleDoubleClick()">
       <app-blured-image [meta]="post.image_meta"></app-blured-image>
       <fa-icon @myInsertRemoveTrigger *ngIf="likeTrigger" [icon]="likeIcon" icon="likeIcon" class="fa fa-6x like-heart">
       </fa-icon>

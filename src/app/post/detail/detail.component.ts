@@ -74,6 +74,8 @@ export class PostDetailComponent implements OnInit {
 
   isDesktop: boolean;
 
+  private touchTime = 0;
+
   constructor(private activatedRoute: ActivatedRoute,
     private postsService: PostsService,
     private commentService: CommentService,
@@ -82,6 +84,22 @@ export class PostDetailComponent implements OnInit {
     private snackBar: MatSnackBar,
     private deviceDetectorService: DeviceDetectorService) {
     this.isDesktop = deviceDetectorService.isDesktop();
+  }
+
+  handleDoubleClick() {
+
+    if (this.touchTime == 0) {
+      this.touchTime = new Date().getTime();
+    } else {
+      if (((new Date().getTime()) - this.touchTime) < 800) {
+        this.likeTrigger = true;
+        this.likePost(String(this.post.id), false);
+        setTimeout(() => this.likeTrigger = false, 800);
+        this.touchTime = 0;
+      } else {
+        this.touchTime = new Date().getTime();
+      }
+    }
   }
 
   handleDelete() {
@@ -113,7 +131,8 @@ export class PostDetailComponent implements OnInit {
     if (!this.post) {
       this.activatedRoute.params.
         subscribe(params => {
-          this.getPost(params.id);
+          if (params.id)
+            this.getPost(params.id);
         });
     } else {
       this.showMoreDescription = this.post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
@@ -130,13 +149,7 @@ export class PostDetailComponent implements OnInit {
   }
 
   handleClick(buttonClicked?: boolean) {
-    if (this.likeTrigger === false && buttonClicked !== true) {
-      this.likeTrigger = true;
-      this.likePost(String(this.post.id), buttonClicked);
-      setTimeout(() => this.likeTrigger = false, 800);
-    } else {
-      this.likePost(String(this.post.id), buttonClicked);
-    }
+    this.likePost(String(this.post.id), buttonClicked);
   }
 
   getPost(id: number) {
