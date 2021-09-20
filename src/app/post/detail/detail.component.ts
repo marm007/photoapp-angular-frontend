@@ -53,7 +53,7 @@ export class PostDetailComponent implements OnInit {
   @Input()
   userID: string;
 
-  @Input() 
+  @Input()
   isHomePage: boolean = false;
 
   @Output()
@@ -113,7 +113,7 @@ export class PostDetailComponent implements OnInit {
     if (!this.post) {
       this.activatedRoute.params.
         subscribe(params => {
-          // this.getPost(params.id);
+          this.getPost(params.id);
         });
     } else {
       this.showMoreDescription = this.post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
