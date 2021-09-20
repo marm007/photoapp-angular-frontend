@@ -53,17 +53,19 @@ export class PostDetailComponent implements OnInit {
   @Input()
   userID: string;
 
+  @Input() 
+  isHomePage: boolean = false;
+
   @Output()
   postDeleted: EventEmitter<Post> = new EventEmitter<Post>();
 
   @HostBinding('@like')
   public likeTrigger = false;
 
+
   moreIcon = faEllipsisH;
   likeIcon = faHeart;
   likeNoBorderIcon = faHeartNoBorder;
-
-  isHomePage: boolean;
 
   showMoreDescription = false;
   showDescription = false; // delete (?)
@@ -109,13 +111,11 @@ export class PostDetailComponent implements OnInit {
     if (!this.userID) this.userID = this.authService.userID;
 
     if (!this.post) {
-      this.isHomePage = false;
       this.activatedRoute.params.
         subscribe(params => {
-          this.getPost(params.id);
+          // this.getPost(params.id);
         });
     } else {
-      this.isHomePage = true;
       this.showMoreDescription = this.post.description.split(' ').length > this.MAX_DESCRIPTION_WORDS;
     }
 

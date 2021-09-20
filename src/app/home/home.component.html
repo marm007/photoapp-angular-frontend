@@ -1,10 +1,10 @@
 <div>
-  <div *ngIf="!componentLoaded" style="display:flex; align-items:center;justify-content:center;">
+  <!--  <div *ngIf="!componentLoaded" style="display:flex; align-items:center;justify-content:center;">
     <mat-spinner style="margin-top: 80px"></mat-spinner>
-  </div>
-  <div [class]="innerWidth >= 992 ? 'app-container' : 'app-container-mobile'">
-    <app-posts *ngIf="dashboard" [posts]="dashboard.posts"></app-posts>
-    <app-relations *ngIf="dashboard" [relations]="dashboard.relations" [userId]="dashboard.id"
+  </div> -->
+  <div class="app-container">
+    <app-posts [posts]="dashboard.posts"></app-posts>
+    <app-relations [relations]="dashboard.relations" [userId]="dashboard.id"
       [userAvatar]="dashboard.meta.avatar">
     </app-relations>
   </div>

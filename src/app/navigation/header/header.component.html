@@ -27,7 +27,7 @@
       </mat-autocomplete>
     </div>
     <div class="header-icons">
-      <div *ngIf="isLoggedIn && user" class="header-icons">
+      <div *ngIf="isLoggedIn && user">
         <button *ngIf="isMainPage" class="header-icons-button" mat-button style="margin-right: 15px;"
           (click)="handleFilterClick()">
           <fa-icon style="line-height: 0" [icon]="filterIcon" icon="filterIcon" class="fa fa-1x header-icons-filter">

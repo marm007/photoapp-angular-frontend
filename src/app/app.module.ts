@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -25,6 +26,7 @@ import { RelationModule } from './relation/relation.module';
     ForbiddenComponent
   ],
   imports: [
+    CommonModule,
     AuthModule,
     NavigationModule,
     HomeModule,

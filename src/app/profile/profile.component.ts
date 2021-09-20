@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   userProfile: UserProfile; // Meta and data of currently visited user
   posts: Array<Post> = [];
   profileLoaded = false;
+  isMorePosts = true;
   loopIteration: number;
   buttonText: string;
   subscription: Subscription;
@@ -48,6 +49,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
   }
 
+  createRange(number: number) {
+
+    return [...Array(number)];
+  }
+
+  checkIfIsMiddle(i: number) {
+    const j = Math.floor(i / 3);
+    return (j % 2 === 0 && i % 2 === 1) || (j % 2 !== 0 && i % 2 === 0) ? 'profile-column-middle' : 'profile-column'
+  }
+
   ngOnInit(): void {
     this.activatedRoute.params
       .subscribe(params => {
@@ -60,7 +71,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   loadOnScrollProfilePosts(): void {
-    if (!this.profileLoaded) return
+    if (!this.profileLoaded || !this.isMorePosts) return
 
     this.userService.
       listProfilePosts(this.userProfile.id, this.posts.length)
@@ -92,6 +103,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getUser(id: string) {
+
     this.userService.getProfile(id)
       .subscribe(user => {
         if (user === null) {
@@ -100,6 +112,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
         this.userProfile = user;
         this.posts = user.posts;
+        this.isMorePosts = user.posts.length === 12;
         this.profileLoaded = true;
         this.isFollowing();
       });

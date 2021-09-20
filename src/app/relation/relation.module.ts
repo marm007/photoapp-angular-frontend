@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BluredImageModule } from '../blured-image/shared.module';
+import { BluredImageModule } from '../blured-image/blured-image.module';
 import { RelationDetailComponent } from './detail/detail.component';
 import { RelationModalComponent } from './modal/modal.component';
 import { RelationOptionsComponent } from './options/options.component';

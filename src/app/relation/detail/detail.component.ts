@@ -3,12 +3,11 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { faEllipsisH, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { DialogMode } from '../../models/dialogMode';
 import { ImageSnippet } from '../../models/imageSnippet';
 import { Relation } from '../../models/relation';
-import { addCorrectTime, ImageType, prepareImage } from '../../restConfig';
+import { addCorrectTime } from '../../restConfig';
 import { RelationService } from '../../services/relation/relation.service';
 import { RelationOptionsComponent } from '../options/options.component';
 
@@ -66,7 +65,7 @@ export class RelationDetailComponent implements OnInit, AfterContentInit, OnDest
     this.setSize();
 
     if (this.modelRelation.mode === DialogMode.WATCH) {
-     // this.startTimer();
+      this.startTimer();
     }
   }
 

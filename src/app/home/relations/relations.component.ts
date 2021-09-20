@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
@@ -84,7 +84,9 @@ export class RelationsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+
   relationThumbnail(relation: Relation) {
+    if (!relation) return
     return prepareImage(relation.image_meta.url, ImageType.THUMBNAIL);
   }
 

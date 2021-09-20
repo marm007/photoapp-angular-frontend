@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TruncateModule } from '@yellowspot/ng-truncate';
-import { BluredImageModule } from '../blured-image/shared.module';
+import { BluredImageModule } from '../blured-image/blured-image.module';
 import { PostAddComponent } from './add/add.component';
 import { CommentsComponent } from './comments/comments.component';
 import { PostDetailComponent } from './detail/detail.component';

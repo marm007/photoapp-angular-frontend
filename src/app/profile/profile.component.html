@@ -1,93 +1,128 @@
-<main *ngIf="profileLoaded">
+<main>
   <div class="profile-section">
     <header class="d-none d-md-flex profile-header">
-      <div mat-card-avatar class="profile-image-wrapper">
-        <img mat-card-avatar class="profile-image" src="{{userProfile.meta.avatar}}" />
+      <div class="profile-image-wrapper skeleton-box-no-anim">
+        <img *ngIf="userProfile" class="profile-image" src="{{userProfile.meta.avatar}}" />
       </div>
       <section class="profile-data">
-        <div class="profile-data-wrapper">
-          <div class="profile-username">
-            {{userProfile.username}}
-          </div>
-          <button *ngIf="userID !== userProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
-            {{this.buttonText}}
-          </button>
-          <button *ngIf="userID === userProfile.id" mat-button (click)="handleEditProfile()"
-            class="profile-follow">
-            Edit profile
-          </button>
-        </div>
-        <div class="profile-data-wrapper">
-          <div class="profile-data-statistics">
-            Posts: <b>{{userProfile.posts_count}}</b>
-          </div>
-          <div class="profile-data-statistics">
-            Followers: <b>{{userProfile.followers}}</b>
-          </div>
-          <div style="margin-right: 0" class="profile-data-statistics">
-            Followed: <b>{{userProfile.followed}}</b>
+        <div class="profile-data-top">
+          <div class="skeleton-box-no-anim">
+            <div *ngIf="userProfile" class="d-flex">
+              <div class="profile-username">
+                {{userProfile.username}}
+              </div>
+              <button *ngIf="userID !== userProfile.id" mat-button (click)="handleFollow()" class="profile-follow">
+                {{this.buttonText}}
+              </button>
+              <button *ngIf="userID === userProfile.id" mat-button (click)="handleEditProfile()" class="profile-follow">
+                Edit profile
+              </button>
+            </div>
           </div>
         </div>
-        <div>
-          {{userProfile.first_name}} {{userProfile.last_name}}
+        <div class="profile-data-bottom">
+          <div class="skeleton-box-no-anim">
+            <div *ngIf="userProfile" class="h-100 w-100">
+
+              <div class="profile-data-wrapper">
+
+                <div class="profile-data-statistics">
+                  Posts: <b>{{userProfile.posts_count}}</b>
+                </div>
+                <div class="profile-data-statistics">
+                  Followers: <b>{{userProfile.followers}}</b>
+                </div>
+                <div style="margin-right: 0" class="profile-data-statistics">
+                  Followed: <b>{{userProfile.followed}}</b>
+                </div>
+              </div>
+              <div>
+                {{userProfile.first_name}} {{userProfile.last_name}}
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
     </header>
-    <header class="d-flex d-md-none profile-header-mobile">
-      <div class="profile-image-wrapper-mobile">
-        <img class="profile-image-mobile" src="{{userProfile.meta.avatar}}" />
-      </div>
-      <section class="profile-data">
-        <div class="profile-data-wrapper" style="margin-bottom: 5px">
-          <div class="profile-nick">
-            {{userProfile.username}}
+
+    <header class="d-block d-md-none">
+      <div class="d-flex profile-header-mobile">
+        <div class="profile-image-wrapper-mobile">
+          <div class="skeleton-box-no-anim">
+            <img *ngIf="userProfile" class="profile-image-mobile" src="{{userProfile.meta.avatar}}" />
           </div>
-          <button *ngIf="userID !== userProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
-            {{this.buttonText}}
-          </button>
-          <button *ngIf="userID === userProfile.id" mat-button (click)="handleEditProfile()"
-            class="profile-follow">
-            Edit profile
-          </button>
         </div>
-        <div>
-          {{userProfile.first_name}} {{userProfile.last_name}}
-        </div>
-      </section>
+        <section class="profile-data-mobile mr-4">
+          <div class="skeleton-box-no-anim d-flex">
+            <div *ngIf="userProfile">
+              <div class="profile-data-wrapper" style="margin-bottom: 5px">
+                <div class="profile-nick">
+                  {{userProfile.username}}
+                </div>
+                <button *ngIf="userID !== userProfile.id" (click)="handleFollow()" mat-button class="profile-follow">
+                  {{this.buttonText}}
+                </button>
+                <button *ngIf="userID === userProfile.id" mat-button (click)="handleEditProfile()"
+                  class="profile-follow">
+                  Edit profile
+                </button>
+              </div>
+              <div>
+                {{userProfile.first_name}} {{userProfile.last_name}}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <ul class="m-0 profile-data-statistics-mobile-wrapper">
+        <li *ngIf="!userProfile" class="profile-data-statistics-mobile">
+          <span class="profile-data-statistics-name-mobile">
+            &nbsp;
+          </span>
+          <span class="profile-data-statistics-value-mobile">
+            &nbsp;
+          </span>
+        </li>
+        <li *ngIf="userProfile" class="profile-data-statistics-mobile">
+          <span class="profile-data-statistics-name-mobile">
+            Posts:
+          </span>
+          <span class="profile-data-statistics-value-mobile">
+            {{userProfile.posts_count}}
+          </span>
+        </li>
+        <li *ngIf="userProfile" class="profile-data-statistics-mobile profile-data-statistics-mobile-ordered">
+          <span class="profile-data-statistics-name-mobile">
+            Followers:
+          </span>
+          <span class="profile-data-statistics-value-mobile">
+            {{userProfile.followers}}
+          </span>
+        </li>
+        <li *ngIf="userProfile" class="profile-data-statistics-mobile">
+          <span class="profile-data-statistics-name-mobile">
+            Followed:
+          </span>
+          <span class="profile-data-statistics-value-mobile">
+            {{userProfile.followed}}
+          </span>
+        </li>
+      </ul>
     </header>
-    <ul style="margin: 0" class="d-flex d-md-none profile-data-statistics-mobile-wrapper">
-      <li class="profile-data-statistics-mobile">
-        <span class="profile-data-statistics-name-mobile">
-          Posts:
-        </span>
-        <span class="profile-data-statistics-value-mobile">
-          {{userProfile.posts_count}}
-        </span>
-      </li>
-      <li class="profile-data-statistics-mobile">
-        <span class="profile-data-statistics-name-mobile">
-          Followers:
-        </span>
-        <span class="profile-data-statistics-value-mobile">
-          {{userProfile.followers}}
-        </span>
-      </li>
-      <li class="profile-data-statistics-mobile">
-        <span class="profile-data-statistics-name-mobile">
-          Followed:
-        </span>
-        <span class="profile-data-statistics-value-mobile">
-          {{userProfile.followed}}
-        </span>
-      </li>
-    </ul>
-    <div class="dropdown-divider mb-4"></div>
-    <div class="profile-posts" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
-      (scrolled)="loadOnScrollProfilePosts()">
+
+    <div *ngIf="!userProfile" class="row m-0">
+      <div class="col col-4" *ngFor="for let post of createRange(12); let i = index" [ngClass]="checkIfIsMiddle(i)">
+        <div class="embed-responsive embed-responsive-1by1 skeleton-box-no-anim">
+        </div>
+      </div>
+    </div>
+    <div *ngIf="userProfile" class="profile-posts" infinite-scroll [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="150" (scrolled)="loadOnScrollProfilePosts()">
       <div class="row m-0 p-0">
-        <div class="col col-12 col-sm-6 col-md-4 mb-4 profile-column" *ngFor="let post of posts"
-          routerLink="/post/{{post.id}}">
+        <div class="col col-4" *ngFor="let post of posts; let i = index" routerLink="/post/{{post.id}}"
+          [ngClass]="checkIfIsMiddle(i)">
           <div class="profile-image-hover">
             <app-blured-image [meta]="post.image_meta"></app-blured-image>
           </div>

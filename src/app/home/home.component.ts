@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../auth/services/auth.service';
 import { Dashboard } from '../models/dashboard';
+import { addCorrectTime } from '../restConfig';
 import { UserService } from '../services/user/user.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { UserService } from '../services/user/user.service';
 })
 export class HomepageComponent implements OnInit {
 
-  dashboard: Dashboard;
+  dashboard: Dashboard = { id: null, relations: [...Array(8)], meta: { avatar: null, is_private: undefined }, posts: [...Array(12)] };
 
   componentLoaded = false;
 
@@ -34,8 +35,11 @@ export class HomepageComponent implements OnInit {
   getDashboard() {
     this.userService.getDashboard()
       .subscribe(dashboard => {
-        this.componentLoaded = true;
+        dashboard.relations.forEach(relation => {
+          relation.created = addCorrectTime(relation.created);
+        });
         this.dashboard = dashboard
+        this.componentLoaded = true;
       });
   }
 }

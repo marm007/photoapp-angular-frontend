@@ -6,8 +6,10 @@
     [infiniteScrollDistance]="2" [infiniteScrollThrottle]="150"
     (scrolled)="listFollowedRelations(this.relations.length)">
     <button class="relation-wrapper" style="outline: 0;" [matMenuTriggerFor]="relationMenu">
-      <div class="d-flex align-items-center">
-        <div class="relation-photo" [ngStyle]="{'background-image': 'url('+ userAvatar +')'}">
+      <div class="d-flex align-items-center ">
+        <div class="skeleton-box-no-anim relation-photo">
+          <div *ngIf="userAvatar" class="relation-photo" [ngStyle]="{'background-image': 'url('+ userAvatar +')'}">
+          </div>
         </div>
         <div class="relation-data-wrapper">
           <div class="relation-username">
@@ -16,7 +18,6 @@
             </span>
 
           </div>
-          <!--<div class="relation-time">10</div>-->
         </div>
       </div>
     </button>
@@ -31,8 +32,10 @@
     <div *ngFor="let relation of relations; index as i" class="post">
       <button class="relation-wrapper" style="outline: 0;" (click)="playRelation(i)">
         <div class="d-flex align-items-center">
-          <div class="relation-photo" [ngStyle]="{'background-image': 'url(' + relationThumbnail(relation) +')'}"></div>
-          <div class="relation-data-wrapper">
+          <div *ngIf="relation" class="relation-photo"
+            [ngStyle]="{'background-image': 'url(' + relationThumbnail(relation) +')'}">
+          </div>
+          <div *ngIf="relation" class="relation-data-wrapper">
             <div class="relation-username"><span>{{relation.user.username}}</span></div>
             <div class="relation-time">{{relation.created}}</div>
           </div>
@@ -49,8 +52,11 @@
     [infiniteScrollDistance]="5" [infiniteScrollThrottle]="50"
     (scrolled)="listFollowedRelations(this.relations.length)">
     <div style="min-width: 100px; display: flex; flex-direction: row" class="relation-mobile">
-      <div mat-card-avatar class="relation-photo-mobile" [matMenuTriggerFor]="relationMenu"
-        [ngStyle]="{'background-image': 'url('+ userAvatar +')'}">
+
+      <div class="skeleton-box-no-anim relation-photo-mobile">
+        <div *ngIf="userAvatar" mat-card-avatar class="relation-photo-mobile" [matMenuTriggerFor]="relationMenu"
+          [ngStyle]="{'background-image': 'url('+ userAvatar +')'}">
+        </div>
       </div>
       <div style="min-width: 100px" class="relation-username-mobile">
         Your relations
@@ -62,9 +68,10 @@
     </mat-menu>
     <mat-divider [vertical]="true" style="margin-bottom: 20px;"></mat-divider>
     <div class="relation-mobile-others" *ngFor="let relation of relations; index as i">
-      <div class="relation-photo-mobile" (click)="playRelation(i)"
+      <div *ngIf="relation" class="relation-photo-mobile" (click)="playRelation(i)"
         [ngStyle]="{'background-image': 'url(' + relationThumbnail(relation) +')'}"></div>
-      <div (click)="playRelation(i)" style="min-width: 50px" class="relation-username-mobile">{{relation.user.username}}
+      <div *ngIf="relation" (click)="playRelation(i)" style="min-width: 50px" class="relation-username-mobile">
+        {{relation.user.username}}
       </div>
     </div>
 

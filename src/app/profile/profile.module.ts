@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { BluredImageModule } from '../blured-image/shared.module';
+import { BluredImageModule } from '../blured-image/blured-image.module';
 import { ProfileEditComponent } from './edit/edit.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
