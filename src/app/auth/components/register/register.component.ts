@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
   isMobile: boolean;
   dialogRef = null;
 
+  recaptchaSiteKey = environment.reCaptchaSiteKey;
   registerError = false;
   registerErrorEmailMessage: string;
   registerErrorUsernameMessage: string;
@@ -48,6 +49,7 @@ export class RegisterComponent implements OnInit {
     if (this.dialog.openDialogs) {
       this.dialogRef = this.dialog.getDialogById('register');
     }
+    
   }
 
   private onSuccess() {

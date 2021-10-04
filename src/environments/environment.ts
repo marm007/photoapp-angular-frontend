@@ -5,9 +5,10 @@
 export const environment = {
   production: false,
   apiURL: 'http://127.0.0.1:8000/api',
-  mediaHttpURL: 'http://res.cloudinary.com/marm007/',
-  mediaURL: 'https://res.cloudinary.com/marm007/',
-  avatarURL: 'https://res.cloudinary.com/marm007/image/upload/v1585912225/avatar_iahjs2.png'
+  mediaHttpURL: 'http://res.cloudinary.com/marm007-photo-app-devlopment/',
+  mediaURL: 'https://res.cloudinary.com/marm007-photo-app-devlopment/',
+  avatarURL: 'https://res.cloudinary.com/marm007-photo-app-devlopment/image/upload/v1585912052/avatar_lhb3lx.png',
+  reCaptchaSiteKey: '6LcAPascAAAAAOkeOEt2HQ2UZju6b5XORYX_CHVu'
 };
 
 /*
