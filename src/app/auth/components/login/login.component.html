@@ -23,6 +23,10 @@
           <input type="password" class="form-control" id="password" [(ngModel)]="loginModel.password" name="password">
         </div>
         <div>
+          <div class="alert alert-success">
+            <p>Test login: test@test.com</p>
+            <p>Test password: test12</p>
+          </div>
           <div *ngIf="loginModel.message"
             [className]="loginModel.status == 'ok' ? 'alert alert-success' : 'alert alert-danger'">
             {{loginModel.message}}
